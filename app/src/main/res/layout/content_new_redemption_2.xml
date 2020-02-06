@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="match_parent">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            app:cardCornerRadius="5dp">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="FUND CODE"/>
+
+                <LinearLayout
+                    android:id="@+id/lay1"
+                    android:layout_below="@id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/circular_edge_light_blue"
+                    android:orientation="vertical">
+
+                    <com.coronationmb.service.CustomeSpinner.SearchableSpinner
+                        android:id="@+id/product_symbol"
+                        android:layout_width="match_parent"
+                        android:entries="@array/acct_type"
+                        android:layout_height="55dp"/>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/fund_name"
+                    android:layout_below="@id/lay1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text="FUND NAME"/>
+
+                <EditText
+                    android:id="@+id/fund_name_editText"
+                    android:layout_below="@id/fund_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/circular_edge_light_blue"
+                    android:orientation="vertical">
+
+
+                </EditText>
+
+
+                <LinearLayout
+                    android:id="@+id/amtff"
+                    android:layout_below="@id/fund_name_editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AMOUNT"
+                            android:layout_marginBottom="10dp"
+                            android:textColor="@color/colorPrimary"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/amt_lay"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="55dp"
+                            app:hintEnabled="false"
+                            android:layout_centerInParent="true">
+                            <EditText
+                                android:id="@+id/amount"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:singleLine="true"
+                                android:imeOptions="actionDone"
+                                android:inputType="number"
+                                android:textSize="16sp"
+                                android:background="@drawable/circular_edge_light_blue"
+                                android:paddingLeft="15dp"
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="QUANTITY"
+                            android:layout_marginBottom="10dp"
+                            android:textColor="@color/colorPrimary"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/quantity_lay"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            app:hintEnabled="false"
+                            android:layout_centerInParent="true">
+                            <EditText
+                                android:id="@+id/quantity"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:singleLine="true"
+                                android:imeOptions="actionDone"
+                                android:textSize="16sp"
+                                android:focusable="false"
+                                android:background="@drawable/circular_edge_light_blue"
+                                android:paddingLeft="15dp"
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/submit"
+                    android:layout_below="@id/amtff"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textSize="18sp"
+                    android:background="@drawable/circular_edge_brown"
+                    android:text="Redeem"
+                    android:textAllCaps="false"/>
+
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>
+

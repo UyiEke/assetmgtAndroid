@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activityModule.activityModule.ui.userActionhistory.RedemptionHistory">
+
+   <LinearLayout
+       android:id="@+id/lay1"
+       android:layout_alignParentTop="true"
+       android:layout_marginTop="35dp"
+       android:layout_width="match_parent"
+       android:layout_marginLeft="20dp"
+       android:layout_marginRight="20dp"
+       android:layout_height="55dp"
+      android:orientation="horizontal">
+
+      <EditText
+          android:id="@+id/startDate"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:layout_marginRight="5dp"
+          android:focusable="false"
+          android:drawableEnd="@drawable/ic_date_range_"
+          android:paddingRight="15dp"
+          android:hint="From"
+          android:background="@drawable/circular_edge_light_blue"/>
+
+
+
+      <EditText
+          android:id="@+id/endDate"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:layout_marginLeft="5dp"
+          android:focusable="false"
+          android:drawableEnd="@drawable/ic_date_range_"
+          android:paddingRight="15dp"
+          android:hint="To"
+          android:background="@drawable/circular_edge_light_blue"/>
+
+
+   </LinearLayout>
+
+   <LinearLayout
+
+       android:layout_below="@id/lay1"
+       android:id="@+id/lay2"
+       android:layout_width="match_parent"
+       android:layout_height="55dp"
+       android:layout_marginTop="15dp"
+
+       android:layout_marginLeft="20dp"
+       android:layout_marginRight="20dp"
+
+       android:gravity="center"
+       android:background="@drawable/circular_edge_brown"
+       android:orientation="horizontal">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+         android:text="Search"
+         android:textColor="@color/white"
+         android:textSize="16sp"/>
+
+   </LinearLayout>
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/recycler"
+       android:layout_below="@id/lay2"
+       android:layout_marginTop="25dp"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_marginBottom="5dp"
+       />
+
+   <ProgressBar
+       android:id="@+id/progressBar"
+       android:layout_width="30dp"
+       android:layout_height="30dp"
+       android:layout_centerInParent="true"/>
+
+   <TextView
+       android:id="@+id/msg"
+       android:visibility="gone"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+       android:text="No record"/>
+
+
+</RelativeLayout>

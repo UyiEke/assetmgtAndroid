@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/profile_item"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    app:cardCornerRadius="5dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="10dp"
+            android:text="Coronation Money Market Fund"/>
+
+        <TextView
+            android:id="@+id/symbol"
+            android:layout_below="@id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="CMMF"/>
+
+        <TextView
+            android:id="@+id/amt"
+            android:layout_below="@id/name"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"
+            android:textColor="@color/brown_des"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:text="30000"/>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
