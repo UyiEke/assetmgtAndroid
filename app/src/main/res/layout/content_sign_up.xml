@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="Personal Details"
                 android:layout_marginTop="30dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_marginBottom="35dp"
                 android:textSize="18sp"
                 android:textColor="@color/text_color"
@@ -2030,8 +2030,8 @@
 
                 <net.igenius.customcheckbox.CustomCheckBox
                     android:id="@+id/success_checkbox"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_centerInParent="true"
                     app:color_checked="@color/green"
                     app:color_tick="@color/white"
@@ -2050,9 +2050,6 @@
                     />
 
 
-
-
-
             </RelativeLayout>
 
         </RelativeLayout>
@@ -2066,7 +2063,7 @@
             android:layout_marginRight="25dp"
             android:layout_marginBottom="15dp"
             android:textColor="@color/white"
-            android:visibility="gone"
+            android:visibility="visible"
             android:textAllCaps="false"
             android:background="@drawable/circular_edge_brown"/>
 

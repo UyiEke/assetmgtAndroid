@@ -106,24 +106,11 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
     @BindView(R.id.state_layout)
     LinearLayout state_layout;
 
     @BindView(R.id.state_country)
     SearchableSpinner state_country;
-
-
-
-
-
-
-
 
 
 

@@ -88,7 +88,7 @@ public interface RetrofitProxyService {
 
     @Multipart
     @POST("kycUploads/{kycID}/{appID}/{custID}")
-    Call<WebResponse<String>> kycUploads(@Path("kycID") String kycID,
+    Call<WebResponse<String>>kycUploads(@Path("kycID") String kycID,
                                          @Path("appID") String appID,
                                          @Path("custID") String custID,
                                          @Part List<MultipartBody.Part> files);
