@@ -28,7 +28,7 @@ public class BaseActivity extends AppCompatActivity implements LogOutListener {
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(BaseActivity.this);
                 builder1.setMessage("Your App Session has timed out due to inactivity").setTitle("");
-                builder1.setCancelable(true);
+                builder1.setCancelable(false);
                 builder1.setPositiveButton(
                         "OK",
                         new DialogInterface.OnClickListener() {

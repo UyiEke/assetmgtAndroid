@@ -148,7 +148,7 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.account_history, R.id.subscription,
                 R.id.redemption,R.id.calculator, R.id.refer_friend, R.id.help_desk,
-                R.id.settings)
+                R.id.settings,R.id.new_subscribe,R.id.new_redemption,R.id.profile)
                 .setDrawerLayout(drawer)
                 .build();
          navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -169,7 +169,7 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
 
             if(accountStatus.equals("temporal account")){
                 completeAccountDialog("You are yet to complete your account setup hence there is limit to what you can do with this application."+"\n"+
-                        "Click on CONTINUE to complete your account setup Or SKIP to complete account setup later");
+                        "Click on CONTINUE to complete your account setup");
             }
 
         }

@@ -128,6 +128,7 @@ public class ProfileFragment extends Fragment {
         context=getContext();
         repo=new GlobalRepository(context);
         ButterKnife.bind(this, root);
+        getImage();
         getProduct();
         return root;
     }
@@ -137,6 +138,7 @@ public class ProfileFragment extends Fragment {
         ((DashboardActivity)getContext()).changeToolbarTitle("PROFILE");
         ((DashboardActivity)getContext()).changeHamburgerIconClorBottomNav();
 
+        /*
         if(imagePath!=null){
 
             Picasso.with(context)
@@ -145,6 +147,7 @@ public class ProfileFragment extends Fragment {
                   //  .rotate(-90)                    //if you want to rotate by 90 degrees
                     .into(profile_image);
         }
+        */
 
         usernameTextview.setText(SharedPref.getFULLNAME(context));
 
@@ -175,6 +178,8 @@ public class ProfileFragment extends Fragment {
         }else {
             getPortfolio();
         }
+
+
     }
 
 
@@ -390,7 +395,8 @@ public class ProfileFragment extends Fragment {
         repo.uploadPofilePix(Constant.APPID, SharedPref.getUSERID(getContext()), passport, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
-              //  Toast.makeText(getContext(),"Upload of profile picture was successful",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Upload of profile picture was successful",Toast.LENGTH_LONG).show();
+                getImageMain();
             }
 
             @Override
@@ -401,7 +407,16 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    private void getImage(){
 
+        Picasso.with(getContext())
+                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(getContext())) // web image url
+                .fit().centerInside()
+                //  .rotate(-90)                    //if you want to rotate by 90 degrees
+               // .into(((DashboardActivity)getContext()).profile_image);
+                .into(profile_image);
+
+    }
 
     @NonNull
     private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
@@ -416,5 +431,17 @@ public class ProfileFragment extends Fragment {
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
     }
 
+
+
+    private void getImageMain(){
+
+        Picasso.with(getContext())
+                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(getContext())) // web image url
+                .fit().centerInside()
+                //  .rotate(-90)                    //if you want to rotate by 90 degrees
+                 .into(((DashboardActivity)getContext()).profile_image);
+               // .into(profile_image);
+
+    }
 
 }

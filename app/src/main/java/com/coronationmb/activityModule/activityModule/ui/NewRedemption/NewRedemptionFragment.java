@@ -103,7 +103,6 @@ public class NewRedemptionFragment extends Fragment {
     }
 
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -113,7 +112,6 @@ public class NewRedemptionFragment extends Fragment {
         }
         initUI();
     }
-
 
     public void initUI(){
 
@@ -198,8 +196,8 @@ public class NewRedemptionFragment extends Fragment {
             return;
         }
 
-        int quantVal= Integer.parseInt(quantityVal);
-        int amtV= Integer.parseInt(amt);
+        Double quantVal= Double.parseDouble(quantityVal);
+        Double amtV= Double.parseDouble(amt);
 
         if(amtV>quantVal && amtV != quantVal){
 
@@ -214,9 +212,10 @@ public class NewRedemptionFragment extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setAppId(Constant.APPID);
-        req.setFunctionId(Constant.Am_Portfolio);
+        req.setFunctionId(Constant.redeem);
         req.setProfile(Constant.profile);
-        req.setParams(SharedPref.getUSERID(context)+"|"+productSym+"|"+productName+"|"+amt+"1"+amt+"|"+"1");
+        req.setParams(SharedPref.getUSERID(context)+"|"+productSym+"|"+productName+"|"+amt+"|1|"+amt+"|"+"1");
+
 
         repo.redemption(Constant.APPID, req, new OnApiResponse<ArrayList<PortFolioModel>>() {
             @Override
@@ -257,9 +256,5 @@ public class NewRedemptionFragment extends Fragment {
                 .show();
 
     }
-
-
-
-
 
 }

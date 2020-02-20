@@ -87,15 +87,14 @@ public interface RetrofitProxyService {
     Call<CreateAccountParameter> getCreateAccountParameter();
 
     @Multipart
-    @POST("kycUploads/{kycID}/{appID}/{custID}")
-    Call<WebResponse<String>>kycUploads(@Path("kycID") String kycID,
-                                         @Path("appID") String appID,
-                                         @Path("custID") String custID,
+    @POST("kycUploads/{appID}/{kycID}")
+    Call<WebResponse<String>>kycUploads( @Path("appID") String appID,
+                                         @Path("kycID") String kycID,
                                          @Part List<MultipartBody.Part> files);
 
     // Get Asset Management
     @POST("completeAccountCreation/{appId}")
-    Call<WebResponse<JsonObject>> CompleteAccountCreationByCustomer(@Path("appId")String appId, @Body CreateAccount req);
+    Call<WebResponse<JsonObject>>  CompleteAccountCreationByCustomer(@Path("appId")String appId, @Body CreateAccount req);
 
     // Post Subscription
     @POST("subscribe/{appId}")

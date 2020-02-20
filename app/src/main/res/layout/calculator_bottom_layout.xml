@@ -1,162 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/bottom_lay"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fillViewport="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    android:orientation="vertical">
-
-
-    <TextView
-        android:id="@+id/cal_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="45dp"
-        android:text="What will be the value of my investment in the future?"/>
-
-    <LinearLayout
-        android:layout_below="@id/cal_title"
-        android:id="@+id/calcview_layout"
-        android:visibility="visible"
-        android:layout_marginTop="30dp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/bottom_lay"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/initial_lump"
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/cal_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:imeOptions="actionNext"
-            android:inputType="numberDecimal"
-            android:singleLine="true"
-            android:paddingLeft="15dp"
-            android:hint="Initial Lump sum (Naira)"
-            android:background="@drawable/circular_edge_light_blue">
-
-        </EditText>
-
-        <EditText
-            android:id="@+id/monhly_contributn"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:layout_height="55dp"
-            android:inputType="numberDecimal"
-            android:layout_marginTop="10dp"
-            android:imeOptions="actionNext"
-            android:singleLine="true"
-            android:paddingLeft="15dp"
-            android:hint="Monthly Contribution (Naira)"
-            android:background="@drawable/circular_edge_light_blue">
-
-        </EditText>
-
-        <EditText
-            android:id="@+id/investment_period"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:singleLine="true"
-            android:paddingLeft="15dp"
-            android:hint="Investment Period (years)"
-            android:background="@drawable/circular_edge_light_blue">
-
-        </EditText>
-
-        <EditText
-            android:id="@+id/estimated_rate"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:singleLine="true"
-            android:paddingLeft="15dp"
-            android:hint="Estimated Rate (%)"
-            android:background="@drawable/circular_edge_light_blue">
-
-        </EditText>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_below="@id/calcview_layout"
-        android:id="@+id/result_layout"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="125dp">
+            android:layout_marginTop="45dp"
+            android:text="What will be the value of my investment in the future?"/>
 
         <LinearLayout
+            android:layout_below="@id/cal_title"
+            android:id="@+id/calcview_layout"
+            android:visibility="visible"
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            android:orientation="vertical"
-            android:background="@drawable/result_bckgrd"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/result_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Future value of investment"
-                android:textAllCaps="true"
-                android:textSize="14sp"
-                android:textColor="@color/colorPrimaryDark"/>
-
-            <TextView
-                android:id="@+id/result_amt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
+            <EditText
+                android:id="@+id/initial_lump"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="55dp"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimaryDark"
-                android:text=""/>
+                android:imeOptions="actionNext"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
+                android:paddingLeft="15dp"
+                android:hint="Initial Lump sum (Naira)"
+                android:background="@drawable/circular_edge_light_blue">
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/monhly_contributn"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="55dp"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
+                android:paddingLeft="15dp"
+                android:hint="Monthly Contribution (Naira)"
+                android:background="@drawable/circular_edge_light_blue">
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/investment_period"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:singleLine="true"
+                android:paddingLeft="15dp"
+                android:hint="Investment Period (years)"
+                android:background="@drawable/circular_edge_light_blue">
+
+            </EditText>
+
+            <EditText
+                android:id="@+id/estimated_rate"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:singleLine="true"
+                android:paddingLeft="15dp"
+                android:hint="Estimated Rate (%)"
+                android:background="@drawable/circular_edge_light_blue">
+
+            </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@id/calcview_layout"
+            android:id="@+id/result_layout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="125dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+
+                android:orientation="vertical"
+                android:background="@drawable/result_bckgrd"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/result_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textAllCaps="true"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:id="@+id/result_amt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:text=""/>
+
+
+            </LinearLayout>
 
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/calculate"
+            android:layout_below="@+id/result_layout"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="25dp"
+            android:text="calculate"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/circular_edge_brown">
 
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/calculate"
-        android:layout_below="@+id/result_layout"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="10dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="25dp"
-        android:text="calculate"
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:background="@drawable/circular_edge_brown">
-
-    </Button>
+        </Button>
 
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>
+
+

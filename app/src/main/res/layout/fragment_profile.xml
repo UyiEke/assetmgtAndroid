@@ -83,7 +83,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
                         android:layout_marginTop="10dp"
                         android:layout_marginLeft="15dp"
                         android:text="Name"/>
@@ -93,12 +92,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="15dp"
+                        android:textColor="@color/colorPrimary"
                         android:text=""/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
                         android:layout_marginLeft="15dp"
                         android:text="Customer ID"/>
                     <TextView
@@ -106,13 +105,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:textColor="@color/colorPrimary"
                         android:layout_marginLeft="15dp"
                         android:text=""/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
                         android:layout_marginLeft="15dp"
                         android:text="Email Address"/>
                     <TextView
@@ -120,19 +119,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:textColor="@color/colorPrimary"
                         android:layout_marginLeft="15dp"
                         android:text=""/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
                         android:layout_marginLeft="15dp"
                         android:text="Phone Number"/>
                     <TextView
                         android:id="@+id/phone_no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/colorPrimary"
                         android:layout_marginLeft="15dp"
                         android:text=""/>
 

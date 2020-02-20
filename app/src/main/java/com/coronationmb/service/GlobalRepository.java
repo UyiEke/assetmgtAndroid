@@ -72,7 +72,6 @@ public class GlobalRepository {
 
                             String tempUserId=json.optString("userid")==null?"":json.optString("userid");
                             String firstname=json.optString("firstname")==null? "":json.optString("firstname");
-                         //   String lastname=json.optString("lastname")==null?"" :json.optString("lastname");
 
                             SharedPref.setFULLNAME(context,firstname);
 
@@ -868,9 +867,9 @@ public class GlobalRepository {
 
     }
 
-    public void kycUploads(String kycID,String appID,String custID, List<MultipartBody.Part>bodylist,final OnApiResponse<WebResponse<String>> callback){
+    public void kycUploads(String appID,String kycID,String custID, List<MultipartBody.Part>bodylist,final OnApiResponse<WebResponse<String>> callback){
 
-        retrofitProxyService.kycUploads(kycID,appID,custID,bodylist).enqueue(new Callback<WebResponse<String>>() {
+        retrofitProxyService.kycUploads(appID,kycID,bodylist).enqueue(new Callback<WebResponse<String>>() {
             @Override
             public void onResponse(Call<WebResponse<String>> call, Response<WebResponse<String>> response) {
                 if (response.isSuccessful()){

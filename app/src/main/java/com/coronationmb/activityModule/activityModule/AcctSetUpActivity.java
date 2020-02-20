@@ -1284,7 +1284,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
         }
         */
 
-        repo.kycUploads(kycID, Constant.APPID,SharedPref.getUSERID(context),files, new OnApiResponse<WebResponse<String>>() {
+        repo.kycUploads(Constant.APPID, kycID, SharedPref.getUSERID(context),files, new OnApiResponse<WebResponse<String>>() {
             @Override
             public void onSuccess(WebResponse<String> data) {
                 progress.dismiss();

@@ -13,7 +13,7 @@ import static androidx.core.content.ContextCompat.getSystemService;
 public class Constant {
     public  static final Spanned nairaSymbol= Html.fromHtml("&#8358");
     public static final String profile="am";
-    public static final String APPID="cmgrp";
+    public static final String APPID="cmbgrp";
     public static String BaseUrl="http://197.253.42.227:8080/assetmanagement/";
 
     //Adhl@28

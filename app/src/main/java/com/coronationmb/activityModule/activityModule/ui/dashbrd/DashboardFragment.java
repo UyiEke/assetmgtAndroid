@@ -84,24 +84,13 @@ public class DashboardFragment extends Fragment {
     }
 
     private void getImage(){
-        repo.downloadPofilePix(SharedPref.getUSERID(getContext()), new OnApiResponse<ImageDetails>() {
-            @Override
-            public void onSuccess(ImageDetails data) {
 
-                Picasso.with(getContext())
-                        .load(data.getPath()) // web image url
-                        .fit().centerInside()
-                        //  .rotate(-90)                    //if you want to rotate by 90 degrees
-                        .into(((DashboardActivity)getContext()).profile_image);
+        Picasso.with(getContext())
+                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(getContext())) // web image url
+                .fit().centerInside()
+                //  .rotate(-90)                    //if you want to rotate by 90 degrees
+                .into(((DashboardActivity)getContext()).profile_image);
 
-                SharedPref.setProfileImage(getContext(),data.getPath());
-            }
-
-            @Override
-            public void onFailed(String message) {
-
-            }
-        });
     }
 
 

@@ -206,7 +206,7 @@ public class NewSubscriptionFragment extends Fragment {
 
         if(amount<mini){
             progress.dismiss();
-            Utility.alertOnly(context,"Amount cannot be less than the minimum investment of 10,000","");
+            Utility.alertOnly(context,"Amount cannot be less than the minimum investment of N "+miniAmt,"");
             return;
         }
 

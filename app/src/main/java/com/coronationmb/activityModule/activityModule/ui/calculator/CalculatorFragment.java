@@ -71,7 +71,6 @@ public class CalculatorFragment extends Fragment {
         list.add("What is the lump sum amount i need to invest now to achieve a future target?");
         list.add("What is the amount i need to invest monthly to achieve a future target");
         list.add("How long (years) will it take me to achieve my future target by investing a lump-sum now?");
-        list.add("How long (years) will it take me to achieve my future target by making monthly contributions?");
         return list;
    }
 

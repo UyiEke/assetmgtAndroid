@@ -17,7 +17,6 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
             android:layout_margin="10dp"
             android:text="Coronation Money Market Fund"/>
 
@@ -25,6 +24,7 @@
             android:id="@+id/symbol"
             android:layout_below="@id/name"
             android:layout_width="wrap_content"
+            android:textColor="@color/colorPrimary"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
