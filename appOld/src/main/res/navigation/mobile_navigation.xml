@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.coronationmb.activityModule.activityModule.ui.dashbrd.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_home" />
+
+    <!--
+    <fragment
+        android:id="@+id/account_history"
+        android:name="com.coronationmb.activityModule.activityModule.ui.portfolio_historymodule.Portfolio_HistoryFragment"
+        android:label="Account History"
+        tools:layout="@layout/fragment_account_history" />
+    -->
+
+    <fragment
+        android:id="@+id/account_history"
+        android:name="com.coronationmb.activityModule.activityModule.ui.subscription_acct_history.SubscriptionFragment"
+        android:label="Account History"
+        tools:layout="@layout/fragment_account_history" />
+
+    <fragment
+        android:id="@+id/new_redemption"
+        android:name="com.coronationmb.activityModule.activityModule.ui.NewRedemption.NewRedemptionFragment"
+        android:label="Redeem"
+        tools:layout="@layout/activity_new_redemption" />
+
+    <fragment
+        android:id="@+id/new_subscribe"
+        android:name="com.coronationmb.activityModule.activityModule.ui.NewSubscription.NewSubscriptionFragment"
+        android:label="Subscribe"
+        tools:layout="@layout/activity_new_subscription" />
+
+    <fragment
+        android:id="@+id/profile"
+        android:name="com.coronationmb.activityModule.activityModule.ui.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/subscription"
+        android:name="com.coronationmb.activityModule.activityModule.ui.subscription_acct_history.SubscriptionFragment"
+        android:label="Subscription"
+        tools:layout="@layout/fragment_subscription" />
+
+    <fragment
+        android:id="@+id/redemption"
+        android:name="com.coronationmb.activityModule.activityModule.ui.redemption.RedemptionFragment"
+        android:label="Redemption"
+        tools:layout="@layout/fragment_redemption" />
+
+    <fragment
+        android:id="@+id/payment_history"
+        android:name="com.coronationmb.activityModule.activityModule.ui.PaymentTransactionHistory.PaymentTransactionHistoryFragment"
+        android:label="Payment History"
+        tools:layout="@layout/fragment_account_history" />
+
+    <fragment
+        android:id="@+id/calculator"
+        android:name="com.coronationmb.activityModule.activityModule.ui.calculator.CalculatorFragment"
+        android:label="Calculator"
+        tools:layout="@layout/fragment_calculator" />
+
+    <fragment
+        android:id="@+id/refer_friend"
+        android:name="com.coronationmb.activityModule.activityModule.ui.referFriend.ReferFriendFragment"
+        android:label="Refer A Friend"
+        tools:layout="@layout/fragment_refer_friend" />
+
+    <fragment
+        android:id="@+id/help_desk"
+        android:name="com.coronationmb.activityModule.activityModule.ui.helpDesk.HelpDeskFragment"
+        android:label="Help Desk"
+        tools:layout="@layout/fragment_help_desk" />
+
+
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.coronationmb.activityModule.activityModule.ui.changePassword.ChangePasswdFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" />
+
+
+
+
+</navigation>

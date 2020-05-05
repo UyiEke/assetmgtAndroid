@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
+
+
+        <TextView
+            android:id="@+id/term_condition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:textAlignment="center"
+            android:layout_marginTop="15dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/blacka"
+            android:text="Terms and Condition"/>
+
+
+        <TextView
+            android:id="@+id/terms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/term_condition"
+            android:scrollbars="vertical"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/blacka"
+            android:layout_marginTop="15dp"
+            android:text="Welcome to the Coronation Asset Management App. The App can be used to invest in the Coronation Asset Management (insert name of applicable Fund), and utilize redemption funds[LT1] .
+
+The use of the Coronation Asset Management (insert name of application) App is subject to the following terms and conditions of use. After you have read and understood these terms and conditions, you may click “I Accept” to confirm that you agree to the terms and conditions which shall govern your activation, access and use of any of the services on the App.
+
+Coronation Asset Management may delete or make changes to these terms and conditions and any other information contained in this App at any time. We will notify you of any changes to these terms and conditions from time to time. You will be required to accept such changes in order to continue to use the App. If you do not accept the revised terms and conditions, then you may no longer be able to access the App.
+
+Access to the (insert name of application) App: A User Identification Number (User ID) and unique password have been set up for you to access the App. The User ID and password will act as your signature and it is your sole responsibility to ensure the security and confidentiality of your User ID and password, which is or your use only. Coronation Asset Management will not be responsible for any unauthorized use of this information.
+
+If you believe that your account password has been compromised in any way, or you become aware of any unauthorized use of your User ID or password, or any unauthorized transaction on your account, you agree to notify Coronation Asset Management immediately via email (insert email address) or telephone (insert telephone number).
+
+Coronation Asset Management many disable your account on the App at any time at our sole discretion without notice or explanation. Disabling your account on the App will not affect your investment and is for your protection to prevent online access to your account for the duration required to resolve all outstanding issues.
+
+You agree that Coronation Asset Management has the right to cooperate with any governmental, regulatory or legal investigation regarding your use of the App.
+
+Use of the App: Access to the App is at your own risk and you shall be solely responsible for any damage to your property, including but not limited to loss of data or computer virus infection, caused as a result of your use of the App or any material downloaded from it.
+
+You agree that your use of the App shall be as provided in: (a) these terms and conditions, and (b) the applicable laws, rules, procedures, and policies to the services from time to time.
+
+All information on or available through this App is protected by copyright. Unless otherwise agreed in writing, neither you nor any third party has permission to copy, display, distribute, republish, or create modified work from this information in any form.
+
+Your investment: There is no restriction on the investment volumes that can be transacted on the App. In addition, the App does not place any restrictions on making additional investments.
+
+The accounts operated on the App are naira-denominated. Foreign currency-denominated transfers are not allowed. The accounts operated on the App are naira-denominated.
+
+The value of your investment can go up or down and you may not get back all that you have invested. Please be advised that any return estimates or indications of past performance on this App are for information purposes and can in no way be construed as a guarantee of future performance. Changes in currency exchange rates may have an adverse effect on the value or income (if any) of the Coronation Asset Management Funds.
+
+Direct Debits: Enrolment on the App will require the provision of your account information by completing a Direct Debit Mandate Form, by which you will decide how much you intend to invest in the Fund on a periodic basis (weekly or monthly) and when such investment will be made. The Direct Debit allows your banker to automatically deduct a specified amount from your bank account and credits the same to your Coronation Asset Management (insert name of account).
+
+Investment Timeline: Subscription requests must be sent by 1:00pm in order to be processed the same business day. All subscription requests received at or before this time will be given same-day value while subscription requests received after this time will be processed the next business day.
+
+Redemptions: Redemption proceeds shall only be transferred to the account provided by the customer upon enrolment. The provision of third party account details for the deposit of the redemption is not allowed. Redemption requests can be sent at any time provided that the customer’s account is sufficiently funded and all required documentation has been provided.
+
+Redemption requests must be sent by 12:00pm in order to be processed the same business day. Redemption requests sent after 12:00pm shall be treated by the following business day.
+
+No Offer, Recommendation or Investment Advice: The information contained in this App does not constitute financial, legal, accounting, tax or investment advice or an offer or recommendation to subscribe to or redeem an investment in any Coronation Asset Management Fund.
+
+Liability for Loss: Coronation Asset Management believes that the information contained on this App is accurate as at the date of publication, however no warranty is made as to the accuracy, suitability or completeness of any such information. Coronation Asset Management hereby excludes any liability for any loss (direct or consequential) arising from the use of any part of this App.
+
+We shall not have any liability for any data transmission errors such as data loss or damage or alteration of any kind, including, but not limited to, any direct, indirect or consequential damage, arising out of the use of the services provided on the App. [LT2] [TO3]
+
+Know-Your-Customer (KYC) Requirements: As part of the process for your enrolment on the App, you will be requested to provide certain information and documentation to assist Coronation Asset Management in getting to know you better and a proper monitoring of your account.
+
+Where there is KYC documentation outstanding, customers will have restrictions in operating their account, including the inability to make withdrawals on their accounts, redemption requests, and/or additional investments. During the period within which the KYC documentation remains outstanding, periodic reminders will be sent notifying the customers to provide the required information.
+
+Privacy Policy: The information required upon subscription are includes your full name, email address, phone number, next of kin and banking information. You will also be required to provide , a recent passport photograph, utility bill, valid identification card and signature specimen, and for direct debit mandates, your debit or credit card information.
+
+The information you provide to us is required to: [LT4]
+
+All information is stored securely in electronic databases and require your login details, which include your User ID and password. Coronation Asset Management will take all reasonable steps to maintain the safety of your personal information. Circumstances under which we may disclose your personal information – minimum information necessary only – include when: (a) we have your explicit consent to share the information; or (b) we require such information to share with our registrars, personnel or service providers who require same on a need-to-know basis, such as provision of access to complete payment or redemption transactions, or fulfill your service requests; or (c) to investigate potential violations of these terms and conditions, enforce the terms and conditions, or where we believe it is necessary to investigate, prevent or take action regarding illegal activities, suspected fraud or potential threats against persons, property or the systems on which we operate the App; or (d) it is required by applicable law.
+Coronation Asset Management may change this privacy policy to accommodate new technologies, adjust to new industry practices, or to comply with regulatory requirements. Any changes made are generally intended to provide greater protection of your personal information, or for other purposes. Where required by applicable law, you will be notified of material changes to this privacy policy. Your continued use of the App after the effective date of the change will constitute acceptance of the change.
+Indemnity: You shall indemnify, defend, and hold Coronation Asset Management and its affiliates harmless from all liabilities, penalties, losses, damages, costs, expenses, attorney’s fees, causes of action or claims caused by or resulting directly or indirectly from your use of the App.
+Legal Capacity: By accepting these terms and conditions, you represent to us that you have the legal capacity to be bound and enter into an agreement. If you are below the age of 18, you will require the assistance of your parents or legal guardian.
+
+ [LT1]Coronation AM to insert any other uses of the App
+ [LT2]IT to confirm whether the customer will be able to download statements or reports.
+IT to confirm whether the customer can send Coronation AM messages via the App.
+ [TO3]Client will be able to view balances but not download statement.
+
+Client will be able to send messages from the app
+ [LT4]Coronation AM to insert uses of the personal information for the purposes of the App.
+" />
+
+        <LinearLayout
+            android:layout_below="@id/terms"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+
+            <Button
+                android:id="@+id/accept"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="Accept"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginRight="20dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:background="@drawable/curved_edge_blue"/>
+
+
+            <Button
+                android:id="@+id/decline"
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp"
+                android:layout_width="match_parent"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_height="55dp"
+                android:textStyle="bold"
+                android:text="Decline"
+                android:textAllCaps="false"
+                android:background="@drawable/circular_edge_brown"/>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</ScrollView>

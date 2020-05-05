@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="5dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+      >
+
+        <TextView
+            android:id="@+id/value_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:text="Valuation Date"/>
+
+        <TextView
+            android:id="@+id/value_dateTextview"
+            android:layout_below="@id/value_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4th Nov,2019"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/desc"
+            android:layout_below="@id/value_dateTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:text="Description"/>
+
+        <TextView
+            android:id="@+id/descTextview"
+            android:layout_below="@id/desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PayStack Funds Transfer. Ref: 1000100115; Cust#: 000940"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorPrimary"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/descTextview">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Credit"/>
+                <TextView
+                    android:id="@+id/creditTextview"
+                    android:layout_below="@id/debit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="N3,000,000,000"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/colorPrimary"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/debit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Debit"/>
+                <TextView
+                    android:id="@+id/debitTextview"
+                    android:layout_below="@id/debit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="N3,000,000,000"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/colorAccent"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_alignParentEnd="true"
+                android:layout_marginLeft="20dp"
+                android:paddingRight="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/transType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Type"/>
+                <TextView
+                    android:id="@+id/transTypeTextview"
+                    android:layout_below="@id/debit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FTI"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/colorPrimary"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>
+
+

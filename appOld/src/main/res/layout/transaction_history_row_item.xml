@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:background="@color/white"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="20dp"
+            android:text="Date"/>
+
+        <TextView
+            android:id="@+id/transRef"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_below="@id/date"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trans Ref:"/>
+        <TextView
+            android:id="@+id/transRefTextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/transRef"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/brown_des"
+            android:layout_marginLeft="15dp"
+            android:text="1000200114"
+            />
+
+        <TextView
+            android:id="@+id/transAmt"
+            android:layout_below="@id/transRefTextview"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trans Amount:"/>
+
+        <TextView
+            android:id="@+id/transAmtTexview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/transAmt"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/brown_des"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:text="N 3000"
+            />
+
+        <TextView
+            android:id="@+id/approvedAmt"
+            android:layout_below="@id/transRefTextview"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/transAmt"
+            android:textColor="@color/colorPrimary"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Approved Amount:"/>
+
+        <TextView
+            android:id="@+id/approvedAmtTexview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/approvedAmt"
+            android:layout_toRightOf="@id/transAmt"
+            android:textAlignment="center"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/brown_des"
+            android:layout_marginLeft="15dp"
+            android:text="0.00"
+            />
+
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_below="@+id/date"
+            android:layout_toRightOf="@id/transAmt"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:text="Status"/>
+
+        <TextView
+            android:id="@+id/statusTexview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/transAmt"
+            android:textAlignment="center"
+            android:layout_below="@id/status"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/brown_des"
+            android:layout_marginLeft="15dp"
+            android:text="Success"
+            />
+
+
+    <View
+        android:layout_below="@id/transAmtTexview"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/faint_light_grey"/>
+
+
+</RelativeLayout>
+

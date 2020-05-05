@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">AssetManagementApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+
+    <string name="exiting_app_question">Do you really want to exit now?</string>
+    <string-array name="country">
+        <item>Country</item>
+        <item>Nigeria</item>
+        <item>Ghana</item>
+        <item>Togo</item>
+    </string-array>
+
+    <string-array name="state">
+        <item>State</item>
+        <item>Lagos</item>
+    </string-array>
+
+    <string-array name="idtype">
+        <item>ID Type</item>
+        <item>National ID Card</item>
+        <item>Driver Licence</item>
+    </string-array>
+
+
+    <string-array name="acct_type">
+        <item>Individual Account</item>
+        <item>Joint Account</item>
+    </string-array>
+
+    <string-array name="relationship">
+        <item>Select Relationship</item>
+        <item>Brother</item>
+        <item>Sister</item>
+    </string-array>
+
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+
+    <string-array name="status">
+        <item>Mr</item>
+        <item>Mrs</item>
+        <item>Miss</item>
+    </string-array>
+
+    <string-array name="bank">
+        <item>Select Bank</item>
+        <item>First Bank</item>
+        <item>Access BAnk</item>
+
+
+    </string-array>
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+    <string name="aopeyemi_yahoo_com_linearlayout"><![CDATA[Aopeyemi@yahoo.com /> </LinearLayout>]]></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_sugn_up">SugnUpActivity</string>
+    <string name="title_activity_change_password">ChangePasswordActivity</string>
+    <string name="title_activity_redemption_history">RedemptionHistory</string>
+    <string name="title_activity_delete">DeleteActivity</string>
+    <string name="title_activity_onboarding">OnboardingActivity</string>
+    <string name="title_activity_paystack_web">PaystackWebActivity</string>
+    <string name="app_alias">Asset Management</string>
+    <string name="log_out">Are you sure you want to log out of this App</string>
+    <string name="title_activity_new_fund_transfer">NewFundTransferActivity</string>
+    <string name="title_activity_calculator">CalculatorActivity</string>
+    <string name="title_activity_term_and_conditon">TermAndConditonActivity</string>
+    <string name="title_activity_test_drawar">TestDrawarActivity</string>
+
+
+</resources>

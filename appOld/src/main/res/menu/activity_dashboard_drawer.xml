@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/account_history"
+            android:title="Account History"
+            />
+        <item
+            android:id="@+id/settings"
+            android:title="Account Settings"
+            />
+
+        <item
+            android:id="@+id/calculator"
+            android:title="Investor Calculator"
+            />
+
+        <item
+            android:id="@+id/refer_friend"
+            android:title="Refer A Friend"
+            />
+
+        <item
+            android:id="@+id/help_desk"
+            android:title="Help Desk"
+            />
+
+
+    </group>
+
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/logout_grp">
+
+        <item
+            android:id="@+id/logout"
+            android:title="Log Out"
+            android:onClick="logout"
+            />
+
+
+    </group>
+
+
+
+</menu>
