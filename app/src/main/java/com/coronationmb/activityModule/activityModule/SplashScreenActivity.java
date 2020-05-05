@@ -21,6 +21,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         context=SplashScreenActivity.this;
 
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -34,4 +35,9 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         },SPLASH_TIME_OUT);
     }
+
+
+
+
+
 }

@@ -31,7 +31,7 @@ public class OnboardingViewAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return OnboardingFragment.newInstance(R.drawable.splash_screen_1, "The smartest way to grow your finance");
+                return OnboardingFragment.newInstance(R.drawable.splash_screen_1, "The smartest way to grow your wealth");
             case 1:
                 return OnboardingFragment.newInstance(R.drawable.splash_screen_2,"Grow together with a joint account");
 

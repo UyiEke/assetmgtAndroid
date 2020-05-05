@@ -160,6 +160,7 @@
                 android:background="@color/editTextColor"/>
 
             <LinearLayout
+                android:id="@+id/linear1"
                 android:layout_below="@id/view3"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
@@ -185,6 +186,56 @@
 
                     <EditText
                         android:id="@+id/passwordEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="10dp"
+                        android:hint="required"
+                        android:inputType="textPassword"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:gravity="top"
+                        android:paddingTop="5dp"
+                        android:background="@null"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/linear1"
+                android:background="@color/editTextColor"/>
+
+            <LinearLayout
+                android:layout_below="@id/linear1"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_margin="3dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_color"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:visibility="visible"
+                    android:textStyle="bold"
+                    android:text="Confirm Password   "/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:passwordToggleEnabled="true"
+                    >
+
+                    <EditText
+                        android:id="@+id/confirmpasswordEditText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:paddingLeft="15dp"
@@ -234,7 +285,7 @@
                 android:text="Already have an account?"/>
 
             <TextView
-                android:id="@+id/signUp"
+                android:id="@+id/back_to_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_color"

@@ -83,7 +83,7 @@ public class SubscriptionHistory extends Fragment {
 
     Context context;
     GlobalRepository repo;
-    List<SubscriptionHistoryModel> list;
+    List<SubscriptionHistoryModel> list=null;
 
     private Calendar myCalendar;
     private DatePickerDialog.OnDateSetListener date;
@@ -147,7 +147,9 @@ public class SubscriptionHistory extends Fragment {
             msg.setVisibility(View.GONE);
             adapter=new RedemptionAdapter(list,context,2);
             recycler.setAdapter(adapter);
-        }else {
+
+        }else
+            {
             list=new ArrayList();
             adapter=new RedemptionAdapter(list,context,2);
             recycler.setAdapter(adapter);
@@ -201,15 +203,20 @@ public class SubscriptionHistory extends Fragment {
     private void getHistory(String txnType){
 
         UserDetailsParam req=new UserDetailsParam();
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
         req.setFunctionId(Constant.subscriptionAndRedemptionHistory);
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context)+"|"+"0");
 
-        repo.subscriptionList(Constant.APPID, req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
+        repo.subscriptionList(SharedPref.getApi_ID(context), req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
             @Override
             public void onSuccess(List<SubscriptionHistoryModel> data) {
                 list=data;
+
+                if(data.size() ==0){
+                    msg.setVisibility(View.VISIBLE);
+                }
+
                 progressBar.setVisibility(View.GONE);
                 msg.setVisibility(View.GONE);
                 adapter=new RedemptionAdapter(data,context,2);

@@ -171,13 +171,13 @@ public class PortfolioStatementHistory extends Fragment {
 
     private void getportfolioStmtHistory(){
         UserDetailsParam req=new UserDetailsParam();
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
         req.setFunctionId(Constant.portfolioStmtHistory);
         req.setProfile(Constant.profile);
         DateFormat dateFormat=new SimpleDateFormat("MM-dd-yyyy");
         req.setParams("9-20-2016|"+dateFormat.format(new Date())+"|"+SharedPref.getUSERID(context));
         //  9-31-2018|9-10-2019|000940
-        repo.getPortfolioStatementHistory(Constant.APPID, req, new OnApiResponse<List<PortfolioStatementHistoryModel>>() {
+        repo.getPortfolioStatementHistory(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortfolioStatementHistoryModel>>() {
             @Override
             public void onSuccess(List<PortfolioStatementHistoryModel> data) {
                 if(data!=null){

@@ -5,10 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+
+import com.coronationmb.Model.OnApiResponse;
 import com.coronationmb.R;
 import com.coronationmb.activityModule.activityModule.ui.onboarding.OnboardingFragment;
 import com.coronationmb.activityModule.activityModule.ui.onboarding.OnboardingFragment22;
 import com.coronationmb.adapter.OnboardingViewAdapter;
+import com.coronationmb.service.GlobalRepository;
+import com.coronationmb.service.SharedPref;
 import com.google.android.material.tabs.TabLayout;
 
 import butterknife.BindView;
@@ -58,6 +62,9 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
         context=OnboardingActivity.this;
+
+        getId();
+
         ButterKnife.bind(this);
 
         acctTpe=1;
@@ -67,7 +74,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingF
 
     public void initUI(){
         OnboardingViewAdapter adapter=new OnboardingViewAdapter(getSupportFragmentManager(),context);
-        adapter.addFragment(OnboardingFragment.newInstance(R.drawable.splash_screen_1, "The smartest way to grow your finance"),"");
+        adapter.addFragment(OnboardingFragment.newInstance(R.drawable.splash_screen_1, "The smartest way to grow your wealth"),"");
         adapter.addFragment(OnboardingFragment.newInstance(R.drawable.splash_screen_2,"Grow together with a joint account"),"");
         viewpager.setAdapter(adapter);
         tablayout.setupWithViewPager(viewpager,true);
@@ -89,7 +96,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingF
 
                     case 0:
                         h1.setText("The smartest way to grow");
-                        h2.setText("your finances");
+                        h2.setText("your wealth");
                         acctTpe=1;
                         break;
                     case 1:
@@ -134,4 +141,23 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingF
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    private void getId(){
+
+        new GlobalRepository(context).getAppid(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApi_ID(context,data);
+                //      SharedPref.setApi_ID(context, data.getMessage());
+
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
+
 }

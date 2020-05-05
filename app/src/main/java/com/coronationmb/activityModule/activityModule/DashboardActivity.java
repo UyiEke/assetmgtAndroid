@@ -116,15 +116,6 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
          toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-     //   ActionBar actionBar = getSupportActionBar();
-      //  assert actionBar != null;
-      //  actionBar.setDisplayHomeAsUpEnabled(true);
-
-     //   Drawable gg=getResources().getDrawable(R.drawable.ic_menu_black_24dp);
-      //  gg.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-
-     //   actionBar.setHomeAsUpIndicator(gg);
-
 
         bundle=savedInstanceState;
 
@@ -165,6 +156,7 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
         login.setTitle(spannableString);
 
         String accountStatus=getIntent().getStringExtra("Temp");
+
         if(accountStatus!=null){
 
             if(accountStatus.equals("temporal account")){
@@ -418,9 +410,9 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context));
         req.setFunctionId(Constant.Am_Portfolio);
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
 
-        repo.getPortfolio(Constant.APPID, req, new OnApiResponse<List<PortFolioModel>>() {
+        repo.getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
 
             @Override
             public void onSuccess(List<PortFolioModel> data) {
@@ -438,10 +430,10 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
         req.setFunctionId(Constant.product);
 
-        repo.getProductAss(Constant.APPID, req, new OnApiResponse<List<AssetProduct>>() {
+        repo.getProductAss(SharedPref.getApi_ID(context), req, new OnApiResponse<List<AssetProduct>>() {
             @Override
             public void onSuccess(List<AssetProduct> data) {
                 product=data;
@@ -490,6 +482,20 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
 
     }
 
+/*
+    public void getImage(){
+        new GlobalRepository(context).downloadPofilePix(SharedPref.getUSERID(context), new OnApiResponse<byte[]>() {
+            @Override
+            public void onSuccess(byte[] data) {
 
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
+    */
 
 }

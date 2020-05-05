@@ -351,6 +351,12 @@ public class AcctSetUpActivity extends AppCompatActivity {
         pageInt = 1;
 
         requestPermissionAndContinue();
+
+        String custid_=SharedPref.getUSERID(context);
+        if(custid_.contains("@")){
+            email.setText(custid_);
+        }
+
     }
 
     @OnClick(R.id.dob)
@@ -366,6 +372,16 @@ public class AcctSetUpActivity extends AppCompatActivity {
     @OnClick(R.id.submit)
     public void submitAction() {
         int d = pageInt;
+
+        if(SharedPref.getApi_ID(context)==null){
+            getId();
+
+        }
+        if(SharedPref.getApp_token(context)==null){
+            getToken();
+
+        }
+
         switch (pageInt) {
 
             case 1:
@@ -402,6 +418,9 @@ public class AcctSetUpActivity extends AppCompatActivity {
                 break;
 
             case 3:
+
+                // Excluded page
+
                 title.setText("Identification");
                 personal_detail_layout.setVisibility(View.GONE);
                 bank_detail_layout.setVisibility(View.GONE);
@@ -432,6 +451,9 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
 
             case 5:
+
+                // Excluded page
+
                 title.setText("Sponsor");
                 personal_detail_layout.setVisibility(View.GONE);
                 bank_detail_layout.setVisibility(View.GONE);
@@ -503,6 +525,11 @@ public class AcctSetUpActivity extends AppCompatActivity {
         }
         if(Utility.checkDate(DOB)){
             Utility.alertOnly(context, "Invalid date of birth", "");
+            return;
+        }
+
+        if(Utility.validatePhoneNumber(custPhno)){
+            Utility.alertOnly(context, "Invalid phone number", "");
             return;
         }
 
@@ -750,42 +777,42 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
     public void selectPassport(){
         Intent intent=new Intent();
-        intent.setType("image/*");
+        intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Passport"),SELECT_PASSPORT);
     }
 
     public void selectProofAddres(){
         Intent intent=new Intent();
-        intent.setType("image/*");
+        intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Proof of Address"),PROOF_ADDRESS);
     }
 
     public void selectValidID(){
         Intent intent=new Intent();
-        intent.setType("image/*");
+        intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Valid ID"),VALID_ID);
     }
 
     public void selectSignature(){
         Intent intent=new Intent();
-        intent.setType("image/*");
+        intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Signature image"),SIGNATURE);
     }
 
     public void selectBirthCertificate(){
         Intent intent=new Intent();
-        intent.setType("image/*");
+        intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Birth Certificate image"),BIRTH_CERT);
     }
 
     public void selectSponsorId(){
         Intent intent=new Intent();
-        intent.setType("image/*");
+        intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Sponsor ID"),SPONSOR);
     }
@@ -923,7 +950,8 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+       // super.onBackPressed();
+        logout();
     }
 
     @OnClick(R.id.backarrow)
@@ -931,11 +959,12 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
         switch (pageInt) {
 
-            case 1:  onBackPressed();
+            case 1:
+                logout();
+
                 break;
 
             case 2:
-
                 title.setText("Personal Details");
                 personal_detail_layout.setVisibility(View.VISIBLE);
                 bank_detail_layout.setVisibility(View.GONE);
@@ -945,33 +974,12 @@ public class AcctSetUpActivity extends AppCompatActivity {
                 success_msg.setVisibility(View.GONE);
                 sponsor_layout.setVisibility(View.GONE);
                 submit.setText("Next");
+                pageInt=1;
 
-                break;
-
-            case 3:
-                title.setText("Bank Details");
-                personal_detail_layout.setVisibility(View.GONE);
-                bank_detail_layout.setVisibility(View.VISIBLE);
-                identification_layout.setVisibility(View.GONE);
-                next_kin_layout.setVisibility(View.GONE);
-                required_layout.setVisibility(View.GONE);
-                sponsor_layout.setVisibility(View.GONE);
-                success_msg.setVisibility(View.GONE);
-                submit.setText("Next");
                 break;
 
             case 4:
-                /*
-                title.setText("Identification & Uploads");
-                personal_detail_layout.setVisibility(View.GONE);
-                bank_detail_layout.setVisibility(View.GONE);
-                identification_layout.setVisibility(View.VISIBLE);
-                next_kin_layout.setVisibility(View.GONE);
-                required_layout.setVisibility(View.GONE);
-                success_msg.setVisibility(View.GONE);
-                sponsor_layout.setVisibility(View.GONE);
-                submit.setText("Next");
-                */
+
                 title.setText("Bank Details");
                 personal_detail_layout.setVisibility(View.GONE);
                 bank_detail_layout.setVisibility(View.VISIBLE);
@@ -980,11 +988,16 @@ public class AcctSetUpActivity extends AppCompatActivity {
                 required_layout.setVisibility(View.GONE);
                 sponsor_layout.setVisibility(View.GONE);
                 success_msg.setVisibility(View.GONE);
+
                 submit.setText("Next");
+                pageInt=2;
+              //  bankInfoAction();
+                // identification();
 
                 break;
 
-            case 5:
+            case 6:
+
                 title.setText("Next of Kin");
                 personal_detail_layout.setVisibility(View.GONE);
                 bank_detail_layout.setVisibility(View.GONE);
@@ -994,37 +1007,15 @@ public class AcctSetUpActivity extends AppCompatActivity {
                 sponsor_layout.setVisibility(View.GONE);
                 success_msg.setVisibility(View.GONE);
                 submit.setText("Next");
-                break;
-
-            case 6:
-                title.setText("Sponsor");
-                personal_detail_layout.setVisibility(View.GONE);
-                bank_detail_layout.setVisibility(View.GONE);
-                identification_layout.setVisibility(View.GONE);
-                next_kin_layout.setVisibility(View.GONE);
-                sponsor_layout.setVisibility(View.VISIBLE);
-                required_layout.setVisibility(View.GONE);
-                success_msg.setVisibility(View.GONE);
-                submit.setText("Next");
+                pageInt=4;
+              //  kinsInfoAction();
 
                 break;
 
-            case 7:
-                title.setText("Identification & Uploads");
-                personal_detail_layout.setVisibility(View.GONE);
-                bank_detail_layout.setVisibility(View.GONE);
-                identification_layout.setVisibility(View.GONE);
-                next_kin_layout.setVisibility(View.GONE);
-                sponsor_layout.setVisibility(View.GONE);
-                required_layout.setVisibility(View.VISIBLE);
-                success_msg.setVisibility(View.GONE);
-                submit.setText("Submit");
-
-                break;
-
-            default:
         }
+
     }
+
 
     private boolean checkPermission() {
 
@@ -1196,12 +1187,29 @@ public class AcctSetUpActivity extends AppCompatActivity {
         req.setTitle(user_titleVal);
         req.setGender(genderVal);
         req.setSurname(surnameVal);
-        req.setNextOfKinAddress(nextOfKinAddress);
+
+       // req.setNextOfKinAddress(nextOfKinAddress);
+
+        if(nextOfKinAddress.contains("\'")){
+            req.setNextOfKinAddress(nextOfKinAddress.replaceAll("\'", " "));
+        }
+        else {
+            req.setNextOfKinAddress(nextOfKinAddress);
+        }
+
         req.setOtherNames(other_nameVal);
         req.setFirstName(fnameVal);
         req.setEmail(custEmail);
         req.setDateOfBirth(DOB);
-        req.setResidentialAddress(custResidential_address);
+
+        if(custResidential_address.contains("\'")){
+           req.setResidentialAddress(custResidential_address.replaceAll("\'", " "));
+        }
+        else {
+            req.setResidentialAddress(custResidential_address);
+        }
+
+
         req.setCountry(custCountry);
         req.setCity(custCity);
         req.setLga(csutLga);
@@ -1241,7 +1249,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
     private void sendCompleteAccountCreation(CreateAccount req){
 
-        repo.CompleteAccountCreationByCustomer(Constant.APPID,req, new OnApiResponse<String>() {
+        repo.CompleteAccountCreationByCustomer(SharedPref.getApi_ID(context),req, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
 
@@ -1260,33 +1268,23 @@ public class AcctSetUpActivity extends AppCompatActivity {
     private void uploadKYCDoc(String kycID){
         List<MultipartBody.Part> files=new ArrayList<>();
         // create part for file (photo, video, ...)
-        MultipartBody.Part passport = prepareFilePart("passport", passPortUri);
+        MultipartBody.Part passport = prepareFilePart("files", passPortUri);
         files.add(passport);
         // create part for file (photo, video, ...)
-        MultipartBody.Part validID = prepareFilePart("validID", validIDuri);
+        MultipartBody.Part validID = prepareFilePart("files", validIDuri);
         files.add(validID);
 
-        MultipartBody.Part proofAddr = prepareFilePart("validID", proofAddressUri);
+        MultipartBody.Part proofAddr = prepareFilePart("files", proofAddressUri);
         files.add(proofAddr);
 
         // create part for file (photo, video, ...)
-        MultipartBody.Part signature = prepareFilePart("signature", signatureUri);
+        MultipartBody.Part signature = prepareFilePart("files", signatureUri);
         files.add(signature);
-/*
-        if(isMinor) {
-            // create part for file (photo, video, ...)
-            MultipartBody.Part birthCertificate = prepareFilePart("birthCertif", birthuri);
-            files.add(birthCertificate);
 
-            // create part for file (photo, video, ...)
-            MultipartBody.Part sponsorU = prepareFilePart("SponsorPassport", sponsorUri);
-            files.add(sponsorU);
-        }
-        */
 
-        repo.kycUploads(Constant.APPID, kycID, SharedPref.getUSERID(context),files, new OnApiResponse<WebResponse<String>>() {
+        repo.kycUploads(SharedPref.getApi_ID(context), kycID, SharedPref.getUSERID(context),files, new OnApiResponse<String>() {
             @Override
-            public void onSuccess(WebResponse<String> data) {
+            public void onSuccess(String data) {
                 progress.dismiss();
 
                 title.setVisibility(View.GONE);
@@ -1357,5 +1355,73 @@ public class AcctSetUpActivity extends AppCompatActivity {
         // MultipartBody.Part is used to send also the actual file name
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
     }
+
+
+    private void getToken(){
+
+        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApp_token(context,data);
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
+
+
+    private void getId(){
+
+        new GlobalRepository(context).getAppid(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApi_ID(context, data);
+
+                //getToken2();
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
+
+
+    public void logout() {
+
+        new androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle(getString(R.string.app_alias))
+                .setMessage(context.getString(R.string.log_out))
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(context, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(R.drawable.lionhead_icon)
+                .show();
+
+
+    }
+
+
+
+
 
 }

@@ -13,8 +13,9 @@ import static androidx.core.content.ContextCompat.getSystemService;
 public class Constant {
     public  static final Spanned nairaSymbol= Html.fromHtml("&#8358");
     public static final String profile="am";
-    public static final String APPID="cmbgrp";
+    public static final String hubAPPID="cmbgrp";
     public static String BaseUrl="http://197.253.42.227:8080/assetmanagement/";
+    public static final String cmbBankCode="CMB";
 
     //Adhl@28
 

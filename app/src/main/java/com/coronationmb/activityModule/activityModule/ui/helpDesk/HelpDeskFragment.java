@@ -104,23 +104,9 @@ public class HelpDeskFragment extends Fragment {
         req.setSubject(subject);
         req.setProfile(Constant.profile);
 
-        /*
-        repo.support(Constant.APPID, req, new OnApiResponse<String>() {
-            @Override
-            public void onSuccess(WebResponse<String> data) {
-                progress.dismiss();
-                alert(data.getMessage(),"");
-            }
 
-            @Override
-            public void onFailed(String message) {
-                progress.dismiss();
-                Utility.alertOnly(context,message,"");
-            }
-        });
-        */
 
-        repo.support(Constant.APPID, req, new OnApiResponse<String>() {
+        repo.support(SharedPref.getApi_ID(context), req, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
                 progress.dismiss();

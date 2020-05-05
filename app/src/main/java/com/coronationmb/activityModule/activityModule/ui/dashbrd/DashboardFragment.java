@@ -1,9 +1,13 @@
 package com.coronationmb.activityModule.activityModule.ui.dashbrd;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,11 +28,16 @@ import com.coronationmb.service.GlobalRepository;
 import com.coronationmb.service.SharedPref;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 
 
 public class DashboardFragment extends Fragment {
@@ -83,6 +92,7 @@ public class DashboardFragment extends Fragment {
 
     }
 
+    /*
     private void getImage(){
 
         Picasso.with(getContext())
@@ -92,6 +102,31 @@ public class DashboardFragment extends Fragment {
                 .into(((DashboardActivity)getContext()).profile_image);
 
     }
+
+    */
+
+    public void getImage(){
+
+        String cusId=SharedPref.getUSERID(getContext());
+
+  new GlobalRepository(getContext()).downloadPofilePix(cusId, new OnApiResponse<ResponseBody>() {
+      @Override
+      public void onSuccess(ResponseBody data) {
+
+          Bitmap bmp= BitmapFactory.decodeStream(data.byteStream());
+
+         ((DashboardActivity)getContext()).profile_image.setImageBitmap(bmp);
+
+
+      }
+
+      @Override
+      public void onFailed(String message) {
+
+      }
+  });
+    }
+
 
 
 

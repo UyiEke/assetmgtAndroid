@@ -122,6 +122,7 @@
                                 android:imeOptions="actionDone"
                                 android:inputType="number"
                                 android:textSize="16sp"
+                                android:maxLength="13"
                                 android:background="@drawable/circular_edge_light_blue"
                                 android:paddingLeft="15dp"
                                 />

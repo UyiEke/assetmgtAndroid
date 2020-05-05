@@ -12,6 +12,7 @@ import com.coronationmb.Model.requestModel.CreateAccount;
 import com.coronationmb.Model.requestModel.TemporarySignUpModel;
 import com.coronationmb.service.Constant;
 import com.coronationmb.service.GlobalRepository;
+import com.coronationmb.service.SharedPref;
 import com.coronationmb.service.Utility;
 
 import androidx.appcompat.app.AlertDialog;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.coronationmb.R;
@@ -52,6 +54,14 @@ Context context;
 
     @BindView(R.id.passwordEditText)
     EditText passwordEditText;
+
+    @BindView(R.id.confirmpasswordEditText)
+    EditText confirmpasswordEditText;
+
+    @BindView(R.id.back_to_login)
+    TextView back_to_login;
+
+
 
     @BindView(R.id.submit)
     Button submit;
@@ -99,6 +109,7 @@ Context context;
         String eMail=email.getText().toString().trim();
         String phNumber=phone_no.getText().toString().trim();
         String passw=passwordEditText.getText().toString().trim();
+        String confirmPass=confirmpasswordEditText.getText().toString().trim();
 
 
         /*
@@ -110,7 +121,8 @@ Context context;
         */
 
 
-        if(TextUtils.isEmpty(fName)||TextUtils.isEmpty(eMail)||TextUtils.isEmpty(phNumber)||TextUtils.isEmpty(passw)){
+        if(TextUtils.isEmpty(fName)||TextUtils.isEmpty(eMail)||TextUtils.isEmpty(phNumber)||TextUtils.isEmpty(passw)
+                ||TextUtils.isEmpty(confirmPass)){
             progress.dismiss();
             Utility.alertOnly(context,"Empty Fields","");
             return;
@@ -128,6 +140,12 @@ Context context;
             return;
         }
 
+        if(!(passw.equals(confirmPass))){
+            progress.dismiss();
+            Utility.alertOnly(context,"Password Mis-match","");
+            return;
+        }
+
         /*
         if(val==2){
             TemporarySignUpModel req=new TemporarySignUpModel();
@@ -140,7 +158,7 @@ Context context;
         req.setName(fName);
         req.setPhoneNumber(phNumber);
         req.setPassword(passw);
-        repo.createTemporaryAccount(Constant.APPID, req, new OnApiResponse<WebResponse<String>>() {
+        repo.createTemporaryAccount(SharedPref.getApi_ID(context), req, new OnApiResponse<WebResponse<String>>() {
             @Override
             public void onSuccess(WebResponse<String> data) {
                 progress.dismiss();
@@ -160,6 +178,12 @@ Context context;
 
     }
 
+@OnClick(R.id.back_to_login)
+public void backtoLogin(){
+
+        startActivity(new Intent(context,LoginActivity.class));
+
+}
 
     @Override
     public void onBackPressed() {

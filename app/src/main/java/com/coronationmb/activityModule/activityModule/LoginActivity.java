@@ -13,14 +13,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
@@ -69,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
     TextView signUp;
 
     GlobalRepository repo;
+    private String custID;
+    private String passw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         this.context = LoginActivity.this;
+
+        getToken();
 
        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
@@ -190,8 +191,8 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.submit)
     public void loginAction(View view){
         progress.show();
-        String custID=usernameEdit.getText().toString().trim();
-        String passw=passwordEditText.getText().toString().trim();
+         custID=usernameEdit.getText().toString().trim();
+         passw=passwordEditText.getText().toString().trim();
         if(TextUtils.isEmpty(custID)|| TextUtils.isEmpty(passw)){
             progress.dismiss();
             Utility.alertOnly(context,"Empty Fields","");
@@ -204,11 +205,25 @@ public class LoginActivity extends AppCompatActivity {
         }
         Utility.hideKeyboardFrom(context,view);
 
+        if(SharedPref.getApi_ID(context)==null){
+            getId();
+            return;
+        }
+        if(SharedPref.getApp_token(context)==null){
+            getToken2();
+            return;
+        }
+        login();
+    }
+
+
+    private void login(){
+
         LoginModel req=new LoginModel();
         req.setCustUserID(custID);
         req.setProfile(Constant.profile);
         req.setPWD(passw);
-        repo.login(Constant.APPID, req, new OnApiResponse<WebResponse<JsonObject>>() {
+        repo.login(SharedPref.getApi_ID(context), req, new OnApiResponse<WebResponse<JsonObject>>() {
             @Override
             public void onSuccess(WebResponse<JsonObject> data) {
                 progress.dismiss();
@@ -224,13 +239,13 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }
-               else if(SharedPref.getPASSWORDCHANGED(context)) {
+                else if(SharedPref.getPASSWORDCHANGED(context)) {
                     startActivity(new Intent(context, DashboardActivity.class));
-                    Utility.hideKeyboardFrom(context,view);
+                  //  Utility.hideKeyboardFrom(context,view);
 
                 }else {
                     startActivity(new Intent(context, ChangePasswordActivity.class));
-                    Utility.hideKeyboardFrom(context,view);
+               //     Utility.hideKeyboardFrom(context,view);
                 }
             }
             @Override
@@ -239,7 +254,10 @@ public class LoginActivity extends AppCompatActivity {
                 Utility.alertOnly(context,message,"");
             }
         });
+
     }
+
+
 
     @OnClick(R.id.signUp)
     public void createAccount(){
@@ -255,6 +273,59 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
+    }
+
+    private void getToken2(){
+
+        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                    SharedPref.setApp_token(context,data);
+                    login();
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
+
+
+    private void getToken(){
+
+        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApp_token(context,data);
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
+
+
+    private void getId(){
+
+        new GlobalRepository(context).getAppid(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApi_ID(context, data);
+
+                getToken2();
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
     }
 
 }

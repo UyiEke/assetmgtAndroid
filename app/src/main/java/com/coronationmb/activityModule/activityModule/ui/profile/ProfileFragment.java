@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -128,7 +130,7 @@ public class ProfileFragment extends Fragment {
         context=getContext();
         repo=new GlobalRepository(context);
         ButterKnife.bind(this, root);
-        getImage();
+       // getImage();
         getProduct();
         return root;
     }
@@ -224,11 +226,11 @@ public class ProfileFragment extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
         req.setParams(SharedPref.getUSERID(getContext()));
         req.setFunctionId(Constant.Am_Portfolio);
 
-        repo.getPortfolio(Constant.APPID, req, new OnApiResponse<List<PortFolioModel>>() {
+        repo.getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 displayProfile(data);
@@ -268,7 +270,7 @@ public class ProfileFragment extends Fragment {
                 .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                        // exitApp();
-                        pickFromGallery();
+                      //  pickFromGallery();
                     }
                 })
                 /*
@@ -355,7 +357,7 @@ public class ProfileFragment extends Fragment {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), passPortUri);
                 profile_image.setImageBitmap(bitmap);
 
-                uploadProfilePixToServer(passPortUri);
+                uploadProfilePixToServer(passPortUri,bitmap);
 
 
             } catch (Exception e) {
@@ -388,25 +390,27 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void uploadProfilePixToServer(Uri imageUri){
+    private void uploadProfilePixToServer(Uri imageUri, Bitmap bitmap){
         // create part for file (photo, video, ...)
         MultipartBody.Part passport = prepareFilePart("files", imageUri);
 
-        repo.uploadPofilePix(Constant.APPID, SharedPref.getUSERID(getContext()), passport, new OnApiResponse<String>() {
+        repo.uploadPofilePix(SharedPref.getApi_ID(context), SharedPref.getUSERID(getContext()), passport, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
                 Toast.makeText(getContext(),"Upload of profile picture was successful",Toast.LENGTH_LONG).show();
-                getImageMain();
+               // getImageMain();
+                ((DashboardActivity)getContext()).profile_image.setImageBitmap(bitmap);
             }
 
             @Override
             public void onFailed(String message) {
-               // Toast.makeText(getContext(),"Upload of profile picture failed",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Failed to upload picture",Toast.LENGTH_LONG).show();
             }
         });
 
     }
 
+    /*
     private void getImage(){
 
         Picasso.with(getContext())
@@ -417,6 +421,55 @@ public class ProfileFragment extends Fragment {
                 .into(profile_image);
 
     }
+    */
+
+
+    public void getImage(){
+
+        String cusId=SharedPref.getUSERID(getContext());
+
+        new GlobalRepository(getContext()).downloadPofilePix(cusId, new OnApiResponse<ResponseBody>() {
+            @Override
+            public void onSuccess(ResponseBody data) {
+
+                Bitmap bmp= BitmapFactory.decodeStream(data.byteStream());
+
+                profile_image.setImageBitmap(bmp);
+
+
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
+
+
+    public void getImageMain(){
+
+        String cusId=SharedPref.getUSERID(getContext());
+
+        new GlobalRepository(getContext()).downloadPofilePix(cusId, new OnApiResponse<ResponseBody>() {
+            @Override
+            public void onSuccess(ResponseBody data) {
+
+                Bitmap bmp= BitmapFactory.decodeStream(data.byteStream());
+
+                ((DashboardActivity)getContext()).profile_image.setImageBitmap(bmp);
+
+
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
+
+
 
     @NonNull
     private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
@@ -432,7 +485,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
-
+/*
     private void getImageMain(){
 
         Picasso.with(getContext())
@@ -443,5 +496,7 @@ public class ProfileFragment extends Fragment {
                // .into(profile_image);
 
     }
+
+    */
 
 }

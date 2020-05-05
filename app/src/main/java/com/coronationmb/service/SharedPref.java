@@ -18,6 +18,10 @@ public class SharedPref {
 
     public static String PROFILE_IMAGE="profile_image";
 
+    public static String app_token="app_token";
+
+    public static String api_ID="api_ID";
+
 
 
 
@@ -28,9 +32,35 @@ public class SharedPref {
         return context.getSharedPreferences("AssetManagement",Context.MODE_PRIVATE);
     }
 
+
+    public static String getApi_ID(Context context) {
+        return getSharedPreferences(context).getString(api_ID,null);
+    }
+
+    public static void setApi_ID(Context context,String api_ID_) {
+
+        SharedPreferences.Editor editor=getSharedPreferences(context).edit();
+        editor.putString(api_ID,api_ID_).apply();
+
+    }
+
+
+    public static String getApp_token(Context context) {
+        return getSharedPreferences(context).getString(app_token,null);
+    }
+
+    public static void setApp_token(Context context,String app_token_) {
+
+        SharedPreferences.Editor editor=getSharedPreferences(context).edit();
+        editor.putString(app_token,app_token_).apply();
+    }
+
+
+
     public static String getUSERID(Context context) {
         return getSharedPreferences(context).getString(USERID,null);
     }
+
 
     public static void setUSERID(Context context,String UserID) {
         SharedPreferences.Editor editor=getSharedPreferences(context).edit();

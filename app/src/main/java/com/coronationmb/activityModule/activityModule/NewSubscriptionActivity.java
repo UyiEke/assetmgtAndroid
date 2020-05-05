@@ -12,15 +12,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
 import com.coronationmb.Model.OnApiResponse;
 import com.coronationmb.Model.UserDetailsParam;
 import com.coronationmb.Model.requestModel.SubscribeModel;
-import com.coronationmb.Model.requestModel.SubscriptionModel;
 import com.coronationmb.Model.responseModel.PortFolioModel;
 import com.coronationmb.R;
 import com.coronationmb.service.Constant;
@@ -28,7 +25,6 @@ import com.coronationmb.service.CustomeSpinner.SearchableSpinner;
 import com.coronationmb.service.GlobalRepository;
 import com.coronationmb.service.SharedPref;
 import com.coronationmb.service.Utility;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -37,8 +33,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.coronationmb.service.Utility.round;
 
 public class NewSubscriptionActivity extends AppCompatActivity {
 
@@ -146,6 +140,7 @@ public class NewSubscriptionActivity extends AppCompatActivity {
 
     @OnClick(R.id.submit)
     public void sendRequest(){
+        boolean isCMBaccount=false;
         progress.show();
         String productName=product_symbol.getSelectedItem().toString().trim();
         String amt=amount.getText().toString().trim();
@@ -158,7 +153,7 @@ public class NewSubscriptionActivity extends AppCompatActivity {
         }
         SubscribeModel req=new SubscribeModel();
         req.setAmount(amt);
-        req.setAppid(Constant.APPID);
+        req.setAppid(SharedPref.getApi_ID(context));
         req.setEmail(SharedPref.getEMAIL(context));
         req.setCustid(SharedPref.getUSERID(context));
 
@@ -173,7 +168,7 @@ public class NewSubscriptionActivity extends AppCompatActivity {
         req.setProfile(Constant.profile);
         req.setNarration(SharedPref.getFULLNAME(context)+ " subscription");
 
-        repo.subscriptionAction(Constant.APPID, req, new OnApiResponse<String>() {
+        repo.subscriptionAction(SharedPref.getApi_ID(context), req, isCMBaccount, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
                 progress.dismiss();
@@ -196,9 +191,9 @@ public class NewSubscriptionActivity extends AppCompatActivity {
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context));
         req.setFunctionId(Constant.Am_Portfolio);
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
 
-        repo.getPortfolio(Constant.APPID, req, new OnApiResponse<List<PortFolioModel>>() {
+        repo.getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 portFolioData=data;

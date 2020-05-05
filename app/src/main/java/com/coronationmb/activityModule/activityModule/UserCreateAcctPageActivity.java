@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.coronationmb.Model.OnApiResponse;
+import com.coronationmb.service.GlobalRepository;
+import com.coronationmb.service.SharedPref;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -45,6 +48,7 @@ public class UserCreateAcctPageActivity extends AppCompatActivity {
     public void initUI(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getToken();
 
     }
 
@@ -72,5 +76,20 @@ public class UserCreateAcctPageActivity extends AppCompatActivity {
 
     }
 
+    private void getToken(){
+
+        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApp_token(context,data);
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+    }
 
 }

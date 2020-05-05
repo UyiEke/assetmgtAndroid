@@ -74,13 +74,7 @@ public class CalculatorActivity extends AppCompatActivity {
         repo=new GlobalRepository(context);
 
         calculatorIndex=getIntent().getIntExtra("calculatorIndex",0);
-/*
-        if(calculatorIndex == 2){
-            monhly_contributn.setVisibility(View.VISIBLE);
-        }else {
-            monhly_contributn.setVisibility(View.GONE);
-        }
-        */
+
 
         if(calculatorIndex == 3){
             monhly_contributn.setVisibility(View.VISIBLE);

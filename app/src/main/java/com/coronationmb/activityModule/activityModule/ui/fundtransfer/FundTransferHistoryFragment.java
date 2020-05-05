@@ -162,12 +162,12 @@ public class FundTransferHistoryFragment extends Fragment {
     private void getHistory(String txnType){
 
         UserDetailsParam req=new UserDetailsParam();
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
         req.setFunctionId("P_00072");
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context)+"|"+txnType);
 
-        repo.subscriptionList(Constant.APPID, req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
+        repo.subscriptionList(SharedPref.getApi_ID(context), req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
             @Override
             public void onSuccess(List<SubscriptionHistoryModel> data) {
                 progressBar.setVisibility(View.GONE);

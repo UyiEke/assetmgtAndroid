@@ -42,7 +42,7 @@ public class Utility {
         new androidx.appcompat.app.AlertDialog.Builder(context)
                 .setTitle("Asset Management")
                 .setMessage(msg)
-                .setCancelable(true)
+                .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                       //  exitApp();

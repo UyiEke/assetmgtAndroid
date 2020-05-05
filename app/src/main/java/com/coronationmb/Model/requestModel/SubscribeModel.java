@@ -28,6 +28,26 @@ public class SubscribeModel implements Serializable {
     @JsonProperty("narration")
     private String narration;
 
+    private String bankaccount;
+    private String bankcode;
+
+    public String getBankaccount() {
+        return bankaccount;
+    }
+
+    public void setBankaccount(String bankaccount) {
+        this.bankaccount = bankaccount;
+    }
+
+    public String getBankcode() {
+        return bankcode;
+    }
+
+    public void setBankcode(String bankcode) {
+        this.bankcode = bankcode;
+    }
+
+
     /*
   "": 67000,
           "appCallBackUrl": "http://localhost:8900",

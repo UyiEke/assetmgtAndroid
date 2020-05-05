@@ -222,10 +222,10 @@ public class MainDashboardChart extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(getContext()));
         req.setParams(SharedPref.getUSERID(getContext()));
         req.setFunctionId(Constant.Am_Portfolio);
-        new GlobalRepository(getContext()).getPortfolio(Constant.APPID, req, new OnApiResponse<List<PortFolioModel>>() {
+        new GlobalRepository(getContext()).getPortfolio(SharedPref.getApi_ID(getContext()), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 chartPortFolio=data;

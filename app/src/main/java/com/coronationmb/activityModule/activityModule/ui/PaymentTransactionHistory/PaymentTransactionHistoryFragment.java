@@ -114,7 +114,7 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
 
     private void getTransactionHistory(){
 
-        repo.getTransactionHistory(SharedPref.getUSERID(context), Constant.profile, Constant.APPID, new OnApiResponse<List<TransactionHistoryModel>>() {
+        repo.getTransactionHistory(SharedPref.getUSERID(context), Constant.profile,SharedPref.getApi_ID(context), new OnApiResponse<List<TransactionHistoryModel>>() {
             @Override
             public void onSuccess(List<TransactionHistoryModel> data) {
                 list=data;

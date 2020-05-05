@@ -13,6 +13,7 @@ import com.coronationmb.Model.requestModel.ChangePasswModel;
 import com.coronationmb.activityModule.activityModule.ui.changePassword.ChangePasswdViewModel;
 import com.coronationmb.service.Constant;
 import com.coronationmb.service.GlobalRepository;
+import com.coronationmb.service.SharedPref;
 import com.coronationmb.service.Utility;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -34,7 +35,6 @@ import butterknife.OnClick;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
-
     @BindView(R.id.usernameEdit)
     EditText usernameEdit;
 
@@ -49,6 +49,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     GlobalRepository repo;
 
     private ChangePasswdViewModel changePasswdViewModel;
+
     private ProgressDialog progress;
     Context context;
 
@@ -58,6 +59,10 @@ public class ChangePasswordActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_change_password);
         ButterKnife.bind(this);
         context=ChangePasswordActivity.this;
+
+
+        usernameEdit.setText(SharedPref.getUSERID(context));
+
         initUI();
     }
 
@@ -82,19 +87,24 @@ public class ChangePasswordActivity extends AppCompatActivity {
             Utility.alertOnly(context,"Empty Field","");
             return;
         }
+
         ChangePasswModel req=new ChangePasswModel();
         req.setCurrentPassword(oldPasswd);
         req.setCustAID(custId);
         req.setNewPassword(newPasswd);
+        req.setProfile("am");
+        req.setPwdChangeRequired(false);
 
-        repo.changePassword(Constant.APPID, req, new OnApiResponse<WebResponse<JsonObject>>() {
+        repo.changePassword(SharedPref.getApi_ID(context), req, new OnApiResponse<String>() {
             @Override
-            public void onSuccess(WebResponse<JsonObject> data) {
-                alert(data.getMessage(),"");
+            public void onSuccess(String data) {
+                progress.dismiss();
+                alert(data,"");
             }
 
             @Override
             public void onFailed(String message) {
+                progress.dismiss();
                 Utility.alertOnly(context,message,"");
             }
         });

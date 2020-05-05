@@ -177,13 +177,13 @@ public class PortfolioTransactionHistory extends Fragment {
         //  000940|CMMFUND
 
         UserDetailsParam req=new UserDetailsParam();
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
         req.setFunctionId(Constant.portfolioTransactionHistory);
         req.setProfile(Constant.profile);
         DateFormat dateFormat=new SimpleDateFormat("MM-dd-yyyy");
         req.setParams(SharedPref.getUSERID(context)+"|CMMFUND");
         //  9-31-2018|9-10-2019|000940
-        repo.getPortfolioTransactionHistory(Constant.APPID, req, new OnApiResponse<List<PortfolioTransactionModel>>() {
+        repo.getPortfolioTransactionHistory(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortfolioTransactionModel>>() {
             @Override
             public void onSuccess(List<PortfolioTransactionModel> data) {
                 if(data!=null){

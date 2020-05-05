@@ -236,10 +236,10 @@ public class MainDashboardViewFragment extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(getContext()));
         req.setFunctionId(Constant.product);
 
-        repo.getProductAss(Constant.APPID, req, new OnApiResponse<List<AssetProduct>>() {
+        repo.getProductAss(SharedPref.getApi_ID(getContext()), req, new OnApiResponse<List<AssetProduct>>() {
             @Override
             public void onSuccess(List<AssetProduct> data) {
                 product_progressBar.setVisibility(View.GONE);
@@ -262,11 +262,11 @@ public class MainDashboardViewFragment extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(getContext()));
         req.setParams(SharedPref.getUSERID(getContext()));
         req.setFunctionId(Constant.Am_Portfolio);
 
-        repo.getPortfolio(Constant.APPID, req, new OnApiResponse<List<PortFolioModel>>() {
+        repo.getPortfolio(SharedPref.getApi_ID(getContext()), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 portFolio=data;
@@ -287,33 +287,7 @@ public class MainDashboardViewFragment extends Fragment {
 
     }
 
-    /*
-    public void greet(){
 
-        DateFormat df = new SimpleDateFormat("EEEE, MMMM dd", Locale.ENGLISH);
-        String data = df.format(new Date());
-
-        dayTextview.setText(data);
-
-        Calendar c = Calendar.getInstance();
-        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
-
-        if(timeOfDay >= 0 && timeOfDay < 12){
-          //  Toast.makeText(this, "Good Morning", Toast.LENGTH_SHORT).show();
-            greetTextview.setText("Good Morning "+SharedPref.getFULLNAME(getContext()));
-        }else if(timeOfDay >= 12 && timeOfDay < 16){
-           // Toast.makeText(this, "Good Afternoon", Toast.LENGTH_SHORT).show();
-            greetTextview.setText("Good Afternoon "+SharedPref.getFULLNAME(getContext()));
-        }else if(timeOfDay >= 16 && timeOfDay < 21){
-           // Toast.makeText(this, "Good Evening", Toast.LENGTH_SHORT).show();
-            greetTextview.setText("Good Evening "+SharedPref.getFULLNAME(getContext()));
-        }else if(timeOfDay >= 21 && timeOfDay < 24){
-           // Toast.makeText(this, "Good Night", Toast.LENGTH_SHORT).show();
-            greetTextview.setText("Good Night "+SharedPref.getFULLNAME(getContext()));
-        }
-
-    }
-    */
 
     public void showBalance(List<PortFolioModel> data){
 

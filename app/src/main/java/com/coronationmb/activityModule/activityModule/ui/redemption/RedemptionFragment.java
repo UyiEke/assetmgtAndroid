@@ -87,9 +87,9 @@ public class RedemptionFragment extends Fragment {
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context));
         req.setFunctionId(Constant.Am_Portfolio);
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
 
-        new GlobalRepository(context).getPortfolio(Constant.APPID, req, new OnApiResponse<List<PortFolioModel>>() {
+        new GlobalRepository(context).getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
 
             @Override
             public void onSuccess(List<PortFolioModel> data) {

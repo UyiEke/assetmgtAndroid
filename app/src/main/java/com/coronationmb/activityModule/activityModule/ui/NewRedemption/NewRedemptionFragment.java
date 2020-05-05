@@ -211,13 +211,13 @@ public class NewRedemptionFragment extends Fragment {
         Utility.hideKeyboardFrom(context,view);
 
         UserDetailsParam req=new UserDetailsParam();
-        req.setAppId(Constant.APPID);
+        req.setAppId(SharedPref.getApi_ID(context));
         req.setFunctionId(Constant.redeem);
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context)+"|"+productSym+"|"+productName+"|"+amt+"|1|"+amt+"|"+"1");
 
 
-        repo.redemption(Constant.APPID, req, new OnApiResponse<ArrayList<PortFolioModel>>() {
+        repo.redemption(SharedPref.getApi_ID(context), req, new OnApiResponse<ArrayList<PortFolioModel>>() {
             @Override
             public void onSuccess(ArrayList<PortFolioModel> data) {
                 progress.dismiss();

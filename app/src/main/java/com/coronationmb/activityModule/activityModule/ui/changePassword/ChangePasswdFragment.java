@@ -28,6 +28,7 @@ import com.coronationmb.activityModule.activityModule.DashboardActivity;
 import com.coronationmb.activityModule.activityModule.LoginActivity;
 import com.coronationmb.service.Constant;
 import com.coronationmb.service.GlobalRepository;
+import com.coronationmb.service.SharedPref;
 import com.coronationmb.service.Utility;
 import com.google.gson.JsonObject;
 
@@ -48,6 +49,9 @@ public class ChangePasswdFragment extends Fragment {
     @BindView(R.id.newpasswordEditText)
     EditText newpasswordEditText;
 
+    @BindView(R.id.confirmpasswordEditText)
+    EditText confirmpasswordEditText;
+
     @BindView(R.id.submit)
     Button submit;
     GlobalRepository repo;
@@ -65,7 +69,6 @@ public class ChangePasswdFragment extends Fragment {
 
         ((DashboardActivity)context).changeToolbarTitle("SETTINGS");
 
-     //   ((DashboardActivity)context).changeToolbarTitle("Account History");
 
         ( (DashboardActivity)context).changeHamburgerIconClor();
 
@@ -80,6 +83,8 @@ public class ChangePasswdFragment extends Fragment {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         repo=new GlobalRepository(context);
+
+        usernameEdit.setText(SharedPref.getUSERID(context));
     }
 
     @OnClick(R.id.submit)
@@ -89,25 +94,39 @@ public class ChangePasswdFragment extends Fragment {
         String oldPasswd=oldPasswdEditText.getText().toString().trim();
         String newPasswd=newpasswordEditText.getText().toString().trim();
 
-        if(TextUtils.isEmpty(custId)||TextUtils.isEmpty(oldPasswd)||TextUtils.isEmpty(newPasswd)){
+        String confirmpasswordE=confirmpasswordEditText.getText().toString().trim();
+
+        if(TextUtils.isEmpty(custId)||TextUtils.isEmpty(oldPasswd)||TextUtils.isEmpty(newPasswd)
+                ||TextUtils.isEmpty(confirmpasswordE)){
             progress.dismiss();
             Utility.alertOnly(context,"Empty Field","");
             return;
         }
+
+        if(!(confirmpasswordE.equals(newPasswd))){
+            progress.dismiss();
+            Utility.alertOnly(context,"Password Mis-match","");
+            return;
+        }
+
         ChangePasswModel req=new ChangePasswModel();
         req.setCurrentPassword(oldPasswd);
         req.setCustAID(custId);
         req.setNewPassword(newPasswd);
+        req.setProfile("am");
 
-        repo.changePassword(Constant.APPID, req, new OnApiResponse<WebResponse<JsonObject>>() {
+
+        repo.changePassword(SharedPref.getApi_ID(context), req, new OnApiResponse<String>() {
             @Override
-            public void onSuccess(WebResponse<JsonObject> data) {
-                alert(data.getMessage(),"");
+            public void onSuccess(String data) {
+                progress.dismiss();
+                alert(data,"");
             }
 
             @Override
             public void onFailed(String message) {
-            Utility.alertOnly(context,message,"");
+                progress.dismiss();
+                Utility.alertOnly(context,message,"");
             }
         });
     }
