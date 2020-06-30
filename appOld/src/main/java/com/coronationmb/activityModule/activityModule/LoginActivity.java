@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.signUp)
     TextView signUp;
 
-    GlobalRepository repo;
     private String custID;
     private String passw;
 

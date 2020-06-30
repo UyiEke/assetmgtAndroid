@@ -32,6 +32,9 @@ import com.coronationmb.service.SharedPref;
 import com.coronationmb.service.Utility;
 import com.google.gson.JsonObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,17 +57,16 @@ public class ChangePasswdFragment extends Fragment {
 
     @BindView(R.id.submit)
     Button submit;
-    GlobalRepository repo;
+
+    Context context;
 
     private ChangePasswdViewModel changePasswdViewModel;
     private ProgressDialog progress;
-    Context context;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         changePasswdViewModel = ViewModelProviders.of(this).get(ChangePasswdViewModel.class);
         View root = inflater.inflate(R.layout.fragment_change_password, container, false);
-        context=getContext();
         ButterKnife.bind(this,root);
 
         ((DashboardActivity)context).changeToolbarTitle("SETTINGS");
@@ -82,7 +84,6 @@ public class ChangePasswdFragment extends Fragment {
         progress.setMessage("please wait.......");
         progress.setIndeterminate(true);
         progress.setProgress(0);
-        repo=new GlobalRepository(context);
 
         usernameEdit.setText(SharedPref.getUSERID(context));
     }
@@ -103,6 +104,31 @@ public class ChangePasswdFragment extends Fragment {
             return;
         }
 
+
+
+
+
+        if(!isPasswordPolicyValid(newPasswd)){
+
+            progress.dismiss();
+            Utility.alertOnly(context,"Password should be minimum of nine character, at least one uppercase letter, one lowercase letter, one number and one special character","");
+            return;
+        }
+
+
+
+        if(!isPasswordPolicyValid(confirmpasswordE)){
+
+            progress.dismiss();
+            Utility.alertOnly(context,"Password should be minimum of nine character, at least one uppercase letter, one lowercase letter, one number and one special character","");
+            return;
+        }
+
+
+
+
+
+
         if(!(confirmpasswordE.equals(newPasswd))){
             progress.dismiss();
             Utility.alertOnly(context,"Password Mis-match","");
@@ -116,7 +142,7 @@ public class ChangePasswdFragment extends Fragment {
         req.setProfile("am");
 
 
-        repo.changePassword(SharedPref.getApi_ID(context), req, new OnApiResponse<String>() {
+        new GlobalRepository(context).changePassword(SharedPref.getApi_ID(context), req, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
                 progress.dismiss();
@@ -130,6 +156,15 @@ public class ChangePasswdFragment extends Fragment {
             }
         });
     }
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+
 
     public void alert(final String msg, String title) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
@@ -147,6 +182,27 @@ public class ChangePasswdFragment extends Fragment {
                 });
         AlertDialog alert11 = builder1.create();
         alert11.show();
+    }
+
+    public boolean isPasswordPolicyValid(String passwd){ // returns true, if its valid
+
+        if (passwd.length() < 9){
+
+            return false;
+
+        }
+
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
+        Matcher matcher = pattern.matcher(passwd);
+
+        if (!matcher.matches()) {
+            //  System.out.println("string '"+str + "' contains special character");
+            return true;
+        } else {
+            //   System.out.println("string '"+str + "' doesn't contains special character");
+            return false;
+        }
+
     }
 
 }

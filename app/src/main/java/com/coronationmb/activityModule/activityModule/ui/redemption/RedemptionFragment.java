@@ -45,6 +45,7 @@ public class RedemptionFragment extends Fragment {
     FloatingActionButton fab;
 
     Context context;
+
     private List<PortFolioModel> portFolioData;
     private RedemptionViewModel redemptionViewModel;
 
@@ -53,11 +54,16 @@ public class RedemptionFragment extends Fragment {
         redemptionViewModel = ViewModelProviders.of(this).get(RedemptionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_redemption, container, false);
         ButterKnife.bind(this,root);
-        context= getContext();
         getPortfolio();
 
         initUI();
         return root;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     public void initUI(){

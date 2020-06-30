@@ -74,7 +74,6 @@ public class NewRedemptionFragment extends Fragment {
 
 
 
-    Context context;
     private ProgressDialog progress;
     GlobalRepository repo;
 
@@ -93,11 +92,10 @@ public class NewRedemptionFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_new_redemption, container, false);
         ButterKnife.bind(this,root);
-        context= getContext();
 
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("REDEEM");
-        ((DashboardActivity)getContext()).changeHamburgerIconClorBottomNav();
+        ((DashboardActivity)context).changeToolbarTitle("REDEEM");
+        ((DashboardActivity)context).changeHamburgerIconClorBottomNav();
 
         return root;
     }

@@ -45,7 +45,6 @@ public class Portfolio_HistoryFragment extends Fragment {
 
 
 
-    Context context;
     private ArrayList<PortFolioModel> portFolioData;
     private Portfolio_HistoryViewModel portfolioHistoryViewModel;
 
@@ -54,7 +53,6 @@ public class Portfolio_HistoryFragment extends Fragment {
         portfolioHistoryViewModel = ViewModelProviders.of(this).get(Portfolio_HistoryViewModel.class);
         View root = inflater.inflate(R.layout.frament_portfolio_history, container, false);
         ButterKnife.bind(this,root);
-        context= getContext();
 
         initUI();
         return root;

@@ -41,7 +41,6 @@ import butterknife.OnClick;
 public class SignUpActivity extends AppCompatActivity {
 Context context;
     private ProgressDialog progress;
-    GlobalRepository repo;
 
     @BindView(R.id.fullname)
     EditText fullname;

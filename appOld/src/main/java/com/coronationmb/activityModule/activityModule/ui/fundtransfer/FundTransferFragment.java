@@ -35,7 +35,6 @@ public class FundTransferFragment extends Fragment {
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    Context context;
     private FundTransferViewModel fundTransferViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,7 +42,6 @@ public class FundTransferFragment extends Fragment {
         fundTransferViewModel = ViewModelProviders.of(this).get(FundTransferViewModel.class);
         View root = inflater.inflate(R.layout.fragment_fund_transfer, container, false);
         ButterKnife.bind(this,root);
-        context= getContext();
         initUI();
 
         return root;

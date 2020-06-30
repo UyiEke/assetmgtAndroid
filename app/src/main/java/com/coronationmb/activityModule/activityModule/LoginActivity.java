@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.signUp)
     TextView signUp;
 
-    GlobalRepository repo;
     private String custID;
     private String passw;
 
@@ -98,7 +97,6 @@ public class LoginActivity extends AppCompatActivity {
         progress.setProgress(0);
         progress.setCanceledOnTouchOutside(false);
 
-        repo=new GlobalRepository(context);
 
         if(SharedPref.getUSERID(context)!=null){
             usernameEdit.setText(SharedPref.getUSERID(context));
@@ -190,7 +188,17 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.submit)
     public void loginAction(View view){
-        progress.show();
+
+
+
+        if(SharedPref.getApi_ID(context) == null){
+
+            getId();
+
+        }
+
+
+         progress.show();
          custID=usernameEdit.getText().toString().trim();
          passw=passwordEditText.getText().toString().trim();
         if(TextUtils.isEmpty(custID)|| TextUtils.isEmpty(passw)){
@@ -213,7 +221,8 @@ public class LoginActivity extends AppCompatActivity {
             getToken2();
             return;
         }
-        login();
+      //  login();
+        getToken2();
     }
 
 
@@ -223,7 +232,7 @@ public class LoginActivity extends AppCompatActivity {
         req.setCustUserID(custID);
         req.setProfile(Constant.profile);
         req.setPWD(passw);
-        repo.login(SharedPref.getApi_ID(context), req, new OnApiResponse<WebResponse<JsonObject>>() {
+        new GlobalRepository(context).login(SharedPref.getApi_ID(context), req, new OnApiResponse<WebResponse<JsonObject>>() {
             @Override
             public void onSuccess(WebResponse<JsonObject> data) {
                 progress.dismiss();
@@ -270,6 +279,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
@@ -287,7 +297,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(String message) {
-
+                progress.dismiss();
+                Utility.alertOnly(context,"Failed to connect, please try again","");
             }
         });
     }

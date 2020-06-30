@@ -106,7 +106,6 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
    // ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawer;
 
-    GlobalRepository repo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

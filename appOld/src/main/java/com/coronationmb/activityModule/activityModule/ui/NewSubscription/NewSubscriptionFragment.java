@@ -74,7 +74,6 @@ public class NewSubscriptionFragment extends Fragment {
     MinimumInvestmentObject dataObj;
 
 
-    Context context;
     private ProgressDialog progress;
     GlobalRepository repo;
 
@@ -89,11 +88,10 @@ public class NewSubscriptionFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_new_subscription, container, false);
         ButterKnife.bind(this,root);
-        context= getContext();
 
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("SUBSCRIBE");
-        ((DashboardActivity)getContext()).changeHamburgerIconClorBottomNav();
+        ((DashboardActivity)context).changeToolbarTitle("SUBSCRIBE");
+        ((DashboardActivity)context).changeHamburgerIconClorBottomNav();
 
         return root;
     }

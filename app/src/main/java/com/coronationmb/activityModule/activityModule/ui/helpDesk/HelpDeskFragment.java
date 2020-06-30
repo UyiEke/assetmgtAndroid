@@ -48,12 +48,13 @@ public class HelpDeskFragment extends Fragment {
     @BindView(R.id.complainEdit)
     EditText complainEdit;
 
+    Context context;
+
     @BindView(R.id.submit)
     Button submit;
     GlobalRepository repo;
     private HelpDeskViewModel helpDeskViewModel;
     private ProgressDialog progress;
-    Context context;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,13 +62,19 @@ public class HelpDeskFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_help_desk, container, false);
 
         ButterKnife.bind(this, root);
-        context=getContext();
 
         ((DashboardActivity)context).changeToolbarTitle("HELP DESK");
-        ((DashboardActivity)getContext()).changeHamburgerIconClor();
+        ((DashboardActivity)context).changeHamburgerIconClor();
 
         initUI();
         return root;
+    }
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     private void initUI() {

@@ -33,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.coronationmb.Model.BankModel;
 import com.coronationmb.Model.OnApiResponse;
 import com.coronationmb.Model.WebResponse;
 import com.coronationmb.Model.requestModel.CreateAccount;
@@ -287,8 +288,9 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
     List<String> listOfValidIDs;
 
+    List<String> BankList;
+
     Context context;
-    GlobalRepository repo;
     String AppID;
 
     public SimpleDateFormat dateformat;
@@ -314,6 +316,8 @@ public class AcctSetUpActivity extends AppCompatActivity {
     boolean reInvest=false;
     private ProgressDialog progress;
     private String nextOfKinAddress;
+    private CreateAccount req;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -323,7 +327,11 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
         context = AcctSetUpActivity.this;
 
-        repo = new GlobalRepository(context);
+        BankList = new ArrayList<>();
+
+
+        getBankList();
+
         initUI();
 
       //  email
@@ -1126,7 +1134,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
     }
 
     private void getParameter(){
-        repo.getCreateAccountParameter(new OnApiResponse<CreateAccountParameter>() {
+        new GlobalRepository(context).getCreateAccountParameter(new OnApiResponse<CreateAccountParameter>() {
             @Override
             public void onSuccess(CreateAccountParameter data) {
                 populateView(data);
@@ -1168,7 +1176,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
       //  ArrayAdapter idType_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, resp.getIdType());
       //  idType.setAdapter(idType_adapter);
 
-        ArrayAdapter bank_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, resp.getBank());
+        ArrayAdapter bank_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item,BankList );
         bankName.setAdapter(bank_adapter);
 
         ArrayAdapter sponsor_country_adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, resp.getCountry());
@@ -1182,7 +1190,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
     }
 
     private void completeAcctCreation(){
-        CreateAccount req=new CreateAccount();
+         req=new CreateAccount();
         req.setAccType("1");
         req.setTitle(user_titleVal);
         req.setGender(genderVal);
@@ -1244,16 +1252,18 @@ public class AcctSetUpActivity extends AppCompatActivity {
             req.setSponsorCountry(sponspor_countryVal);
 
         }
-        sendCompleteAccountCreation(req);
+       sendCompleteAccountCreation(req);
+       // getToken2();
     }
 
     private void sendCompleteAccountCreation(CreateAccount req){
 
-        repo.CompleteAccountCreationByCustomer(SharedPref.getApi_ID(context),req, new OnApiResponse<String>() {
+        new GlobalRepository(context).CompleteAccountCreationByCustomer(SharedPref.getApi_ID(context),req, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
 
                 uploadKYCDoc(data);
+              //  getToken1(data);
             }
 
             @Override
@@ -1264,6 +1274,42 @@ public class AcctSetUpActivity extends AppCompatActivity {
         });
 
     }
+
+    /*
+    private void getToken1(String kycID){
+
+        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApp_token(context,data);
+                uploadKYCDoc(kycID);
+            }
+
+            @Override
+            public void onFailed(String message) {
+                Utility.alertOnly(context,"Failed, please try again","");
+            }
+        });
+    }
+
+    private void getToken2(){
+
+        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApp_token(context,data);
+                sendCompleteAccountCreation();
+            }
+
+            @Override
+            public void onFailed(String message) {
+                Utility.alertOnly(context,"Failed, please try again","");
+            }
+        });
+    }
+    */
 
     private void uploadKYCDoc(String kycID){
         List<MultipartBody.Part> files=new ArrayList<>();
@@ -1282,7 +1328,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
         files.add(signature);
 
 
-        repo.kycUploads(SharedPref.getApi_ID(context), kycID, SharedPref.getUSERID(context),files, new OnApiResponse<String>() {
+        new GlobalRepository(context).kycUploads(SharedPref.getApi_ID(context), kycID, SharedPref.getUSERID(context),files, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
                 progress.dismiss();
@@ -1316,7 +1362,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
     }
 
     private void getValidIDs(){
-     repo.getValidIDForm(new OnApiResponse<List<String>>() {
+        new GlobalRepository(context).getValidIDForm(new OnApiResponse<List<String>>() {
          @Override
          public void onSuccess(List<String> data) {
              listOfValidIDs=data;
@@ -1334,7 +1380,6 @@ public class AcctSetUpActivity extends AppCompatActivity {
          }
      });
     }
-
 
 
     @NonNull
@@ -1420,6 +1465,38 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
     }
 
+
+    public void getBankList(){
+
+        new GlobalRepository(context).getBankist(new OnApiResponse<BankModel>() {
+            @Override
+            public void onSuccess(BankModel data) {
+
+                if (data.getStatusCodeValue() == 200){
+
+                    List<BankModel.BankDetails> list = data.getBody();
+
+                    for(int count=0; count< list.size(); count ++){
+
+                        BankList.add(list.get(count).getInstitutionName());
+
+                    }
+
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+            }
+        });
+
+
+    }
 
 
 

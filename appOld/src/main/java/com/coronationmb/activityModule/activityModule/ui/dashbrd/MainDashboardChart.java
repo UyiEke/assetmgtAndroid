@@ -106,9 +106,9 @@ public class MainDashboardChart extends Fragment {
         View root= inflater.inflate(R.layout.fragment_main_dashboard_chart, container, false);
         ButterKnife.bind(this, root);
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("DASHBOARD");
+        ((DashboardActivity)context).changeToolbarTitle("DASHBOARD");
 
-        if(!SharedPref.getUSERID(getContext()).contains("@")){
+        if(!SharedPref.getUSERID(context).contains("@")){
             if (chartPortFolio != null) {
                 if (chartPortFolio.size() > 0) {
                     displayGraph(chartPortFolio);
@@ -222,10 +222,10 @@ public class MainDashboardChart extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(SharedPref.getApi_ID(getContext()));
-        req.setParams(SharedPref.getUSERID(getContext()));
+        req.setAppId(SharedPref.getApi_ID(context));
+        req.setParams(SharedPref.getUSERID(context));
         req.setFunctionId(Constant.Am_Portfolio);
-        new GlobalRepository(getContext()).getPortfolio(SharedPref.getApi_ID(getContext()), req, new OnApiResponse<List<PortFolioModel>>() {
+        new GlobalRepository(context).getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 chartPortFolio=data;

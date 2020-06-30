@@ -31,6 +31,7 @@ public class SubscriptionFragment extends Fragment {
 
   //  @BindView(R.id.fab)
    // FloatingActionButton fab;
+
     Context context;
 
     private SubscriptionViewModel subscriptionViewModel;
@@ -40,7 +41,6 @@ public class SubscriptionFragment extends Fragment {
         subscriptionViewModel = ViewModelProviders.of(this).get(SubscriptionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_subscription, container, false);
         ButterKnife.bind(this,root);
-        context= getContext();
         initUI();
 
        ((DashboardActivity)context).changeToolbarTitle("Account History");
@@ -49,6 +49,12 @@ public class SubscriptionFragment extends Fragment {
 
 
         return root;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     public void initUI(){

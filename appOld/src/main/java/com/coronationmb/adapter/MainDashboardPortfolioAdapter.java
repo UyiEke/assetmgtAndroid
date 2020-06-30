@@ -32,7 +32,7 @@ public class MainDashboardPortfolioAdapter extends RecyclerView.Adapter<MainDash
     @NonNull
     @Override
     public MainDashboardPortfolioAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.portfolio_row_item, parent,false);
+        View itemView= LayoutInflater.from(parent.context).inflate(R.layout.portfolio_row_item, parent,false);
 
         return new MainDashboardPortfolioAdapter.MyViewHolder(itemView);
     }

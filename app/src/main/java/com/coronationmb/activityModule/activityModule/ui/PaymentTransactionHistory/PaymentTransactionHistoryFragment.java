@@ -48,10 +48,9 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
     @BindView(R.id.recycler)
     RecyclerView recycler;
 
-    GlobalRepository repo;
+
     private PaymentTransactionHistoryViewModel paymentTransactionHistoryViewModel;
     private ProgressDialog progress;
-    Context context;
     private LinearLayoutManager layoutManager;
     PaymentTransactionHistoryAdapter adapter;
 
@@ -76,6 +75,7 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
 
     SimpleDateFormat dateformat;
 
+    Context context;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -84,15 +84,19 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
         View root = inflater.inflate(R.layout.transaction_history_layout, container, false);
 
         ButterKnife.bind(this, root);
-        context=getContext();
 
        // ((DashboardActivity)context).changeToolbarTitle("Payment History");
         initUI();
         return root;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
     private void initUI() {
-        repo=new GlobalRepository(context);
         layoutManager= new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recycler.setLayoutManager(layoutManager);
@@ -114,7 +118,7 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
 
     private void getTransactionHistory(){
 
-        repo.getTransactionHistory(SharedPref.getUSERID(context), Constant.profile,SharedPref.getApi_ID(context), new OnApiResponse<List<TransactionHistoryModel>>() {
+        new GlobalRepository(context).getTransactionHistory(SharedPref.getUSERID(context), Constant.profile,SharedPref.getApi_ID(context), new OnApiResponse<List<TransactionHistoryModel>>() {
             @Override
             public void onSuccess(List<TransactionHistoryModel> data) {
                 list=data;
@@ -142,13 +146,13 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
 
         if(TextUtils.isEmpty(start_Date) && TextUtils.isEmpty(end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
             return;
         }
 
         if(!Utility.compare2Date(start_Date, end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
 
             return;
         }

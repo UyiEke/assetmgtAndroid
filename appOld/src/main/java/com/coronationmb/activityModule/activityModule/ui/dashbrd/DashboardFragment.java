@@ -38,7 +38,6 @@ public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
 
-    GlobalRepository repo;
     List<AssetProduct> product;
 
     List<PortFolioModel> portFolio;
@@ -50,7 +49,6 @@ public class DashboardFragment extends Fragment {
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this,root);
-        repo=new GlobalRepository(getContext());
 
 
         return root;
@@ -58,13 +56,13 @@ public class DashboardFragment extends Fragment {
 
     private void initUI(){
 
-        MainDashboardViewPagerAdapter adapter=new MainDashboardViewPagerAdapter(getChildFragmentManager(),getContext(),portFolioData,assetProducts);
+        MainDashboardViewPagerAdapter adapter=new MainDashboardViewPagerAdapter(getChildFragmentManager(),context,portFolioData,assetProducts);
        adapter.addFragment(new MainDashboardViewFragment(),"main");
         adapter.addFragment(new MainDashboardChart(),"chart");
 
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("DASHBOARD");
-        ((DashboardActivity)getContext()).changeHamburgerIconClorBottomNav();
+        ((DashboardActivity)context).changeToolbarTitle("DASHBOARD");
+        ((DashboardActivity)context).changeHamburgerIconClorBottomNav();
 
         viewpager.setAdapter(adapter);
         getImage();
@@ -85,11 +83,11 @@ public class DashboardFragment extends Fragment {
 
     private void getImage(){
 
-        Picasso.with(getContext())
-                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(getContext())) // web image url
+        Picasso.with(context)
+                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(context)) // web image url
                 .fit().centerInside()
                 //  .rotate(-90)                    //if you want to rotate by 90 degrees
-                .into(((DashboardActivity)getContext()).profile_image);
+                .into(((DashboardActivity)context).profile_image);
 
     }
 

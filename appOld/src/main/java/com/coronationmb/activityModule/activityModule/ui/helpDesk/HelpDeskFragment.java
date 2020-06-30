@@ -61,10 +61,9 @@ public class HelpDeskFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_help_desk, container, false);
 
         ButterKnife.bind(this, root);
-        context=getContext();
 
         ((DashboardActivity)context).changeToolbarTitle("HELP DESK");
-        ((DashboardActivity)getContext()).changeHamburgerIconClor();
+        ((DashboardActivity)context).changeHamburgerIconClor();
 
         initUI();
         return root;

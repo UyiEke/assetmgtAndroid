@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,7 @@ public class NewSubscriptionFragment extends Fragment {
     @BindView(R.id.quantity)
     EditText quantity;
 
+    Context context;
 
     @BindView(R.id.minimum_invest_editText)
     EditText minimum_investment;
@@ -85,9 +87,7 @@ public class NewSubscriptionFragment extends Fragment {
     MinimumInvestmentObject dataObj;
 
 
-    Context context;
     private ProgressDialog progress;
-    GlobalRepository repo;
 
     ArrayAdapter<String> adapter;
     List<String> fundList;
@@ -100,10 +100,11 @@ public class NewSubscriptionFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_new_subscription, container, false);
         ButterKnife.bind(this,root);
-        context= getContext();
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("SUBSCRIBE");
-        ((DashboardActivity)getContext()).changeHamburgerIconClorBottomNav();
+        ((DashboardActivity)context).changeToolbarTitle("SUBSCRIBE");
+        ((DashboardActivity)context).changeHamburgerIconClorBottomNav();
+
+        getToken();
 
         return root;
     }
@@ -115,6 +116,11 @@ public class NewSubscriptionFragment extends Fragment {
         if (getArguments() != null) {
             portFolioData =(List<PortFolioModel>) getArguments().getSerializable("portfolio");
             assetProducts = (List<AssetProduct>)getArguments().getSerializable("product");
+
+            if(portFolioData== null){
+                getPortfolio();
+            }
+
         }
 
         initUI();
@@ -129,7 +135,7 @@ public class NewSubscriptionFragment extends Fragment {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.setCanceledOnTouchOutside(false);
-        repo=new GlobalRepository(context);
+        //repo=new GlobalRepository(context);
 
         fundList=new ArrayList<>();
         //fundList.add("Select Fund Type");
@@ -158,13 +164,7 @@ public class NewSubscriptionFragment extends Fragment {
 
         getMinimum();
 
-        /*
-        if(portFolioData!=null) {
-            showPort(portFolioData);
-        }else {
-            getPortfolio();
-        }
-        */
+
 
     }
 
@@ -172,14 +172,16 @@ public class NewSubscriptionFragment extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             String product=product_symbol.getSelectedItem().toString().trim();
-            if(product!="Select Fund Type"){
+            if(product!="Select Fund Type") {
 
-                for(int count=0;count<dataObj.getProduct().size();count++){
+                if (dataObj != null){
+                    for (int count = 0; count < dataObj.getProduct().size(); count++) {
 
                         if (product.equals(dataObj.getProduct().get(count).getProductName())) {
                             product_name.setText(dataObj.getProduct().get(count).getProductCode());
                         }
-                }
+                    }
+            }
 
             }
 
@@ -201,7 +203,8 @@ public class NewSubscriptionFragment extends Fragment {
         String quantityVal=quantity.getText().toString().trim();
         String miniAmt=minimum_investment.getText().toString().trim();
 
-        if(TextUtils.isEmpty(productName)||TextUtils.isEmpty(amt)||TextUtils.isEmpty(quantityVal)){
+        if(TextUtils.isEmpty(productName)||TextUtils.isEmpty(amt)||TextUtils.isEmpty(quantityVal)
+                ||TextUtils.isEmpty(miniAmt)){
             progress.dismiss();
             Utility.alertOnly(context,"Empty Fields","");
             return;
@@ -210,10 +213,12 @@ public class NewSubscriptionFragment extends Fragment {
         Long amount=Long.parseLong(amt);
         int mini=Integer.parseInt(miniAmt);
 
-        if(amount<mini){
+        if (amount < mini){
+
             progress.dismiss();
-            Utility.alertOnly(context,"Amount cannot be less than the minimum investment of N "+miniAmt,"");
+            Utility.alertOnly(context,"Amount cannot be less than the minimum investment","");
             return;
+
         }
 
         Utility.hideKeyboardFrom(context,view);
@@ -221,6 +226,40 @@ public class NewSubscriptionFragment extends Fragment {
         paymentPreview(amt,productName);
 
     }
+
+
+    public void validateToken(String amount, String ref,String productName,boolean isCMBaccount,
+                              String acctNum, String token){
+
+        progress.show();
+
+       new GlobalRepository(context).verifyCoronationToken(acctNum, token, new OnApiResponse<CmbResponse>() {
+            @Override
+            public void onSuccess(CmbResponse data) {
+
+                if(data.getStatus().equals("true")){
+
+                    sendSubscriptionRequest(amount,ref,productName,isCMBaccount,acctNum,token);
+
+                }
+                else {
+                    progress.dismiss();
+                    Utility.alertOnly(context,"Invalid Token","");
+                }
+            }
+
+            @Override
+            public void onFailed(String message) {
+
+                progress.dismiss();
+                Utility.alertOnly(context,"Failed to validate token","");
+            }
+        });
+
+
+    }
+
+
 
     private void sendSubscriptionRequest(String amount, String ref,String productName,boolean isCMBaccount,
                                          String acctNum, String token){
@@ -240,6 +279,14 @@ public class NewSubscriptionFragment extends Fragment {
             req.setBankcode("other");
         }
 
+        if (portFolioData == null){
+
+            progress.dismiss();
+            Utility.alertOnly(context,"failed to proceed with transaction, please try again ","");
+            return;
+
+        }
+
         for(int count=0;count<portFolioData.size();count++){
             if(portFolioData.get(count).getFundName().equals(productName)){
                 req.setProductcode(portFolioData.get(count).getFundCode());
@@ -249,13 +296,30 @@ public class NewSubscriptionFragment extends Fragment {
         req.setProfile(Constant.profile);
         req.setNarration(SharedPref.getFULLNAME(context)+ " subscription");
 
-        repo.subscriptionAction(SharedPref.getApi_ID(context), req, isCMBaccount,new OnApiResponse<String>() {
+
+
+
+       new GlobalRepository(context).subscriptionAction(SharedPref.getApi_ID(context), req, isCMBaccount,new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
                 progress.dismiss();
 
                 if(isCMBaccount){
-                    alert("Debit transaction was Successful");
+                   // alert("Debit transaction was Successful");
+
+                    if (data.contains("Transaction failed")){
+
+                        Utility.alertOnly(context,"CMB debit Transaction failed, please try again","");
+                        return;
+
+                    }else {
+
+                        alert(data);
+
+                    }
+
+
+
                 }else {
 
                     Intent intent=new Intent(context, PaystackWebActivity.class);
@@ -267,7 +331,7 @@ public class NewSubscriptionFragment extends Fragment {
             @Override
             public void onFailed(String message) {
                 progress.dismiss();
-                Utility.alertOnly(context,"Subscription request failed","");
+                Utility.alertOnly(context,"Subscription request failed, please try again","");
             }
         });
 
@@ -282,7 +346,7 @@ public class NewSubscriptionFragment extends Fragment {
         req.setFunctionId(Constant.Am_Portfolio);
         req.setAppId(SharedPref.getApi_ID(context));
 
-        repo.getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
+       new GlobalRepository(context).getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 portFolioData=data;
@@ -295,6 +359,34 @@ public class NewSubscriptionFragment extends Fragment {
             }
         });
 
+    }
+
+
+
+    private void getToken(){
+
+        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApp_token(context,data);
+               // uploadKYCDoc(kycID);
+            }
+
+            @Override
+            public void onFailed(String message) {
+              //  Utility.alertOnly(context,"Failed, please try again","");
+            }
+        });
+    }
+
+
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     private void showPort(MinimumInvestmentObject data){
@@ -318,7 +410,7 @@ public class NewSubscriptionFragment extends Fragment {
 
     private void getMinimum(){
 
-        repo.getMinimumInvestment(new OnApiResponse<MinimumInvestmentObject>() {
+      new  GlobalRepository(context).getMinimumInvestment(new OnApiResponse<MinimumInvestmentObject>() {
             @Override
             public void onSuccess(MinimumInvestmentObject data) {
 
@@ -348,6 +440,8 @@ public class NewSubscriptionFragment extends Fragment {
         TextView transRef = (TextView) dialog.findViewById(R.id.transRef);
         String refs=SharedPref.getUSERID(context)+new StringBuffer(Long.toString(System.currentTimeMillis())).reverse().substring(0,12);
         transRef.setText(refs);
+
+        ProgressBar preview_progressBar = (ProgressBar) dialog.findViewById(R.id.previewProgressBar);
 
         TextView product_name = (TextView) dialog.findViewById(R.id.product_name);
         product_name.setText(prodName);
@@ -383,15 +477,32 @@ public class NewSubscriptionFragment extends Fragment {
 
                      acctNum=acct_number.getText().toString().trim();
                      tokenVal=token.getText().toString().trim();
+
+                 String   actt_nameV=actt_name.getText().toString().trim();
+
                     if(TextUtils.isEmpty(acctNum) || TextUtils.isEmpty(tokenVal)){
                         Toast.makeText(context,"Empty fields", Toast.LENGTH_LONG).show();
                         return;
                     }
 
+                    if(TextUtils.isEmpty(actt_nameV) || actt_nameV.equals("NA")){
+                        Toast.makeText(context,"Account number can not be verified", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    dialog.dismiss();
+                    //   sendSubscriptionRequest(amt,refs,prodName,isCMBaccount,acctNum,tokenVal);
+                    validateToken(amt,refs,prodName,isCMBaccount,acctNum,tokenVal);
+
+
+                }else {
+
+                    dialog.dismiss();
+                      sendSubscriptionRequest(amt,refs,prodName,isCMBaccount,acctNum,tokenVal);
+                    // validateToken(amt, refs, prodName, isCMBaccount, acctNum, tokenVal);
+
                 }
 
-                dialog.dismiss();
-                sendSubscriptionRequest(amt,refs,prodName,isCMBaccount,acctNum,tokenVal);
             }
         });
 
@@ -432,7 +543,8 @@ public class NewSubscriptionFragment extends Fragment {
                 if(TextUtils.isEmpty(acct)){
                     return;
                 }
-                cmbAccount(acct,actt_name);
+                preview_progressBar.setVisibility(View.VISIBLE);
+                cmbAccount(acct,actt_name,preview_progressBar,token);
             }
         });
 
@@ -440,19 +552,22 @@ public class NewSubscriptionFragment extends Fragment {
         dialog.show();
     }
 
-    private void cmbAccount(String acctNum,EditText ed){
+    private void cmbAccount(String acctNum,EditText ed,ProgressBar prog,EditText tokenText){
 
-        new GlobalRepository(getContext()).verifyCoronationToken(acctNum, new OnApiResponse<CmbResponse>() {
+        new GlobalRepository(context).verifyCoronationAccountNumber(acctNum, new OnApiResponse<CmbResponse>() {
             @Override
             public void onSuccess(CmbResponse data) {
+                prog.setVisibility(View.GONE);
                 ed.setVisibility(View.VISIBLE);
                 ed.setText(data.getAccountName());
             }
 
             @Override
             public void onFailed(String message) {
+                prog.setVisibility(View.GONE);
                 ed.setVisibility(View.VISIBLE);
-                ed.setText("Account can't be verified");
+                ed.setText("NA");
+                tokenText.setText(null);
             }
         });
 

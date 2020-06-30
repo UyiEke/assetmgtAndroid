@@ -27,7 +27,6 @@ import com.coronationmb.R;
 public class CalculatorActivity extends AppCompatActivity {
 
 
-    GlobalRepository repo;
     int calculatorIndex;
 
     @BindView(R.id.calculate)
@@ -71,7 +70,6 @@ public class CalculatorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calculator);
         context=CalculatorActivity.this;
         ButterKnife.bind(this);
-        repo=new GlobalRepository(context);
 
         calculatorIndex=getIntent().getIntExtra("calculatorIndex",0);
 

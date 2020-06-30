@@ -51,6 +51,8 @@ public class PortfolioStatementHistory extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    Context context;
+
     private OnFragmentInteractionListener mListener;
 
     PortfolioStmtHistoryAdapter adapter;
@@ -67,9 +69,6 @@ public class PortfolioStatementHistory extends Fragment {
 
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-
-    Context context;
-    GlobalRepository repo;
 
     public PortfolioStatementHistory() {
         // Required empty public constructor
@@ -110,13 +109,11 @@ public class PortfolioStatementHistory extends Fragment {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_user_action_history, container, false);
         ButterKnife.bind(this, root);
-        context=getContext();
         initUI();
         return root;
     }
 
     private void initUI(){
-      repo=new GlobalRepository(context);
       portStmtHistoryList=new ArrayList();
       layoutManager= new LinearLayoutManager(context);
       layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -177,7 +174,7 @@ public class PortfolioStatementHistory extends Fragment {
         DateFormat dateFormat=new SimpleDateFormat("MM-dd-yyyy");
         req.setParams("9-20-2016|"+dateFormat.format(new Date())+"|"+SharedPref.getUSERID(context));
         //  9-31-2018|9-10-2019|000940
-        repo.getPortfolioStatementHistory(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortfolioStatementHistoryModel>>() {
+        new GlobalRepository(context).getPortfolioStatementHistory(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortfolioStatementHistoryModel>>() {
             @Override
             public void onSuccess(List<PortfolioStatementHistoryModel> data) {
                 if(data!=null){

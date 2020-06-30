@@ -46,7 +46,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     @BindView(R.id.submit)
     Button submit;
-    GlobalRepository repo;
 
     private ChangePasswdViewModel changePasswdViewModel;
 
@@ -72,7 +71,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         progress.setMessage("please wait.......");
         progress.setIndeterminate(true);
         progress.setProgress(0);
-        repo=new GlobalRepository(context);
+    //    repo=new GlobalRepository(context);
     }
 
     @OnClick(R.id.submit)

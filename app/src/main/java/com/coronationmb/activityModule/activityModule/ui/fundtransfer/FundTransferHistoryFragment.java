@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +49,8 @@ public class FundTransferHistoryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    Context context;
+
     private RedemptionHistory.OnFragmentInteractionListener mListener;
 
     RedemptionAdapter adapter;
@@ -62,8 +65,6 @@ public class FundTransferHistoryFragment extends Fragment {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    Context context;
-    GlobalRepository repo;
 
 
     public FundTransferHistoryFragment() {
@@ -88,6 +89,9 @@ public class FundTransferHistoryFragment extends Fragment {
         return fragment;
     }
 
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,13 +107,11 @@ public class FundTransferHistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View root= inflater.inflate(R.layout.fragment_fund_transfer_history, container, false);
         ButterKnife.bind(this, root);
-        context=getContext();
         initUI();
         return root;
     }
 
     private void initUI(){
-        repo=new GlobalRepository(context);
         List<SubscriptionHistoryModel> list=new ArrayList();
         layoutManager= new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -167,7 +169,7 @@ public class FundTransferHistoryFragment extends Fragment {
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context)+"|"+txnType);
 
-        repo.subscriptionList(SharedPref.getApi_ID(context), req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
+        new GlobalRepository(context).subscriptionList(SharedPref.getApi_ID(context), req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
             @Override
             public void onSuccess(List<SubscriptionHistoryModel> data) {
                 progressBar.setVisibility(View.GONE);

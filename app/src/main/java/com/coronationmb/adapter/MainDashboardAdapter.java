@@ -53,6 +53,9 @@ public class MainDashboardAdapter extends RecyclerView.Adapter<MainDashboardAdap
 
     }
 
+
+
+
     @Override
     public int getItemCount() {
         return list==null? 0:list.size();

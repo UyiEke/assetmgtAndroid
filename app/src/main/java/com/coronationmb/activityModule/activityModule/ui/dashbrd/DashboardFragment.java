@@ -1,5 +1,6 @@
 package com.coronationmb.activityModule.activityModule.ui.dashbrd;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -47,8 +48,9 @@ public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
 
-    GlobalRepository repo;
     List<AssetProduct> product;
+
+   Context context;
 
     List<PortFolioModel> portFolio;
     private List<PortFolioModel> portFolioData;
@@ -59,7 +61,6 @@ public class DashboardFragment extends Fragment {
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this,root);
-        repo=new GlobalRepository(getContext());
 
 
         return root;
@@ -67,13 +68,13 @@ public class DashboardFragment extends Fragment {
 
     private void initUI(){
 
-        MainDashboardViewPagerAdapter adapter=new MainDashboardViewPagerAdapter(getChildFragmentManager(),getContext(),portFolioData,assetProducts);
+        MainDashboardViewPagerAdapter adapter=new MainDashboardViewPagerAdapter(getChildFragmentManager(),context,portFolioData,assetProducts);
        adapter.addFragment(new MainDashboardViewFragment(),"main");
         adapter.addFragment(new MainDashboardChart(),"chart");
 
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("DASHBOARD");
-        ((DashboardActivity)getContext()).changeHamburgerIconClorBottomNav();
+        ((DashboardActivity)context).changeToolbarTitle("DASHBOARD");
+        ((DashboardActivity)context).changeHamburgerIconClorBottomNav();
 
         viewpager.setAdapter(adapter);
         getImage();
@@ -92,30 +93,26 @@ public class DashboardFragment extends Fragment {
 
     }
 
-    /*
-    private void getImage(){
 
-        Picasso.with(getContext())
-                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(getContext())) // web image url
-                .fit().centerInside()
-                //  .rotate(-90)                    //if you want to rotate by 90 degrees
-                .into(((DashboardActivity)getContext()).profile_image);
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        this.context = context;
 
     }
 
-    */
-
     public void getImage(){
 
-        String cusId=SharedPref.getUSERID(getContext());
+        String cusId=SharedPref.getUSERID(context);
 
-  new GlobalRepository(getContext()).downloadPofilePix(cusId, new OnApiResponse<ResponseBody>() {
+  new GlobalRepository(context).downloadPofilePix(cusId, new OnApiResponse<ResponseBody>() {
       @Override
       public void onSuccess(ResponseBody data) {
 
           Bitmap bmp= BitmapFactory.decodeStream(data.byteStream());
 
-         ((DashboardActivity)getContext()).profile_image.setImageBitmap(bmp);
+         ((DashboardActivity)context).profile_image.setImageBitmap(bmp);
 
 
       }

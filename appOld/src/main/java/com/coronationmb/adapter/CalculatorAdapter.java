@@ -31,7 +31,7 @@ public class CalculatorAdapter  extends RecyclerView.Adapter<CalculatorAdapter.M
     @NonNull
     @Override
     public CalculatorAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.calculator_row_item, parent,false);
+        View itemView= LayoutInflater.from(parent.context).inflate(R.layout.calculator_row_item, parent,false);
         return new CalculatorAdapter.MyViewHolder(itemView);
     }
 

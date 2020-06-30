@@ -50,11 +50,11 @@ public class RedemptionAdapter extends RecyclerView.Adapter<RedemptionAdapter.My
         switch (this.type){
 
             case 1:
-                 itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.redemption_row_item, parent,false);
+                 itemView= LayoutInflater.from(parent.context).inflate(R.layout.redemption_row_item, parent,false);
                 break;
 
             case 2:
-                 itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.subscription_row_item, parent,false);
+                 itemView= LayoutInflater.from(parent.context).inflate(R.layout.subscription_row_item, parent,false);
                  break;
         }
 

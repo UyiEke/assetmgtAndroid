@@ -21,12 +21,12 @@
         android:supportsRtl="true"
         android:largeHeap="true"
         android:usesCleartextTraffic="true"
-
         android:theme="@style/AppTheme"
         tools:replace="android:label">
         <activity
             android:name=".activityModule.activityModule.TermAndConditonActivity"
             android:label="@string/title_activity_term_and_conditon"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activityModule.activityModule.CalculatorActivity"
@@ -39,8 +39,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activityModule.activityModule.PaystackWebActivity" />
-        <activity android:name=".activityModule.activityModule.OnboardingActivity" />
+        <activity android:name=".activityModule.activityModule.PaystackWebActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activityModule.activityModule.OnboardingActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activityModule.activityModule.NewRedemptionActivity"
             android:screenOrientation="portrait"

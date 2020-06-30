@@ -60,7 +60,6 @@ public class NewFundTransferActivity extends AppCompatActivity {
 
     Context context;
     private ProgressDialog progress;
-    GlobalRepository repo;
 
     ArrayAdapter<String> adapter;
     List<String> fundList;
@@ -91,7 +90,7 @@ public class NewFundTransferActivity extends AppCompatActivity {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.setCanceledOnTouchOutside(false);
-        repo=new GlobalRepository(context);
+      //  repo=new GlobalRepository(context);
         fundList=new ArrayList<>();
         fundList.add("Select Fund Type");
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, fundList);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,6 +77,7 @@ public class RedemptionHistory extends Fragment {
     EditText endDate;
 
 
+    Context context;
 
 
     static String actionType;
@@ -83,8 +85,7 @@ public class RedemptionHistory extends Fragment {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    Context context;
-    GlobalRepository repo;
+
 
     List<SubscriptionHistoryModel> list=null;
     private Calendar myCalendar;
@@ -118,6 +119,8 @@ public class RedemptionHistory extends Fragment {
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,13 +136,11 @@ public class RedemptionHistory extends Fragment {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_user_action_history, container, false);
         ButterKnife.bind(this, root);
-        context=getContext();
         initUI();
         return root;
     }
 
     private void initUI(){
-      repo=new GlobalRepository(context);
         layoutManager= new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recycler.setLayoutManager(layoutManager);
@@ -208,7 +209,7 @@ public class RedemptionHistory extends Fragment {
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context)+"|"+"1");
 
-        repo.subscriptionList(SharedPref.getApi_ID(context), req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
+        new GlobalRepository(context).subscriptionList(SharedPref.getApi_ID(context), req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
             @Override
             public void onSuccess(List<SubscriptionHistoryModel> data) {
                 list=data;
@@ -236,13 +237,13 @@ public class RedemptionHistory extends Fragment {
 
         if(TextUtils.isEmpty(start_Date) && TextUtils.isEmpty(end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
             return;
         }
 
         if(!Utility.compare2Date(start_Date, end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
 
             return;
         }

@@ -31,7 +31,7 @@ public class PortfolioStmtHistoryAdapter extends RecyclerView.Adapter<PortfolioS
     @NonNull
     @Override
     public PortfolioStmtHistoryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.portfolio_stmt_history_row_item, parent,false);
+        View itemView= LayoutInflater.from(parent.context).inflate(R.layout.portfolio_stmt_history_row_item, parent,false);
         return new PortfolioStmtHistoryAdapter.MyViewHolder(itemView);
     }
 

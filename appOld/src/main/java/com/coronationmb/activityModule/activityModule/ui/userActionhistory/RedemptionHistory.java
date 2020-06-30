@@ -83,8 +83,6 @@ public class RedemptionHistory extends Fragment {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    Context context;
-    GlobalRepository repo;
 
     List<SubscriptionHistoryModel> list=null;
     private Calendar myCalendar;
@@ -133,7 +131,6 @@ public class RedemptionHistory extends Fragment {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_user_action_history, container, false);
         ButterKnife.bind(this, root);
-        context=getContext();
         initUI();
         return root;
     }
@@ -236,13 +233,13 @@ public class RedemptionHistory extends Fragment {
 
         if(TextUtils.isEmpty(start_Date) && TextUtils.isEmpty(end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
             return;
         }
 
         if(!Utility.compare2Date(start_Date, end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
 
             return;
         }

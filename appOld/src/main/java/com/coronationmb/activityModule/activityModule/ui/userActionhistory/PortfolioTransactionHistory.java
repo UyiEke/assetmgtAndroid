@@ -70,8 +70,6 @@ public class PortfolioTransactionHistory extends Fragment {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    Context context;
-    GlobalRepository repo;
 
     public PortfolioTransactionHistory() {
         // Required empty public constructor
@@ -112,7 +110,6 @@ public class PortfolioTransactionHistory extends Fragment {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_user_action_history, container, false);
         ButterKnife.bind(this, root);
-        context=getContext();
         initUI();
         return root;
     }

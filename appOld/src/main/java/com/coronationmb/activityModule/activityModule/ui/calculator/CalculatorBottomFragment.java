@@ -81,9 +81,8 @@ public class CalculatorBottomFragment extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        View view = View.inflate(getContext(), R.layout.calculator_bottom_layout, null);
+        View view = View.inflate(context, R.layout.calculator_bottom_layout, null);
         ButterKnife.bind(this, view);
-        repo=new GlobalRepository(getContext());
         cal_title.setText(charaterMsg);
 
 

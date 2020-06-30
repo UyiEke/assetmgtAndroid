@@ -44,7 +44,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     ProgressDialog progress;
     Context context;
-    GlobalRepository repo;
     String apID;
     private String custId;
 

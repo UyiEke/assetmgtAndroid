@@ -56,7 +56,6 @@ public class NewSubscriptionActivity extends AppCompatActivity {
 
     Context context;
     private ProgressDialog progress;
-    GlobalRepository repo;
 
     ArrayAdapter<String> adapter;
     List<String> fundList;
@@ -78,7 +77,6 @@ public class NewSubscriptionActivity extends AppCompatActivity {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.setCanceledOnTouchOutside(false);
-        repo=new GlobalRepository(context);
         fundList=new ArrayList<>();
         fundList.add("Select Fund Type");
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, fundList);
@@ -168,7 +166,7 @@ public class NewSubscriptionActivity extends AppCompatActivity {
         req.setProfile(Constant.profile);
         req.setNarration(SharedPref.getFULLNAME(context)+ " subscription");
 
-        repo.subscriptionAction(SharedPref.getApi_ID(context), req, isCMBaccount, new OnApiResponse<String>() {
+        new GlobalRepository(context).subscriptionAction(SharedPref.getApi_ID(context), req, isCMBaccount, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
                 progress.dismiss();
@@ -193,7 +191,7 @@ public class NewSubscriptionActivity extends AppCompatActivity {
         req.setFunctionId(Constant.Am_Portfolio);
         req.setAppId(SharedPref.getApi_ID(context));
 
-        repo.getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
+        new GlobalRepository(context).getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 portFolioData=data;

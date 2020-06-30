@@ -102,9 +102,7 @@ public class ProfileFragment extends Fragment {
 
     List<Product> listOfProduct;
 
-    GlobalRepository repo;
     private ProgressDialog progress;
-    Context context;
     private ProfileViewModel profileViewModel;
 
     String imagePath, passPortPath;
@@ -125,8 +123,6 @@ public class ProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        context=getContext();
-        repo=new GlobalRepository(context);
         ButterKnife.bind(this, root);
         getImage();
         getProduct();
@@ -135,8 +131,8 @@ public class ProfileFragment extends Fragment {
 
     private void initUI() {
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("PROFILE");
-        ((DashboardActivity)getContext()).changeHamburgerIconClorBottomNav();
+        ((DashboardActivity)context).changeToolbarTitle("PROFILE");
+        ((DashboardActivity)context).changeHamburgerIconClorBottomNav();
 
         /*
         if(imagePath!=null){
@@ -225,7 +221,7 @@ public class ProfileFragment extends Fragment {
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
         req.setAppId(SharedPref.getApi_ID(context));
-        req.setParams(SharedPref.getUSERID(getContext()));
+        req.setParams(SharedPref.getUSERID(context));
         req.setFunctionId(Constant.Am_Portfolio);
 
         repo.getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
@@ -305,7 +301,7 @@ public class ProfileFragment extends Fragment {
     private void pickFromCamera(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (getContext().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            if (context.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
             {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
             }
@@ -352,7 +348,7 @@ public class ProfileFragment extends Fragment {
                 passPortPath=path;
             //    passportEditText.setText(dir[dir.length-1]);
 
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), passPortUri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), passPortUri);
                 profile_image.setImageBitmap(bitmap);
 
                 uploadProfilePixToServer(passPortUri);
@@ -392,10 +388,10 @@ public class ProfileFragment extends Fragment {
         // create part for file (photo, video, ...)
         MultipartBody.Part passport = prepareFilePart("files", imageUri);
 
-        repo.uploadPofilePix(SharedPref.getApi_ID(context), SharedPref.getUSERID(getContext()), passport, new OnApiResponse<String>() {
+        repo.uploadPofilePix(SharedPref.getApi_ID(context), SharedPref.getUSERID(context), passport, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
-                Toast.makeText(getContext(),"Upload of profile picture was successful",Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Upload of profile picture was successful",Toast.LENGTH_LONG).show();
                 getImageMain();
             }
 
@@ -409,8 +405,8 @@ public class ProfileFragment extends Fragment {
 
     private void getImage(){
 
-        Picasso.with(getContext())
-                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(getContext())) // web image url
+        Picasso.with(context)
+                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(context)) // web image url
                 .fit().centerInside()
                 //  .rotate(-90)                    //if you want to rotate by 90 degrees
                // .into(((DashboardActivity)getContext()).profile_image);
@@ -422,10 +418,10 @@ public class ProfileFragment extends Fragment {
     private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
         // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
         // use the FileUtilx to get the actual file by uri
-        File file = FileUtils.getFile(getContext(), fileUri);
+        File file = FileUtils.getFile(context, fileUri);
 
         // create RequestBody instance from file
-        RequestBody requestFile = RequestBody.create(MediaType.parse(getContext().getContentResolver().getType(fileUri)), file);
+        RequestBody requestFile = RequestBody.create(MediaType.parse(context.getContentResolver().getType(fileUri)), file);
 
         // MultipartBody.Part is used to send also the actual file name
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
@@ -435,11 +431,11 @@ public class ProfileFragment extends Fragment {
 
     private void getImageMain(){
 
-        Picasso.with(getContext())
-                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(getContext())) // web image url
+        Picasso.with(context)
+                .load(Constant.BaseUrl+"/profilePictureDownload/"+SharedPref.getUSERID(context)) // web image url
                 .fit().centerInside()
                 //  .rotate(-90)                    //if you want to rotate by 90 degrees
-                 .into(((DashboardActivity)getContext()).profile_image);
+                 .into(((DashboardActivity)context).profile_image);
                // .into(profile_image);
 
     }

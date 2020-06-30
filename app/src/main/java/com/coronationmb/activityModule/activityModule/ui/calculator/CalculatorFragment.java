@@ -29,13 +29,13 @@ import java.util.List;
 
 public class CalculatorFragment extends Fragment {
 
-    Context context;
     private CalculatorViewModel calculatorViewModel;
 
 
     @BindView(R.id.calculator_recycler)
     RecyclerView recycler;
 
+    Context context;
 
     CalculatorAdapter adapter;
     LinearLayoutManager layoutManager;
@@ -45,13 +45,12 @@ public class CalculatorFragment extends Fragment {
 
         calculatorViewModel = ViewModelProviders.of(this).get(CalculatorViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calculator, container, false);
-        ((DashboardActivity)getContext()).changeToolbarTitle("CALCULATOR");
+        ((DashboardActivity)context).changeToolbarTitle("CALCULATOR");
 
 
-        ( (DashboardActivity)getContext()).changeHamburgerIconClor();
+        ( (DashboardActivity)context).changeHamburgerIconClor();
 
         ButterKnife.bind(this,root);
-        context= getContext();
         initUI();
         return root;
     }
@@ -74,4 +73,9 @@ public class CalculatorFragment extends Fragment {
         return list;
    }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 }

@@ -51,7 +51,6 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
     GlobalRepository repo;
     private PaymentTransactionHistoryViewModel paymentTransactionHistoryViewModel;
     private ProgressDialog progress;
-    Context context;
     private LinearLayoutManager layoutManager;
     PaymentTransactionHistoryAdapter adapter;
 
@@ -84,7 +83,6 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
         View root = inflater.inflate(R.layout.transaction_history_layout, container, false);
 
         ButterKnife.bind(this, root);
-        context=getContext();
 
        // ((DashboardActivity)context).changeToolbarTitle("Payment History");
         initUI();
@@ -142,13 +140,13 @@ public class  PaymentTransactionHistoryFragment extends Fragment {
 
         if(TextUtils.isEmpty(start_Date) && TextUtils.isEmpty(end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
             return;
         }
 
         if(!Utility.compare2Date(start_Date, end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
 
             return;
         }

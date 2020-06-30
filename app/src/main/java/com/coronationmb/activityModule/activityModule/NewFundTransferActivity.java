@@ -60,7 +60,6 @@ public class NewFundTransferActivity extends AppCompatActivity {
 
     Context context;
     private ProgressDialog progress;
-    GlobalRepository repo;
 
     ArrayAdapter<String> adapter;
     List<String> fundList;
@@ -91,7 +90,6 @@ public class NewFundTransferActivity extends AppCompatActivity {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.setCanceledOnTouchOutside(false);
-        repo=new GlobalRepository(context);
         fundList=new ArrayList<>();
         fundList.add("Select Fund Type");
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, fundList);
@@ -170,7 +168,7 @@ public class NewFundTransferActivity extends AppCompatActivity {
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context)+"|"+productSym+"|"+productName+"|"+amt+"1"+amt+"|"+"1");
 
-        repo.redemption(SharedPref.getApi_ID(context), req, new OnApiResponse<ArrayList<PortFolioModel>>() {
+        new GlobalRepository(context).redemption(SharedPref.getApi_ID(context), req, new OnApiResponse<ArrayList<PortFolioModel>>() {
             @Override
             public void onSuccess(ArrayList<PortFolioModel> data) {
                 alert("Request sent successfully");

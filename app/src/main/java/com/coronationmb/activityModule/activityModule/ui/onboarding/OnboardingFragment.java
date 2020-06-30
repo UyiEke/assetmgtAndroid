@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ public class OnboardingFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    Context context;
 
     @BindView(R.id.advert_image)
     ImageView advert_image;
@@ -86,9 +88,10 @@ public class OnboardingFragment extends Fragment {
     }
 
     public void initUI(){
-        advert_image.setImageDrawable(getContext().getResources().getDrawable(mParam1));
+        advert_image.setImageDrawable(context.getResources().getDrawable(mParam1));
 
     }
+
 
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -101,6 +104,9 @@ public class OnboardingFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        this.context = context;
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {

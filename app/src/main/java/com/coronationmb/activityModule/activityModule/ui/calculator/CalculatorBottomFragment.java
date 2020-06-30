@@ -2,6 +2,7 @@ package com.coronationmb.activityModule.activityModule.ui.calculator;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,8 @@ public class CalculatorBottomFragment extends BottomSheetDialogFragment {
 
     String charaterMsg;
 
+    Context context;
+
     BottomSheetBehavior bottomSheetBehavior;
 
     public static CalculatorBottomFragment newInstance(int position,String msg) {
@@ -81,11 +84,11 @@ public class CalculatorBottomFragment extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        View view = View.inflate(getContext(), R.layout.calculator_bottom_layout, null);
+        View view = View.inflate(context, R.layout.calculator_bottom_layout, null);
         ButterKnife.bind(this, view);
-        repo=new GlobalRepository(getContext());
+        repo=new GlobalRepository(context);
         cal_title.setText(charaterMsg);
-
+        context = getContext();
 
                 dialog.setContentView(view);
     }

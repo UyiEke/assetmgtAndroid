@@ -44,7 +44,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     ProgressDialog progress;
     Context context;
-    GlobalRepository repo;
     String apID;
     private String custId;
 
@@ -63,13 +62,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //apID="212";
-        getToken();
+        //getToken();
         progress = new ProgressDialog(context);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setMessage("Connecting.......");
         progress.setIndeterminate(true);
         progress.setProgress(0);
-        repo=new GlobalRepository(context);
     }
 
     @OnClick(R.id.submit)
@@ -92,18 +90,20 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             getId();
             return;
         }
-        if(SharedPref.getApp_token(context)==null){
-            getToken2();
-            return;
-        }
 
         reset();
 
+       // getToken2();
+
     }
+
+
+
+
 
     private void reset(){
 
-        repo.resetPassword(SharedPref.getApi_ID(context), custId, new OnApiResponse<WebResponse<JsonObject>>() {
+        new GlobalRepository(context).resetPassword(SharedPref.getApi_ID(context), custId, new OnApiResponse<WebResponse<JsonObject>>() {
             @Override
             public void onSuccess(WebResponse<JsonObject> data) {
                 progress.dismiss();
@@ -163,27 +163,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(String message) {
-
+                Utility.alertOnly(context,"Failed, please try again","");
             }
         });
     }
 
 
-    private void getToken(){
-
-        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
-            @Override
-            public void onSuccess(String data) {
-
-                SharedPref.setApp_token(context,data);
-            }
-
-            @Override
-            public void onFailed(String message) {
-
-            }
-        });
-    }
 
 
     private void getId(){

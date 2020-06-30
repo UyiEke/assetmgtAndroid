@@ -55,13 +55,11 @@ public class ChangePasswdFragment extends Fragment {
 
     private ChangePasswdViewModel changePasswdViewModel;
     private ProgressDialog progress;
-    Context context;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         changePasswdViewModel = ViewModelProviders.of(this).get(ChangePasswdViewModel.class);
         View root = inflater.inflate(R.layout.fragment_change_password, container, false);
-        context=getContext();
         ButterKnife.bind(this,root);
 
         ((DashboardActivity)context).changeToolbarTitle("SETTINGS");

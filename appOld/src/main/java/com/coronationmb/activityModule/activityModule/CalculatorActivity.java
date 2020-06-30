@@ -27,7 +27,6 @@ import com.coronationmb.R;
 public class CalculatorActivity extends AppCompatActivity {
 
 
-    GlobalRepository repo;
     int calculatorIndex;
 
     @BindView(R.id.calculate)

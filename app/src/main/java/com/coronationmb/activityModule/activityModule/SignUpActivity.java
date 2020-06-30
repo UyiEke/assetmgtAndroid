@@ -33,6 +33,8 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +43,6 @@ import butterknife.OnClick;
 public class SignUpActivity extends AppCompatActivity {
 Context context;
     private ProgressDialog progress;
-    GlobalRepository repo;
 
     @BindView(R.id.fullname)
     EditText fullname;
@@ -90,7 +91,6 @@ Context context;
         progress.setIndeterminate(true);
         progress.setProgress(0);
 
-        repo=new GlobalRepository(context);
         list=new ArrayList<>();
 
          val=getIntent().getIntExtra("group",0);
@@ -140,6 +140,25 @@ Context context;
             return;
         }
 
+
+        if(!isPasswordPolicyValid(passw)){
+
+            progress.dismiss();
+            Utility.alertOnly(context,"Password should be minimum of nine character, at least one uppercase letter, one lowercase letter, one number and one special character","");
+            return;
+        }
+
+
+
+        if(!isPasswordPolicyValid(confirmPass)){
+
+            progress.dismiss();
+            Utility.alertOnly(context,"Password should be minimum of nine character, at least one uppercase letter, one lowercase letter, one number and one special character","");
+            return;
+        }
+
+
+
         if(!(passw.equals(confirmPass))){
             progress.dismiss();
             Utility.alertOnly(context,"Password Mis-match","");
@@ -158,7 +177,7 @@ Context context;
         req.setName(fName);
         req.setPhoneNumber(phNumber);
         req.setPassword(passw);
-        repo.createTemporaryAccount(SharedPref.getApi_ID(context), req, new OnApiResponse<WebResponse<String>>() {
+        new GlobalRepository(context).createTemporaryAccount(SharedPref.getApi_ID(context), req, new OnApiResponse<WebResponse<String>>() {
             @Override
             public void onSuccess(WebResponse<String> data) {
                 progress.dismiss();
@@ -257,6 +276,29 @@ public void backtoLogin(){
                     }
                 });
         dialog.show();
+    }
+
+
+
+    public boolean isPasswordPolicyValid(String passwd){ // returns true, if its valid
+
+        if (passwd.length() < 9){
+
+            return false;
+
+        }
+
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
+        Matcher matcher = pattern.matcher(passwd);
+
+        if (!matcher.matches()) {
+          //  System.out.println("string '"+str + "' contains special character");
+            return true;
+        } else {
+         //   System.out.println("string '"+str + "' doesn't contains special character");
+            return false;
+        }
+
     }
 
 

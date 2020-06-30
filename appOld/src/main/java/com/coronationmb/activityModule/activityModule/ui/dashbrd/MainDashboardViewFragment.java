@@ -65,7 +65,6 @@ public class MainDashboardViewFragment extends Fragment {
 
     @BindView(R.id.profile_recycler)
     RecyclerView profile_recycler;
-    GlobalRepository repo;
    // List<AssetProduct> product;
 
     public List<PortFolioModel> portFolio;
@@ -155,13 +154,12 @@ public class MainDashboardViewFragment extends Fragment {
 
     public void initUI(){
        // greet();
-        repo=new GlobalRepository(getContext());
-        ((DashboardActivity)getContext()).changeToolbarTitle("DASHBOARD");
-        productLayoutManager=new LinearLayoutManager(getContext());
+        ((DashboardActivity)context).changeToolbarTitle("DASHBOARD");
+        productLayoutManager=new LinearLayoutManager(context);
         productLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
 
-        portfolioLayoutManager=new LinearLayoutManager(getContext());
+        portfolioLayoutManager=new LinearLayoutManager(context);
         portfolioLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         profile_recycler.setLayoutManager(portfolioLayoutManager);
@@ -169,7 +167,7 @@ public class MainDashboardViewFragment extends Fragment {
 
         if(product!=null){
             product_progressBar.setVisibility(View.GONE);
-            productAdapter= new MainDashboardAdapter(product,getContext());
+            productAdapter= new MainDashboardAdapter(product,context);
             product_recycler.setAdapter(productAdapter);
         }else {
             getProduct();
@@ -178,10 +176,10 @@ public class MainDashboardViewFragment extends Fragment {
         if(portFolio!=null){
             showBalance(portFolio);
             portfolio_progressBar.setVisibility(View.GONE);
-            portfolioAdapter= new MainDashboardPortfolioAdapter(portFolio,getContext());
+            portfolioAdapter= new MainDashboardPortfolioAdapter(portFolio,context);
             profile_recycler.setAdapter(portfolioAdapter);
         }else {
-            if(!SharedPref.getUSERID(getContext()).contains("@")) {
+            if(!SharedPref.getUSERID(context).contains("@")) {
                 getPortfolio();
             }else {
                 portfolio_status.setVisibility(View.VISIBLE);
@@ -236,23 +234,23 @@ public class MainDashboardViewFragment extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(SharedPref.getApi_ID(getContext()));
+        req.setAppId(SharedPref.getApi_ID(context));
         req.setFunctionId(Constant.product);
 
-        repo.getProductAss(SharedPref.getApi_ID(getContext()), req, new OnApiResponse<List<AssetProduct>>() {
+        repo.getProductAss(SharedPref.getApi_ID(context), req, new OnApiResponse<List<AssetProduct>>() {
             @Override
             public void onSuccess(List<AssetProduct> data) {
                 product_progressBar.setVisibility(View.GONE);
                 product_progressBar.setVisibility(View.GONE);
                 product=data;
-                productAdapter= new MainDashboardAdapter(data,getContext());
+                productAdapter= new MainDashboardAdapter(data,context);
                 product_recycler.setAdapter(productAdapter);
             }
 
             @Override
             public void onFailed(String message) {
                 product_progressBar.setVisibility(View.GONE);
-                productAdapter= new MainDashboardAdapter(new ArrayList<>(),getContext());
+                productAdapter= new MainDashboardAdapter(new ArrayList<>(),context);
                 product_recycler.setAdapter(productAdapter);
             }
         });
@@ -262,18 +260,18 @@ public class MainDashboardViewFragment extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(SharedPref.getApi_ID(getContext()));
-        req.setParams(SharedPref.getUSERID(getContext()));
+        req.setAppId(SharedPref.getApi_ID(context));
+        req.setParams(SharedPref.getUSERID(context));
         req.setFunctionId(Constant.Am_Portfolio);
 
-        repo.getPortfolio(SharedPref.getApi_ID(getContext()), req, new OnApiResponse<List<PortFolioModel>>() {
+        repo.getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 portFolio=data;
                 showBalance(portFolio);
                 portfolio_progressBar.setVisibility(View.GONE);
                 portfolio_status.setVisibility(View.GONE);
-                portfolioAdapter= new MainDashboardPortfolioAdapter(data,getContext());
+                portfolioAdapter= new MainDashboardPortfolioAdapter(data,context);
                 profile_recycler.setAdapter(portfolioAdapter);
 
             }
@@ -294,7 +292,7 @@ public class MainDashboardViewFragment extends Fragment {
         for(PortFolioModel port:data){
 
             if(port.getFundType().equals("Unused Cash")){
-                dayTextview.setText("Welcome "+SharedPref.getFULLNAME(getContext()));
+                dayTextview.setText("Welcome "+SharedPref.getFULLNAME(context));
 
                 if(!TextUtils.isEmpty(port.getTotalAssetValue())) {
                     greetTextview.setText("Your Cash Balance: " + Utility.formatStringToNaira(Utility.round(Double.parseDouble(port.getTotalAssetValue()))));

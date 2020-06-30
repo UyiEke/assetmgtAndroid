@@ -29,7 +29,6 @@ import java.util.List;
 
 public class CalculatorFragment extends Fragment {
 
-    Context context;
     private CalculatorViewModel calculatorViewModel;
 
 
@@ -45,13 +44,12 @@ public class CalculatorFragment extends Fragment {
 
         calculatorViewModel = ViewModelProviders.of(this).get(CalculatorViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calculator, container, false);
-        ((DashboardActivity)getContext()).changeToolbarTitle("CALCULATOR");
+        ((DashboardActivity)context).changeToolbarTitle("CALCULATOR");
 
 
-        ( (DashboardActivity)getContext()).changeHamburgerIconClor();
+        ( (DashboardActivity)context).changeHamburgerIconClor();
 
         ButterKnife.bind(this,root);
-        context= getContext();
         initUI();
         return root;
     }

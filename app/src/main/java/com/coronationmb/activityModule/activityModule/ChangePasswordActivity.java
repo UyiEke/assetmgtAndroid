@@ -29,6 +29,9 @@ import android.widget.EditText;
 import com.coronationmb.R;
 import com.google.gson.JsonObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,14 +47,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
     @BindView(R.id.newpasswordEditText)
     EditText newpasswordEditText;
 
+
+    @BindView(R.id.confirmpasswordEditText)
+    EditText confirmpasswordEditText;
+
     @BindView(R.id.submit)
     Button submit;
-    GlobalRepository repo;
 
     private ChangePasswdViewModel changePasswdViewModel;
 
     private ProgressDialog progress;
     Context context;
+    private ChangePasswModel req;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +79,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         progress.setMessage("please wait.......");
         progress.setIndeterminate(true);
         progress.setProgress(0);
-        repo=new GlobalRepository(context);
     }
 
     @OnClick(R.id.submit)
@@ -82,20 +88,50 @@ public class ChangePasswordActivity extends AppCompatActivity {
         String oldPasswd=oldPasswdEditText.getText().toString().trim();
         String newPasswd=newpasswordEditText.getText().toString().trim();
 
+        String confirmpasswordE=confirmpasswordEditText.getText().toString().trim();
+
         if(TextUtils.isEmpty(custId)||TextUtils.isEmpty(oldPasswd)||TextUtils.isEmpty(newPasswd)){
             progress.dismiss();
             Utility.alertOnly(context,"Empty Field","");
             return;
         }
 
-        ChangePasswModel req=new ChangePasswModel();
+
+
+        if(!isPasswordPolicyValid(newPasswd)){
+
+            progress.dismiss();
+            Utility.alertOnly(context,"Password should be minimum of nine character, at least one uppercase letter, one lowercase letter, one number and one special character","");
+            return;
+        }
+
+        if(!isPasswordPolicyValid(confirmpasswordE)){
+
+            progress.dismiss();
+            Utility.alertOnly(context,"Password should be minimum of nine character, at least one uppercase letter, one lowercase letter, one number and one special character","");
+            return;
+        }
+
+
+
+        if(!(confirmpasswordE.equals(newPasswd))){
+            progress.dismiss();
+            Utility.alertOnly(context,"Password Mis-match","");
+            return;
+        }
+
+
+         req=new ChangePasswModel();
         req.setCurrentPassword(oldPasswd);
         req.setCustAID(custId);
         req.setNewPassword(newPasswd);
         req.setProfile("am");
         req.setPwdChangeRequired(false);
 
-        repo.changePassword(SharedPref.getApi_ID(context), req, new OnApiResponse<String>() {
+      //  getToken2();
+
+
+        new GlobalRepository(context).changePassword(SharedPref.getApi_ID(context), req, new OnApiResponse<String>() {
             @Override
             public void onSuccess(String data) {
                 progress.dismiss();
@@ -108,7 +144,48 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 Utility.alertOnly(context,message,"");
             }
         });
+
     }
+
+    public void updateAction(){
+
+        new GlobalRepository(context).changePassword(SharedPref.getApi_ID(context), req, new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+                progress.dismiss();
+                alert(data,"");
+            }
+
+            @Override
+            public void onFailed(String message) {
+                progress.dismiss();
+                Utility.alertOnly(context,message,"");
+            }
+        });
+
+
+
+    }
+
+
+    private void getToken2(){
+
+        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
+            @Override
+            public void onSuccess(String data) {
+
+                SharedPref.setApp_token(context,data);
+                updateAction();
+            }
+
+            @Override
+            public void onFailed(String message) {
+                progress.dismiss();
+                Utility.alertOnly(context,"Failed to connect, please try again","");
+            }
+        });
+    }
+
 
     public void alert(final String msg, String title) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
@@ -127,5 +204,27 @@ public class ChangePasswordActivity extends AppCompatActivity {
         AlertDialog alert11 = builder1.create();
         alert11.show();
     }
+
+    public boolean isPasswordPolicyValid(String passwd){ // returns true, if its valid
+
+        if (passwd.length() < 9){
+
+            return false;
+
+        }
+
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
+        Matcher matcher = pattern.matcher(passwd);
+
+        if (!matcher.matches()) {
+            //  System.out.println("string '"+str + "' contains special character");
+            return true;
+        } else {
+            //   System.out.println("string '"+str + "' doesn't contains special character");
+            return false;
+        }
+
+    }
+
 
 }

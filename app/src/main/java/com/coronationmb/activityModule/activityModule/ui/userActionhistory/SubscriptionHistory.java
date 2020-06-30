@@ -58,6 +58,8 @@ public class SubscriptionHistory extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    Context context;
+
     private OnFragmentInteractionListener mListener;
 
     RedemptionAdapter adapter;
@@ -81,8 +83,6 @@ public class SubscriptionHistory extends Fragment {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    Context context;
-    GlobalRepository repo;
     List<SubscriptionHistoryModel> list=null;
 
     private Calendar myCalendar;
@@ -129,13 +129,11 @@ public class SubscriptionHistory extends Fragment {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_user_action_history, container, false);
         ButterKnife.bind(this, root);
-        context=getContext();
         initUI();
         return root;
     }
 
     private void initUI(){
-      repo=new GlobalRepository(context);
 
       layoutManager= new LinearLayoutManager(context);
       layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -208,7 +206,7 @@ public class SubscriptionHistory extends Fragment {
         req.setProfile(Constant.profile);
         req.setParams(SharedPref.getUSERID(context)+"|"+"0");
 
-        repo.subscriptionList(SharedPref.getApi_ID(context), req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
+        new GlobalRepository(context).subscriptionList(SharedPref.getApi_ID(context), req, new OnApiResponse<List<SubscriptionHistoryModel>>() {
             @Override
             public void onSuccess(List<SubscriptionHistoryModel> data) {
                 list=data;
@@ -241,13 +239,13 @@ public class SubscriptionHistory extends Fragment {
 
         if(TextUtils.isEmpty(start_Date) && TextUtils.isEmpty(end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
             return;
         }
 
         if(!Utility.compare2Date(start_Date, end_Date)){
 
-            Toast.makeText(getContext(),"InValid Date Entries",Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"InValid Date Entries",Toast.LENGTH_LONG).show();
 
             return;
         }

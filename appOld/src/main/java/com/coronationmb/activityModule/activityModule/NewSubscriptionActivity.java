@@ -62,7 +62,6 @@ public class NewSubscriptionActivity extends AppCompatActivity {
 
     Context context;
     private ProgressDialog progress;
-    GlobalRepository repo;
 
     ArrayAdapter<String> adapter;
     List<String> fundList;

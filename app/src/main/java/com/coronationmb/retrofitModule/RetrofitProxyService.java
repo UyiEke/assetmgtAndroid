@@ -1,6 +1,7 @@
 package com.coronationmb.retrofitModule;
 
 
+import com.coronationmb.Model.BankModel;
 import com.coronationmb.Model.Product;
 import com.coronationmb.Model.UserDetailsParam;
 import com.coronationmb.Model.WebResponse;
@@ -28,11 +29,13 @@ import org.json.JSONObject;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -81,8 +84,21 @@ public interface RetrofitProxyService {
     Call<WebResponse<List<Product>>> getProduct();
 
     // Get Asset Management : P2get-data
+  /*
+    @Headers({"Accept: application/json"})
+    @POST("fetchCustomerTransactionDetails/{appId}")
+    Call<WebResponse<JsonObject>> amTransactionAction(@Path("appId")String appId, @Body RequestBody req, @Header("Authorization") String auth);
+*/
+
+
+    // Get Asset Management : P2get-data
+
     @POST("fetchCustomerTransactionDetails/{appId}")
     Call<WebResponse<JsonObject>> amTransactionAction(@Path("appId")String appId, @Body UserDetailsParam req,@Header("Authorization") String auth);
+
+
+
+
 
     @GET("createAccountParameter")
     Call<CreateAccountParameter> getCreateAccountParameter(@Header("Authorization") String auth);
@@ -143,6 +159,11 @@ public interface RetrofitProxyService {
                                          @Path("tokenString") String tokenString
                                         ,@Header("Authorization") String auth);
 
+
+
+    // List of Bank
+    @GET("getBanklist")
+    Call<WebResponse<BankModel>>getBanklist();
 
 
 }

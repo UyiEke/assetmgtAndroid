@@ -86,7 +86,7 @@ public class OnboardingFragment extends Fragment {
     }
 
     public void initUI(){
-        advert_image.setImageDrawable(getContext().getResources().getDrawable(mParam1));
+        advert_image.setImageDrawable(context.getResources().getDrawable(mParam1));
 
     }
 

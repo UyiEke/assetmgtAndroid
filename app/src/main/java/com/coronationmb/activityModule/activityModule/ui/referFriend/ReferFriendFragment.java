@@ -36,7 +36,7 @@ public class ReferFriendFragment extends Fragment {
     LinearLayout send;
     GlobalRepository repo;
     private ProgressDialog progress;
-    //Context context;
+    Context context;
 
 
     private ReferFriendViewModel referFriendViewModel;
@@ -46,10 +46,17 @@ public class ReferFriendFragment extends Fragment {
         referFriendViewModel = ViewModelProviders.of(this).get(ReferFriendViewModel.class);
         View root = inflater.inflate(R.layout.fragment_refer_friend, container, false);
         ButterKnife.bind(this, root);
-        ((DashboardActivity)getContext()).changeToolbarTitle("REFER A FRIEND");
-        ((DashboardActivity)getContext()).changeHamburgerIconClor();
+        ((DashboardActivity)context).changeToolbarTitle("REFER A FRIEND");
+        ((DashboardActivity)context).changeHamburgerIconClor();
 
         return root;
+    }
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @OnClick(R.id.send)

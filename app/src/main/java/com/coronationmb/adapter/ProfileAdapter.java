@@ -1,6 +1,7 @@
 package com.coronationmb.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +43,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ProfileAdapter.MyViewHolder holder, int position) {
-        if(list.get(position).getTotalAssetValue()!=null || !list.get(position).getTotalAssetValue().isEmpty()){
+      //  if(list.get(position).getTotalAssetValue()!=null || !list.get(position).getTotalAssetValue().isEmpty()){
 
+        if(!TextUtils.isEmpty(list.get(position).getTotalAssetValue())){
             holder.amt.setText(formatStringToNaira(round(Double.parseDouble(list.get(position).getTotalAssetValue()))));
 
         }

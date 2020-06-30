@@ -34,7 +34,7 @@ public class MainDashboardAdapter extends RecyclerView.Adapter<MainDashboardAdap
     public MainDashboardAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
 
-            itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.product_row_item, parent,false);
+            itemView= LayoutInflater.from(parent.context).inflate(R.layout.product_row_item, parent,false);
 
         return new MainDashboardAdapter.MyViewHolder(itemView);
     }

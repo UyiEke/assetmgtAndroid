@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.collection.ArrayMap;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
@@ -46,6 +47,7 @@ import com.coronationmb.service.Constant;
 import com.coronationmb.service.GlobalRepository;
 import com.coronationmb.service.SharedPref;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -55,6 +57,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,14 +68,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.RequestBody;
 
 public class DashboardActivity extends BaseActivity implements RedemptionHistory.OnFragmentInteractionListener,
         MainDashboardViewFragment.OnFragmentInteractionListener, MainDashboardChart.OnFragmentInteractionListener,
@@ -106,7 +114,6 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
    // ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawer;
 
-    GlobalRepository repo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +129,6 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
         ButterKnife.bind(this);
         context=DashboardActivity.this;
 
-        repo=new GlobalRepository(context);
 
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
         getPortfolio();
@@ -403,7 +409,7 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
 
     }
 
-    private void getPortfolio(){
+    private void getPortfolio()  {
 
         UserDetailsParam req=new UserDetailsParam();
 
@@ -412,7 +418,19 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
         req.setFunctionId(Constant.Am_Portfolio);
         req.setAppId(SharedPref.getApi_ID(context));
 
-        repo.getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
+/*
+        Map<String, Object> jsonParams = new ArrayMap<>();
+        //put something inside the map, could be null
+        jsonParams.put("profile", Constant.profile);
+        jsonParams.put("params", SharedPref.getUSERID(context));
+        jsonParams.put("functionId", Constant.Am_Portfolio);
+        jsonParams.put("appId", SharedPref.getApi_ID(context));
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"),(new JSONObject(jsonParams)).toString());
+*/
+
+
+        new GlobalRepository(context).getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
 
             @Override
             public void onSuccess(List<PortFolioModel> data) {
@@ -420,6 +438,7 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
             }
             @Override
             public void onFailed(String message) {
+                Log.d("getproduct","error");
 
             }
         });
@@ -433,7 +452,18 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
         req.setAppId(SharedPref.getApi_ID(context));
         req.setFunctionId(Constant.product);
 
-        repo.getProductAss(SharedPref.getApi_ID(context), req, new OnApiResponse<List<AssetProduct>>() {
+/*
+        Map<String, Object> jsonParams = new ArrayMap<>();
+        //put something inside the map, could be null
+        jsonParams.put("profile", Constant.profile);
+      //  jsonParams.put("params", SharedPref.getUSERID(context));
+        jsonParams.put("functionId", Constant.Am_Portfolio);
+        jsonParams.put("appId", SharedPref.getApi_ID(context));
+
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json"),(new JSONObject(jsonParams)).toString());
+*/
+
+        new GlobalRepository(context).getProductAss(SharedPref.getApi_ID(context), req, new OnApiResponse<List<AssetProduct>>() {
             @Override
             public void onSuccess(List<AssetProduct> data) {
                 product=data;
@@ -443,7 +473,7 @@ public class DashboardActivity extends BaseActivity implements RedemptionHistory
 
             @Override
             public void onFailed(String message) {
-
+                Log.d("getproduct","error");
             }
         });
     }

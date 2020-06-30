@@ -73,14 +73,13 @@ public class NewRedemptionFragment extends Fragment {
     EditText product_name;
 
 
-
-    Context context;
     private ProgressDialog progress;
-    GlobalRepository repo;
 
     ArrayAdapter<String> adapter;
     List<String> fundList;
     List<PortFolioModel> portFolioData;
+
+    Context context;
 
     private NewRedemptionViewModel newRedemptionViewModel;
 
@@ -93,11 +92,10 @@ public class NewRedemptionFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_new_redemption, container, false);
         ButterKnife.bind(this,root);
-        context= getContext();
 
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("REDEEM");
-        ((DashboardActivity)getContext()).changeHamburgerIconClorBottomNav();
+        ((DashboardActivity)context).changeToolbarTitle("REDEEM");
+        ((DashboardActivity)context).changeHamburgerIconClorBottomNav();
 
         return root;
     }
@@ -113,6 +111,13 @@ public class NewRedemptionFragment extends Fragment {
         initUI();
     }
 
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
     public void initUI(){
 
         progress = new ProgressDialog(context);
@@ -121,7 +126,7 @@ public class NewRedemptionFragment extends Fragment {
         progress.setIndeterminate(true);
         progress.setProgress(0);
         progress.setCanceledOnTouchOutside(false);
-        repo=new GlobalRepository(context);
+     //   repo=new GlobalRepository(context);
        fundList=new ArrayList<>();
         fundList.add("Select Fund Type");
 
@@ -217,7 +222,7 @@ public class NewRedemptionFragment extends Fragment {
         req.setParams(SharedPref.getUSERID(context)+"|"+productSym+"|"+productName+"|"+amt+"|1|"+amt+"|"+"1");
 
 
-        repo.redemption(SharedPref.getApi_ID(context), req, new OnApiResponse<ArrayList<PortFolioModel>>() {
+        new GlobalRepository(context).redemption(SharedPref.getApi_ID(context), req, new OnApiResponse<ArrayList<PortFolioModel>>() {
             @Override
             public void onSuccess(ArrayList<PortFolioModel> data) {
                 progress.dismiss();

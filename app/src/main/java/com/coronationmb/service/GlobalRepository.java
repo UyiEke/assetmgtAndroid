@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.coronationmb.Model.BankModel;
 import com.coronationmb.Model.OnApiResponse;
 import com.coronationmb.Model.Product;
 import com.coronationmb.Model.SubscriptionHistoryModel;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +59,9 @@ public class GlobalRepository {
     public GlobalRepository(Context context) {
         retrofitProxyService = getRetrofitInstance();
         this.context=context;
+
+        updateToken();
+
     }
 
     public void login(String appID, LoginModel model, final OnApiResponse<WebResponse<JsonObject>> callback){
@@ -67,11 +72,16 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
 
-                if(response.isSuccessful() && response.body().getData()!=null){
+                if(response.isSuccessful() && response.body()!=null){
+
+                    if(response.body().getData()!=null && response.body().getStatus() !=null ) {
+
+
 
                     if(response.body().getStatus().equals("1") ){
                         callback.onFailed(response.body().getMessage());
                     }
+
                     else if(response.body().getStatus().equals("01")){
 
                         try {
@@ -110,6 +120,8 @@ public class GlobalRepository {
 
                             if(datatableObject!=null){
                                 JSONArray rows= datatableObject.optJSONArray("Rows");
+
+                                if (rows!=null){
                                 JSONObject rowsObject= rows.optJSONObject(0);
 
                                 String userId=rowsObject.getString("0");
@@ -139,13 +151,26 @@ public class GlobalRepository {
                                 callback.onFailed("Access Denied");
                             }
 
+                            }else {
+                                // callback.onFailed(responseBody.getString("StatusMessage"));
+                                callback.onFailed("Access Denied");
+                            }
+
                         }catch (JSONException err){
                             Log.d("Error", err.toString());
-                            callback.onFailed("failed to connect!, please try again");
+                            callback.onFailed("failed to connect,, please try again");
                         }
 
                     }
-                }else {
+
+
+
+
+                    }
+
+                }
+
+                else {
                     Log.e("create","onresponse");
                     JSONObject jObjError = null;
                     try {
@@ -153,7 +178,7 @@ public class GlobalRepository {
 
                         String msg=jObjError.getString("message");
 
-                        callback.onFailed("failed to connect!, please try again");
+                        callback.onFailed("failed to connect, please try again");
 
                         Log.e("create2","onresponse");
 
@@ -169,11 +194,13 @@ public class GlobalRepository {
                     callback.onFailed("Failed to connect, please try again");
                 }
                 else {
-                    callback.onFailed("Failed! pls try again");
+                    callback.onFailed("Failed, please try again");
                 }
             }
         });
     }
+
+
 
     public void resetPassword(String appID, String custID,final OnApiResponse<WebResponse<JsonObject>> callback){
         retrofitProxyService.resetPassword(appID,custID,SharedPref.getApp_token(context)).enqueue(new Callback<WebResponse<JsonObject>>() {
@@ -181,7 +208,41 @@ public class GlobalRepository {
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
 
                 if(response.isSuccessful() && response.body()!=null){
-                    callback.onSuccess(response.body());
+
+                    if (response.body().getData()!= null){
+
+                        String responseString = response.body().getData().toString();
+
+                        JSONObject obj = null;
+                        try {
+                            obj = new JSONObject(responseString);
+
+                            Integer status = obj.optInt("status");
+
+                            if (status == 0){
+
+                                callback.onSuccess(response.body());
+                            }
+                            else {
+                                callback.onFailed("Failed to retrieve password, please try again");
+
+                            }
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            callback.onFailed("Failed to retrieve password, please try again");
+                        }
+
+
+
+                    }else {
+                        callback.onFailed("Failed to retrieve password, please try again");
+
+                    }
+
+
                 }else {
                     Log.e("create","onresponse");
                     JSONObject jObjError = null;
@@ -209,18 +270,30 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<WebResponse<String>> call, Response<WebResponse<String>> response) {
 
-                if (response.isSuccessful() ) {
-                    if (response.body().getStatus().equals("00")) {
-                        callback.onSuccess(response.body());
-                        return;
-                    }
+                if (response.isSuccessful() && response.body() != null) {
+
+                    if (response.body().getStatus() != null){
+
+                        if (response.body().getStatus().equals("00")) {
+                            callback.onSuccess(response.body());
+                            return;
+                        }
                     if (response.body().getStatus().equals("1")) {
                         callback.onFailed(response.body().getMessage());
                         return;
                     } else {
                         callback.onFailed("Account creation failed!");
                     }
-                }else {
+
+                } else {
+                        callback.onFailed("Account creation failed!");
+                    }
+
+                }
+
+
+
+                else {
                     callback.onFailed("Account creation failed!");
                 }
             }
@@ -244,28 +317,35 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
 
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
 
-                    try {
-                        JSONObject dataz = new JSONObject(response.body().getData().toString());
+                    if (response.body().getData() != null){
+                        try {
+                            JSONObject dataz = new JSONObject(response.body().getData().toString());
 
-                        int status = dataz.optInt("status");
-                        if (status == 0) {
-                            callback.onSuccess("Password change request was successful");
-                        } else {
-                            String msg = dataz.optString("message");
-                            if(TextUtils.isEmpty(msg)) {
-                                callback.onFailed("Password change request failed");
-                            }else {
-                                callback.onFailed(msg);
+                            int status = dataz.optInt("status");
+                            if (status == 0) {
+                                callback.onSuccess("Password change request was successful");
+                            } else {
+                                String msg = dataz.optString("message");
+                                if (TextUtils.isEmpty(msg)) {
+                                    callback.onFailed("Password change request failed, please try again");
+                                } else {
+                                    callback.onFailed(msg);
+                                }
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            callback.onFailed("Password change request failed, please try again");
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        callback.onFailed("Password change request failed");
-                    }
                 }else {
-                    callback.onFailed("Password change request failed!");
+                        callback.onFailed("Password change request failed, please try again");
+                    }
+
+
+
+                }else {
+                    callback.onFailed("Password change request failed, please try again");
                 }
             }
             @Override
@@ -316,21 +396,21 @@ public class GlobalRepository {
                         if (response.body().getData().getStatus() == 0){
                             callback.onSuccess("Request sent successfully");
                         }else {
-                            callback.onFailed("Request failed");
+                            callback.onFailed("Request failed, please try again");
                         }
 
                     }else {
-                        callback.onFailed("Request failed");
+                        callback.onFailed("Request failed, please try again");
                     }
                 }else {
-                    callback.onFailed("Request failed");
+                    callback.onFailed("Request failed, please try again");
                 }
 
             }
 
             @Override
             public void onFailure(Call<WebResponse<SupportResponseModel>> call, Throwable t) {
-                callback.onFailed("Request failed");
+                callback.onFailed("Request failed, please try again");
             }
         });
 
@@ -458,7 +538,7 @@ public class GlobalRepository {
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        callback.onFailed("attempt to change request failed");
+                        callback.onFailed("attempt to change request failed, please try again");
                     }
                 }
             }
@@ -477,51 +557,66 @@ public class GlobalRepository {
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
                 List<SubscriptionHistoryModel> resp=new ArrayList<>();
 
-                if(response.isSuccessful() && response.body().getData()!=null){
-                    try {
+                if(response.isSuccessful() && response.body()!=null) {
 
-                        JSONObject json = new JSONObject(response.body().getData().toString());
-                      //  JSONObject responseBody=json.optJSONObject("data");
-                        JSONObject datatableObject=json.optJSONObject("dataTable");
 
-                        if(datatableObject!=null){
+                    if (response.body().getData() != null){
 
-                            JSONArray rows= datatableObject.optJSONArray("Rows");
+                        try {
 
-                            for (int count=0; count<rows.length();count++){
+                            JSONObject json = new JSONObject(response.body().getData().toString());
+                            //  JSONObject responseBody=json.optJSONObject("data");
+                            JSONObject datatableObject = json.optJSONObject("dataTable");
 
-                                SubscriptionHistoryModel subscription=new SubscriptionHistoryModel();
+                            if (datatableObject != null) {
 
-                                JSONObject rowsObject= rows.optJSONObject(count);
-                                if(rowsObject!=null){
+                                JSONArray rows = datatableObject.optJSONArray("Rows");
 
-                                    String fundCode=rowsObject.optString("2");
-                                    subscription.setFundCode(fundCode);
-                                    String fundName=rowsObject.optString("3");
-                                    subscription.setFundName(fundName);
-                                    String quantity=rowsObject.optString("4");
-                                    subscription.setQuantity(quantity);
-                                    String unitPrice=rowsObject.optString("5");
-                                    subscription.setUnitPrice(unitPrice);
-                                    String txnDate=rowsObject.optString("9");
-                                    subscription.setTxnDate(txnDate);
-                                    resp.add(subscription);
-                                }
+                                if (rows != null){
+                                    for (int count = 0; count < rows.length(); count++) {
 
+                                        SubscriptionHistoryModel subscription = new SubscriptionHistoryModel();
+
+                                        JSONObject rowsObject = rows.optJSONObject(count);
+                                        if (rowsObject != null) {
+
+                                            String fundCode = rowsObject.optString("2");
+                                            subscription.setFundCode(fundCode);
+                                            String fundName = rowsObject.optString("3");
+                                            subscription.setFundName(fundName);
+                                            String quantity = rowsObject.optString("4");
+                                            subscription.setQuantity(quantity);
+                                            String unitPrice = rowsObject.optString("5");
+                                            subscription.setUnitPrice(unitPrice);
+                                            String txnDate = rowsObject.optString("9");
+                                            subscription.setTxnDate(txnDate);
+                                            resp.add(subscription);
+                                        }
+
+                                    }
+
+                            }else {
+                                callback.onFailed("failed");
                             }
 
-                        }else {
-                            callback.onFailed("failed");
-                        }
+                            } else {
+                                callback.onFailed("failed");
+                            }
 
-                    }catch (JSONException err){
-                        Log.d("Error", err.toString());
-                        callback.onFailed("failed to connect!, please try again");
-                    }
+                        } catch (JSONException err) {
+                            Log.d("Error", err.toString());
+                            callback.onFailed("failed to connect!, please try again");
+                        }
 
                     callback.onSuccess(resp);
 
+
                 }else {
+                        callback.onFailed("failed!, please try again");
+                    }
+
+                }
+                else {
                     Log.e("create","onresponse");
                     JSONObject jObjError = null;
                     try {
@@ -548,64 +643,78 @@ public class GlobalRepository {
         });
     }
 
-    public void getPortfolio(String appID, UserDetailsParam req,final OnApiResponse<List<PortFolioModel>> callback){
+    /*
+    public void getPortfolio(String appID, RequestBody req , final OnApiResponse<List<PortFolioModel>> callback){
 
         retrofitProxyService.amTransactionAction(appID,req,SharedPref.getApp_token(context)).enqueue(new Callback<WebResponse<JsonObject>>() {
             @Override
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
                 List<PortFolioModel> resp=new ArrayList<>();
 
-                if(response.isSuccessful() && response.body().getData()!=null){
-                    try {
+                if(response.isSuccessful() && response.body()!=null) {
 
-                        JSONObject json = new JSONObject(response.body().getData().toString());
-                        Log.d("check", json.toString());
+                    if (response.body().getData() != null){
 
-                       // JSONObject responseBody=json.optJSONObject("data");
-                        JSONObject datatableObject=json.optJSONObject("dataTable");
+                        try {
+                            JSONObject json = new JSONObject(response.body().getData().toString());
+                            Log.d("check", json.toString());
 
-                        if(datatableObject!=null){
+                            // JSONObject responseBody=json.optJSONObject("data");
+                            JSONObject datatableObject = json.optJSONObject("dataTable");
 
-                            JSONArray rows= datatableObject.optJSONArray("Rows");
+                            if (datatableObject != null) {
 
-                            for (int count=0; count<rows.length();count++){
+                                JSONArray rows = datatableObject.optJSONArray("Rows");
 
-                                PortFolioModel model=new PortFolioModel();
+                                if (rows != null){
+                                    for (int count = 0; count < rows.length(); count++) {
 
-                                JSONObject rowsObject= rows.optJSONObject(count);
-                                if(rowsObject!=null){
+                                        PortFolioModel model = new PortFolioModel();
 
-                                    String fundName=rowsObject.optString("0");
-                                    model.setFundName(fundName);
-                                    String fundCode=rowsObject.optString("1");
-                                    model.setFundCode(fundCode);
-                                    String fundType=rowsObject.optString("2");
-                                    model.setFundType(fundType);
+                                        JSONObject rowsObject = rows.optJSONObject(count);
+                                        if (rowsObject != null) {
 
-                                    String custAID=rowsObject.optString("3");
-                                    model.setCustAID(custAID);
+                                            String fundName = rowsObject.optString("0");
+                                            model.setFundName(fundName);
+                                            String fundCode = rowsObject.optString("1");
+                                            model.setFundCode(fundCode);
+                                            String fundType = rowsObject.optString("2");
+                                            model.setFundType(fundType);
 
-                                    String totalAssetValue=rowsObject.optString("4");
-                                    model.setTotalAssetValue(totalAssetValue);
+                                            String custAID = rowsObject.optString("3");
+                                            model.setCustAID(custAID);
 
-                                    String valuationDate=rowsObject.optString("5");
-                                    model.setValuationDate(valuationDate);
+                                            String totalAssetValue = rowsObject.optString("4");
+                                            model.setTotalAssetValue(totalAssetValue);
 
-                                    resp.add(model);
+                                            String valuationDate = rowsObject.optString("5");
+                                            model.setValuationDate(valuationDate);
+
+                                            resp.add(model);
+                                        }
+
+                                    }
+
+                                    callback.onSuccess(resp);
+                            }
+                                else {
+                                    callback.onFailed("failed");
                                 }
 
+
+                            } else {
+                                callback.onFailed("failed");
                             }
 
-                        }else {
-                            callback.onFailed("failed");
+                        } catch (JSONException err) {
+                            Log.d("Error", err.toString());
+                            callback.onFailed("failed to connect!, please try again");
                         }
+                        callback.onSuccess(resp);
 
-                    }catch (JSONException err){
-                        Log.d("Error", err.toString());
-                        callback.onFailed("failed to connect!, please try again");
-                    }
-
-                    callback.onSuccess(resp);
+                }else {
+                    callback.onFailed("Something went wrong, please try again");
+                }
 
                 }else {
                     Log.e("create","onresponse");
@@ -633,6 +742,110 @@ public class GlobalRepository {
             }
         });
     }
+*/
+
+    public void getPortfolio(String appID, UserDetailsParam req ,final OnApiResponse<List<PortFolioModel>> callback){
+
+        retrofitProxyService.amTransactionAction(appID,req,SharedPref.getApp_token(context)).enqueue(new Callback<WebResponse<JsonObject>>() {
+            @Override
+            public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
+                List<PortFolioModel> resp=new ArrayList<>();
+
+                if(response.isSuccessful() && response.body()!=null) {
+
+                    if (response.body().getData() != null){
+
+                        try {
+                            JSONObject json = new JSONObject(response.body().getData().toString());
+                            Log.d("check", json.toString());
+
+                            // JSONObject responseBody=json.optJSONObject("data");
+                            JSONObject datatableObject = json.optJSONObject("dataTable");
+
+                            if (datatableObject != null) {
+
+                                JSONArray rows = datatableObject.optJSONArray("Rows");
+
+                                if (rows != null){
+                                    for (int count = 0; count < rows.length(); count++) {
+
+                                        PortFolioModel model = new PortFolioModel();
+
+                                        JSONObject rowsObject = rows.optJSONObject(count);
+                                        if (rowsObject != null) {
+
+                                            String fundName = rowsObject.optString("0");
+                                            model.setFundName(fundName);
+                                            String fundCode = rowsObject.optString("1");
+                                            model.setFundCode(fundCode);
+                                            String fundType = rowsObject.optString("2");
+                                            model.setFundType(fundType);
+
+                                            String custAID = rowsObject.optString("3");
+                                            model.setCustAID(custAID);
+
+                                            String totalAssetValue = rowsObject.optString("4");
+                                            model.setTotalAssetValue(totalAssetValue);
+
+                                            String valuationDate = rowsObject.optString("5");
+                                            model.setValuationDate(valuationDate);
+
+                                            resp.add(model);
+                                        }
+
+                                    }
+
+                                    callback.onSuccess(resp);
+                                }
+                                else {
+                                    callback.onFailed("failed");
+                                }
+
+
+                            } else {
+                                callback.onFailed("failed");
+                            }
+
+                        } catch (JSONException err) {
+                            Log.d("Error", err.toString());
+                            callback.onFailed("failed to connect!, please try again");
+                        }
+                        callback.onSuccess(resp);
+
+                    }else {
+                        callback.onFailed("Something went wrong, please try again");
+                    }
+
+                }else {
+                    Log.e("create","onresponse");
+                    JSONObject jObjError = null;
+                    try {
+                        jObjError = new JSONObject(response.errorBody().string());
+
+                        String msg=jObjError.optString("message");
+
+                        callback.onFailed("failed!, please try again");
+
+                        Log.e("create2","onresponse");
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailed("Something went wrong, please try again");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<WebResponse<JsonObject>> call, Throwable t) {
+                callback.onFailed("failed!, please try again");
+            }
+        });
+    }
+
+
+
+
 
     public void redemption(String appID, UserDetailsParam req,final OnApiResponse<ArrayList<PortFolioModel>> callback){
 
@@ -652,6 +865,8 @@ public class GlobalRepository {
 
                             JSONArray rows= datatableObject.optJSONArray("Rows");
 
+
+                            if (rows!=null){
                             for (int count=0; count<rows.length();count++){
 
                                 PortFolioModel model=new PortFolioModel();
@@ -676,8 +891,13 @@ public class GlobalRepository {
                                     model.setValuationDate(valuationDate);
 
                                     resp.add(model);
+                                }else {
+                                    callback.onFailed("failed");
                                 }
 
+                            }
+                            }else {
+                                callback.onFailed("failed");
                             }
 
                         }else {
@@ -724,22 +944,44 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<WebResponse<SubscriptionResponseModel>> call, Response<WebResponse<SubscriptionResponseModel>> response) {
 
-                if(response.isSuccessful() && response.body().getData()!=null){
+                if(response.isSuccessful() && response.body()!=null) {
 
-                    if(isCMBaccount){
-                        callback.onSuccess(response.body().getMessage());
-                    }else{
+                    if (response.body().getData() != null){
+
+                        if (isCMBaccount) {
+                            callback.onSuccess(response.body().getData().getMessage());
+                        } else {
 
 
-                        if(response.body().getData().isStatus()){
-                            callback.onSuccess(response.body().getData().getData().getAuthorization_url());
-                        }else {
-                            callback.onFailed("Subscription request failed, please try again");
+                            if (response.body().getData().isStatus()) {
+
+                                if (response.body().getData().getData() != null){
+
+                                    if(response.body().getData().getData().getAuthorization_url() !=null){
+
+                                    callback.onSuccess(response.body().getData().getData().getAuthorization_url());
+
+                                }else {
+                                    callback.onFailed("Subscription request failed, please try again");
+                                }
+
+                            }else {
+                                    callback.onFailed("Subscription request failed, please try again");
+                                }
+
+
+                            } else {
+                                callback.onFailed("Subscription request failed, please try again");
+                            }
+
                         }
 
+                }else {
+                        callback.onFailed("Subscription request failed, please try again");
                     }
 
                 }
+
                 else {
                     callback.onFailed("Subscription request failed, please try again");
                 }
@@ -755,14 +997,19 @@ public class GlobalRepository {
         });
     }
 
-    public void getProductAss(String appID, UserDetailsParam req,final OnApiResponse<List<AssetProduct>> callback){
+
+/*
+    public void getProductAss(String appID, RequestBody req,final OnApiResponse<List<AssetProduct>> callback){
 
         retrofitProxyService.amTransactionAction(appID,req,SharedPref.getApp_token(context)).enqueue(new Callback<WebResponse<JsonObject>>() {
             @Override
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
                 List<AssetProduct> resp=new ArrayList<>();
 
-                if(response.isSuccessful() && response.body().getData()!=null){
+                if(response.isSuccessful() && response.body()!=null){
+
+                    if (response.body().getData()!=null){
+
                     try {
 
                         JSONObject json = new JSONObject(response.body().getData().toString());
@@ -775,6 +1022,8 @@ public class GlobalRepository {
                         if(datatableObject!=null){
 
                             JSONArray rows= datatableObject.optJSONArray("Rows");
+
+                            if (rows!=null){
 
                             for (int count=0; count<rows.length();count++){
 
@@ -807,9 +1056,17 @@ public class GlobalRepository {
                                     model.setMinInvest(MinInvest);
 
                                     resp.add(model);
+                                } else {
+                                    callback.onFailed("failed");
                                 }
 
                             }
+
+                                callback.onSuccess(resp);
+                            return;
+                        }else {
+                            callback.onFailed("failed");
+                        }
 
                         }else {
                             callback.onFailed("failed");
@@ -820,7 +1077,11 @@ public class GlobalRepository {
                         callback.onFailed("failed to connect!, please try again");
                     }
 
-                    callback.onSuccess(resp);
+
+
+                }else {
+                        callback.onFailed("failed, please try again");
+                }
 
                 }else {
                     Log.e("create","onresponse");
@@ -830,7 +1091,7 @@ public class GlobalRepository {
 
                         String msg=jObjError.optString("message");
 
-                        callback.onFailed("failed!, please try again");
+                        callback.onFailed("failed, please try again");
 
                         Log.e("create2","onresponse");
 
@@ -848,6 +1109,118 @@ public class GlobalRepository {
             }
         });
     }
+*/
+    public void getProductAss(String appID, UserDetailsParam req,final OnApiResponse<List<AssetProduct>> callback){
+
+        retrofitProxyService.amTransactionAction(appID,req,SharedPref.getApp_token(context)).enqueue(new Callback<WebResponse<JsonObject>>() {
+            @Override
+            public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
+                List<AssetProduct> resp=new ArrayList<>();
+
+                if(response.isSuccessful() && response.body()!=null){
+
+                    if (response.body().getData()!=null){
+
+                        try {
+
+                            JSONObject json = new JSONObject(response.body().getData().toString());
+
+                            Log.d("check2", json.toString());
+
+                            // JSONObject responseBody=json.optJSONObject("data");
+                            JSONObject datatableObject=json.optJSONObject("dataTable");
+
+                            if(datatableObject!=null){
+
+                                JSONArray rows= datatableObject.optJSONArray("Rows");
+
+                                if (rows!=null){
+
+                                    for (int count=0; count<rows.length();count++){
+
+                                        AssetProduct model=new AssetProduct();
+
+                                        JSONObject rowsObject= rows.optJSONObject(count);
+                                        if(rowsObject!=null){
+                                            String fundcode=rowsObject.optString("0");
+                                            model.setFundCode(fundcode);
+
+                                            String fundname=rowsObject.optString("1");
+                                            model.setFundName(fundname);
+
+                                            String MktValue=rowsObject.optString("4");
+                                            model.setMktValue(MktValue);
+
+                                            String FundType=rowsObject.optString("6");
+                                            model.setFundType(FundType);
+
+                                            String UnitPrice=rowsObject.optString("7");
+                                            model.setUnitPrice(UnitPrice);
+
+                                            String BidPrice=rowsObject.optString("8");
+                                            model.setBidPrice(BidPrice);
+
+                                            String OfferPrice=rowsObject.optString("9");
+                                            model.setOfferPrice(OfferPrice);
+
+                                            String MinInvest=rowsObject.optString("12");
+                                            model.setMinInvest(MinInvest);
+
+                                            resp.add(model);
+                                        } else {
+                                            callback.onFailed("failed");
+                                        }
+
+                                    }
+
+                                    callback.onSuccess(resp);
+
+                                }else {
+                                    callback.onFailed("failed");
+                                }
+
+                            }else {
+                                callback.onFailed("failed");
+                            }
+
+                        }catch (JSONException err){
+                            Log.d("Error", err.toString());
+                            callback.onFailed("failed to connect!, please try again");
+                        }
+
+
+
+                    }else {
+                        callback.onFailed("failed, please try again");
+                    }
+
+                }else {
+                    Log.e("create","onresponse");
+                    JSONObject jObjError = null;
+                    try {
+                        jObjError = new JSONObject(response.errorBody().string());
+
+                        String msg=jObjError.optString("message");
+
+                        callback.onFailed("failed, please try again");
+
+                        Log.e("create2","onresponse");
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailed("Something went wrong, please try again");
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<WebResponse<JsonObject>> call, Throwable t) {
+                callback.onFailed("failed!, please try again");
+            }
+        });
+    }
+
 
     public void getCreateAccountParameter(final OnApiResponse<CreateAccountParameter> callback){
 
@@ -879,30 +1252,38 @@ public class GlobalRepository {
 
     }
 
+
+
     public void kycUploads(String appID,String kycID,String custI , List<MultipartBody.Part>bodylist,final OnApiResponse<String> callback){
 
         retrofitProxyService.kycUploads(appID,kycID,bodylist,SharedPref.getApp_token(context)).enqueue(new Callback<WebResponse<JsonObject>>() {
             @Override
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     //   callback.onSuccess(response.body());
 
-                    try {
+                    if (response.body().getData() != null){
 
-                        JSONObject dataz = new JSONObject(response.body().getData().toString());
+                        try {
 
-                        int statusCodeValue = dataz.optInt("statusCodeValue");
+                            JSONObject dataz = new JSONObject(response.body().getData().toString());
 
-                        if (statusCodeValue == 200) {
+                            int statusCodeValue = dataz.optInt("statusCodeValue");
 
-                            callback.onSuccess("Account creation was Successful!");
+                            if (statusCodeValue == 200) {
 
-                        } else {
-                            callback.onFailed("Account creation might have been successful, kindly get in touch with the customer support team for confirmation");
+                                callback.onSuccess("Account creation was Successful!");
+
+                            } else {
+                                callback.onFailed("Account creation might have been successful, kindly get in touch with the customer support team for confirmation");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            callback.onFailed("Your Account has been created but something went wrong with your KYC upload, kindly get in touch with the customer support team for confirmation");
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        callback.onFailed("Your Account has been created but something went wrong with your KYC upload, kindly get in touch with the customer support team for confirmation");
+                }
+                    else{
+                        callback.onFailed("Account creation failed, pls try again");
                     }
                 }
 
@@ -914,44 +1295,57 @@ public class GlobalRepository {
         });
     }
 
+
+
     public void CompleteAccountCreationByCustomer(String appID,CreateAccount req,final OnApiResponse<String> callback){
 
         retrofitProxyService.CompleteAccountCreationByCustomer(appID,req,SharedPref.getApp_token(context)).enqueue(new Callback<WebResponse<JsonObject>>() {
             @Override
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
-                if(response.isSuccessful()){
+
+                if(response.isSuccessful() && response.body()!=null){
 
                     if (response.body().getStatus().equals("00")){
 
                         JSONObject json = null;
                         try {
+                            if(response.body().getData()!=null){
+
                             json = new JSONObject(response.body().getData().toString());
+                            //   JSONObject responseBody=json.optJSONObject("data");
+                            JSONObject datatableObject=json.optJSONObject("dataTable");
+
+                            JSONArray Rows=datatableObject.optJSONArray("Rows");
+
+                            JSONObject row1=Rows.optJSONObject(0);
+
+                            String id=row1.optString("0");
+
+                            callback.onSuccess(id);
+
+                        }else {
+                            callback.onFailed("Account creation failed, please try again");
+                        }
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            callback.onFailed("Account creation failed, please try again");
                         }
-                     //   JSONObject responseBody=json.optJSONObject("data");
-                        JSONObject datatableObject=json.optJSONObject("dataTable");
 
-                        JSONArray Rows=datatableObject.optJSONArray("Rows");
-
-                        JSONObject row1=Rows.optJSONObject(0);
-
-                        String id=row1.optString("0");
-
-                        callback.onSuccess(id);
 
                     }else {
-                        callback.onFailed("Account creation failed");
+                        callback.onFailed("Account creation failed, please try again");
                     }
 
 
                 }else {
-                    callback.onFailed("Account creation failed");
+                    callback.onFailed("Account creation failed, please try again");
                 }
             }
             @Override
             public void onFailure(Call<WebResponse<JsonObject>> call, Throwable t) {
-                callback.onFailed("Account creation failed");
+                callback.onFailed("Account creation failed, please try again");
             }
         });
     }
@@ -961,8 +1355,11 @@ public class GlobalRepository {
         retrofitProxyService.getValidIDForm().enqueue(new Callback<List<String>>() {
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                if(response.isSuccessful()){
+
+                if(response.isSuccessful() && response.body()!=null){
                     callback.onSuccess(response.body());
+                }else{
+                    callback.onFailed("failed");
                 }
             }
 
@@ -984,56 +1381,70 @@ public class GlobalRepository {
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
                 List<PortfolioTransactionModel> resp=new ArrayList<>();
 
-                if(response.isSuccessful() && response.body().getData()!=null){
+                if(response.isSuccessful() && response.body()!=null) {
+
+                    if (response.body().getData()!=null){
+
                     try {
 
                         JSONObject json = new JSONObject(response.body().getData().toString());
-                      //  JSONObject responseBody=json.optJSONObject("data");
-                        JSONObject datatableObject=json.optJSONObject("dataTable");
+                        //  JSONObject responseBody=json.optJSONObject("data");
+                        JSONObject datatableObject = json.optJSONObject("dataTable");
 
-                        if(datatableObject!=null){
+                        if (datatableObject != null) {
 
-                            JSONArray rows= datatableObject.optJSONArray("Rows");
+                            JSONArray rows = datatableObject.optJSONArray("Rows");
 
-                            for (int count=0; count<rows.length();count++){
+                            if(rows!=null){
+                            for (int count = 0; count < rows.length(); count++) {
 
-                                PortfolioTransactionModel model=new PortfolioTransactionModel();
+                                PortfolioTransactionModel model = new PortfolioTransactionModel();
 
-                                JSONObject rowsObject= rows.optJSONObject(count);
+                                JSONObject rowsObject = rows.optJSONObject(count);
 
-                                if(rowsObject!=null){
+                                if (rowsObject != null) {
 
-                                    String valueDate=rowsObject.optString("0");
+                                    String valueDate = rowsObject.optString("0");
                                     model.setValueDate(valueDate);
 
-                                    String fundName=rowsObject.optString("1");
+                                    String fundName = rowsObject.optString("1");
                                     model.setFundName(fundName);
 
-                                    String subscription=rowsObject.optString("2");
+                                    String subscription = rowsObject.optString("2");
                                     model.setSubscription(subscription);
 
-                                    String price=rowsObject.optString("3");
+                                    String price = rowsObject.optString("3");
                                     model.setPrice(price);
 
-                                    String mktValue=rowsObject.optString("4");
+                                    String mktValue = rowsObject.optString("4");
                                     model.setMktValue(mktValue);
 
 
                                     resp.add(model);
+                                }else {
+                                    callback.onFailed("failed");
                                 }
 
                             }
 
-                        }else {
+                        } else {
                             callback.onFailed("failed");
                         }
 
-                    }catch (JSONException err){
+                        } else {
+                            callback.onFailed("failed");
+                        }
+
+                    } catch (JSONException err) {
                         Log.d("Error", err.toString());
-                        callback.onFailed("failed to connect!, please try again");
+                        callback.onFailed("failed to connect, please try again");
                     }
 
                     callback.onSuccess(resp);
+
+                }else {
+                    callback.onFailed("failed, please try again");
+                }
 
                 }else {
                     Log.e("create","onresponse");
@@ -1072,33 +1483,37 @@ public class GlobalRepository {
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
                 List<PortfolioStatementHistoryModel> resp=new ArrayList<>();
 
-                if(response.isSuccessful() && response.body().getData()!=null){
-                    try {
+                if(response.isSuccessful() && response.body()!=null) {
 
-                        JSONObject json = new JSONObject(response.body().getData().toString());
-                     //   JSONObject responseBody=json.optJSONObject("data");
-                        JSONObject datatableObject=json.optJSONObject("dataTable");
+                    if (response.body().getData() != null){
 
-                        if(datatableObject!=null){
+                        try {
 
-                            JSONArray rows= datatableObject.optJSONArray("Rows");
+                            JSONObject json = new JSONObject(response.body().getData().toString());
+                            //   JSONObject responseBody=json.optJSONObject("data");
+                            JSONObject datatableObject = json.optJSONObject("dataTable");
 
-                            for (int count=0; count<rows.length();count++){
+                            if (datatableObject != null) {
 
-                                PortfolioStatementHistoryModel model=new PortfolioStatementHistoryModel();
+                                JSONArray rows = datatableObject.optJSONArray("Rows");
 
-                                JSONObject rowsObject= rows.optJSONObject(count);
+                                if (rows != null){
+                                    for (int count = 0; count < rows.length(); count++) {
 
-                                if(rowsObject!=null){
+                                        PortfolioStatementHistoryModel model = new PortfolioStatementHistoryModel();
 
-                                    String effectiveDate=rowsObject.optString("0");
-                                    model.setEffectiveDate(effectiveDate);
+                                        JSONObject rowsObject = rows.optJSONObject(count);
 
-                                    String desc=rowsObject.optString("5");
-                                    model.setDescription(desc);
+                                        if (rowsObject != null) {
 
-                                    String amount=rowsObject.optString("4");
-                                    model.setAmount(amount);
+                                            String effectiveDate = rowsObject.optString("0");
+                                            model.setEffectiveDate(effectiveDate);
+
+                                            String desc = rowsObject.optString("5");
+                                            model.setDescription(desc);
+
+                                            String amount = rowsObject.optString("4");
+                                            model.setAmount(amount);
 
                                     /*
                                     String price=rowsObject.optString("3");
@@ -1108,21 +1523,28 @@ public class GlobalRepository {
                                     model.setMktValue(mktValue);
                                 */
 
-                                    resp.add(model);
+                                            resp.add(model);
+                                        }
+
+                                    }
+                            } else {
+                                    callback.onFailed("failed");
                                 }
 
+                            } else {
+                                callback.onFailed("failed");
                             }
 
-                        }else {
-                            callback.onFailed("failed");
+                        } catch (JSONException err) {
+                            Log.d("Error", err.toString());
+                            callback.onFailed("failed to connect!, please try again");
                         }
 
-                    }catch (JSONException err){
-                        Log.d("Error", err.toString());
-                        callback.onFailed("failed to connect!, please try again");
-                    }
-
                     callback.onSuccess(resp);
+
+                }  else {
+                        callback.onFailed("failed");
+                    }
 
                 }else {
                     Log.e("create","onresponse");
@@ -1158,34 +1580,43 @@ public class GlobalRepository {
         retrofitProxyService.getTransactionHistory(custID,profile,appID,SharedPref.getApp_token(context)).enqueue(new Callback<WebResponse<JsonObject>>() {
             @Override
             public void onResponse(Call<WebResponse<JsonObject>> call, Response<WebResponse<JsonObject>> response) {
-                if(response.isSuccessful()&& response.body().getData()!=null){
+                if(response.isSuccessful()&& response.body()!=null) {
 
-                    List<TransactionHistoryModel> list=new ArrayList<>();
+                    List<TransactionHistoryModel> list = new ArrayList<>();
 
-                    JSONObject json = null;
+                    if (response.body().getData() != null){
+                        JSONObject json = null;
                     try {
                         json = new JSONObject(response.body().getData().toString());
-                        JSONObject responseBody=json.optJSONObject("body");
-                        String outString=responseBody.optString("outValue");
+
+                        JSONObject responseBody = json.optJSONObject("body");
+
+
+                        if (responseBody!=null){
+
+                        String outString = responseBody.optString("outValue");
 
 
                         JSONArray outValue = new JSONArray(outString);
 
-                        for(int count=0;count<outValue.length(); count++){
+                        if(outValue!=null){
 
-                            TransactionHistoryModel model=new TransactionHistoryModel();
+                        for (int count = 0; count < outValue.length(); count++) {
 
-                            JSONObject obj=outValue.optJSONObject(count);
+                            TransactionHistoryModel model = new TransactionHistoryModel();
 
-                            String date=obj.optString("Date");
-                            String TransactionReference=obj.optString("TransactionReference");
-                            String Amount=obj.optString("Amount");
-                            String ApprovedAmount=obj.optString("ApprovedAmount");
-                            String Currency=obj.optString("Currency");
-                            String Status=obj.optString("Status");
+                            JSONObject obj = outValue.optJSONObject(count);
 
-                            String ResponseDescription=obj.optString("ResponseDescription");
-                            String Code=obj.optString("Code");
+                            if (obj != null){
+                                String date = obj.optString("Date");
+                            String TransactionReference = obj.optString("TransactionReference");
+                            String Amount = obj.optString("Amount");
+                            String ApprovedAmount = obj.optString("ApprovedAmount");
+                            String Currency = obj.optString("Currency");
+                            String Status = obj.optString("Status");
+
+                            String ResponseDescription = obj.optString("ResponseDescription");
+                            String Code = obj.optString("Code");
 
                             model.setDate(date);
                             model.setTransactionRef(TransactionReference);
@@ -1199,12 +1630,28 @@ public class GlobalRepository {
                             list.add(model);
                         }
 
+                        }
+
                         callback.onSuccess(list);
+
+                        }else {
+                            callback.onFailed("failed");
+                        }
+
+                    }else {
+                            callback.onFailed("failed");
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                         callback.onFailed("failed");
                     }
+
+                }else {
+                        callback.onFailed("failed");
+                    }
+
+
                 }
             }
 
@@ -1244,7 +1691,8 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body()!=null){
+
                     if(response.body().contentLength()>0){
 
                         callback.onSuccess(response.body());
@@ -1274,8 +1722,11 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<MinimumInvestmentObject> call, Response<MinimumInvestmentObject> response) {
 
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body()!= null){
                     callback.onSuccess(response.body());
+                }
+                else {
+                    callback.onFailed("failed");
                 }
 
             }
@@ -1283,6 +1734,7 @@ public class GlobalRepository {
             @Override
             public void onFailure(Call<MinimumInvestmentObject> call, Throwable t) {
                 Log.d("getValidIDForm","getValidIDForm",t);
+                callback.onFailed("failed");
             }
         });
 
@@ -1295,8 +1747,19 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
 
-                if(response.isSuccessful()){
-                    callback.onSuccess(response.body().getGeneratedToken());
+                if(response.isSuccessful() && response.body() != null){
+
+
+
+                    if (response.body().getGeneratedToken()!= null) {
+
+                        SharedPref.setApp_token(context,response.body().getGeneratedToken());
+                        callback.onSuccess(response.body().getGeneratedToken());
+
+                    }else {
+                        Log.d("getToken","isNull");
+                        callback.onFailed("failed");
+                    }
 
                 }
 
@@ -1305,10 +1768,40 @@ public class GlobalRepository {
             @Override
             public void onFailure(Call<TokenModel> call, Throwable t) {
                 Log.d("getValidIDForm","getValidIDForm",t);
+                callback.onFailed("failed");
             }
         });
 
     }
+
+
+    public void updateToken(){
+
+
+        retrofitProxyService.getToken(Constant.hubAPPID).enqueue(new Callback<TokenModel>() {
+            @Override
+            public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
+
+                if(response.isSuccessful()){
+
+                    SharedPref.setApp_token(context,response.body().getGeneratedToken());
+
+                 //   callback.onSuccess(response.body().getGeneratedToken());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<TokenModel> call, Throwable t) {
+                Log.d("getValidIDForm","getValidIDForm",t);
+
+
+            }
+        });
+
+    }
+
 
     public void getAppid(final OnApiResponse<String> callback){
 
@@ -1316,9 +1809,12 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<ApIDModel> call, Response<ApIDModel> response) {
 
-                if(response.isSuccessful()){
+                if(response.isSuccessful() && response.body() != null){
+
                     callback.onSuccess(response.body().getMessage());
 
+                }else {
+                    callback.onFailed("failed");
                 }
 
             }
@@ -1326,6 +1822,7 @@ public class GlobalRepository {
             @Override
             public void onFailure(Call<ApIDModel> call, Throwable t) {
                 Log.d("getValidIDForm","getValidIDForm",t);
+                callback.onFailed("failed");
             }
         });
 
@@ -1338,34 +1835,19 @@ public class GlobalRepository {
             @Override
             public void onResponse(Call<CmbResponse> call, Response<CmbResponse> response) {
 
-                if(response.isSuccessful()){
-                    callback.onSuccess(response.body());
+                if(response.isSuccessful() && response.body() != null){
 
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<CmbResponse> call, Throwable t) {
-                Log.d("getValidIDForm","getValidIDForm",t);
-            }
-        });
-
-    }
-
-    public void verifyCoronationToken(String acctNumba,OnApiResponse<CmbResponse> callback){
-
-        retrofitProxyService.verifyCoronationAccountNumber(acctNumba,SharedPref.getApp_token(context)).enqueue(new Callback<CmbResponse>() {
-            @Override
-            public void onResponse(Call<CmbResponse> call, Response<CmbResponse> response) {
-
-                if(response.isSuccessful()){
+                    if(response.body().getStatus()!=null){
 
                     if(response.body().getStatus().equals("false")){
                         callback.onFailed("failed");
                     }else {
                         callback.onSuccess(response.body());
                     }
+
+                }else {
+                    callback.onFailed("failed");
+                }
 
                 }else {
                     callback.onFailed("failed");
@@ -1381,6 +1863,74 @@ public class GlobalRepository {
         });
 
     }
+
+    public void verifyCoronationToken(String acctNumba,String Acct_token, OnApiResponse<CmbResponse> callback){
+
+        retrofitProxyService.verifyCoronationToken(acctNumba,Acct_token,SharedPref.getApp_token(context)).enqueue(new Callback<CmbResponse>() {
+            @Override
+            public void onResponse(Call<CmbResponse> call, Response<CmbResponse> response) {
+
+                if(response.isSuccessful() && response.body()!= null){
+
+                    if(response.body().getStatus()!=null){
+
+                    if(response.body().getStatus().equals("false")){
+                        callback.onFailed("failed");
+                    }else {
+                        callback.onSuccess(response.body());
+                    }
+                }else {
+                    callback.onFailed("failed");
+                }
+
+
+                }else {
+                    callback.onFailed("failed");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CmbResponse> call, Throwable t) {
+                Log.d("getValidIDForm","getValidIDForm",t);
+                callback.onFailed("failed");
+            }
+        });
+
+    }
+
+    public void getBankist(final OnApiResponse<BankModel> callback){
+
+        retrofitProxyService.getBanklist().enqueue(new Callback<WebResponse<BankModel>>() {
+            @Override
+            public void onResponse(Call<WebResponse<BankModel>> call, Response<WebResponse<BankModel>> response) {
+
+                if (response.isSuccessful() && response.body()!=null){
+
+                    if(response.body().getData() != null){
+
+                        callback.onSuccess(response.body().getData());
+
+                    }
+                    else {
+                        callback.onFailed("failed");
+                    }
+
+                }else {
+
+                    callback.onFailed("failed");
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<WebResponse<BankModel>> call, Throwable t) {
+                callback.onFailed("failed");
+            }
+        });
+    }
+
 
 
 }

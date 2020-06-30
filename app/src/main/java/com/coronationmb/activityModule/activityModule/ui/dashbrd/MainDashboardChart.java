@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -61,6 +62,7 @@ public class MainDashboardChart extends Fragment {
 
     @BindView(R.id.piechart)
     PieChart piechart;
+    Context context;
 
     public List<PortFolioModel> chartPortFolio;
 
@@ -87,6 +89,10 @@ public class MainDashboardChart extends Fragment {
     }
 
 
+
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,9 +112,9 @@ public class MainDashboardChart extends Fragment {
         View root= inflater.inflate(R.layout.fragment_main_dashboard_chart, container, false);
         ButterKnife.bind(this, root);
 
-        ((DashboardActivity)getContext()).changeToolbarTitle("DASHBOARD");
+        ((DashboardActivity)context).changeToolbarTitle("DASHBOARD");
 
-        if(!SharedPref.getUSERID(getContext()).contains("@")){
+        if(!SharedPref.getUSERID(context).contains("@")){
             if (chartPortFolio != null) {
                 if (chartPortFolio.size() > 0) {
                     displayGraph(chartPortFolio);
@@ -189,6 +195,9 @@ public class MainDashboardChart extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        this.context = context;
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -222,10 +231,10 @@ public class MainDashboardChart extends Fragment {
 
         UserDetailsParam req=new UserDetailsParam();
         req.setProfile(Constant.profile);
-        req.setAppId(SharedPref.getApi_ID(getContext()));
-        req.setParams(SharedPref.getUSERID(getContext()));
+        req.setAppId(SharedPref.getApi_ID(context));
+        req.setParams(SharedPref.getUSERID(context));
         req.setFunctionId(Constant.Am_Portfolio);
-        new GlobalRepository(getContext()).getPortfolio(SharedPref.getApi_ID(getContext()), req, new OnApiResponse<List<PortFolioModel>>() {
+        new GlobalRepository(context).getPortfolio(SharedPref.getApi_ID(context), req, new OnApiResponse<List<PortFolioModel>>() {
             @Override
             public void onSuccess(List<PortFolioModel> data) {
                 chartPortFolio=data;
