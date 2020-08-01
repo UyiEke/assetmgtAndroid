@@ -1283,14 +1283,15 @@ public class GlobalRepository {
                         }
                 }
                     else{
-                        callback.onFailed("Account creation failed, pls try again");
+                        callback.onFailed("Account creation failed, please try again");
                     }
                 }
 
             }
             @Override
             public void onFailure(Call<WebResponse<JsonObject>> call, Throwable t) {
-                callback.onFailed("Account creation failed, pls try again");
+                t.printStackTrace();
+                callback.onFailed("Account creation failed, please try again");
             }
         });
     }
@@ -1315,13 +1316,25 @@ public class GlobalRepository {
                             //   JSONObject responseBody=json.optJSONObject("data");
                             JSONObject datatableObject=json.optJSONObject("dataTable");
 
-                            JSONArray Rows=datatableObject.optJSONArray("Rows");
+                            if (datatableObject != null){
 
-                            JSONObject row1=Rows.optJSONObject(0);
+                                JSONArray Rows=datatableObject.optJSONArray("Rows");
 
-                            String id=row1.optString("0");
+                                if(Rows!=null){
+                                JSONObject row1=Rows.optJSONObject(0);
 
-                            callback.onSuccess(id);
+                                String id=row1.optString("0");
+
+                                callback.onSuccess(id);
+
+                                }else {
+                                    callback.onFailed("Account creation failed, please try again");
+                                }
+                            }else {
+
+                                callback.onFailed("Account creation failed, please try again");
+                            }
+
 
                         }else {
                             callback.onFailed("Account creation failed, please try again");

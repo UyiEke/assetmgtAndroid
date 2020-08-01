@@ -19,11 +19,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -135,7 +138,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
     EditText cust_lga;
 
     @BindView(R.id.user_title)
-    EditText user_title;
+    Spinner user_title;
 
     @BindView(R.id.email)
     EditText email;
@@ -183,8 +186,8 @@ public class AcctSetUpActivity extends AppCompatActivity {
     @BindView(R.id.bankName)
     SearchableSpinner bankName;
 
-    @BindView(R.id.reinvestCheck)
-    RadioButton reinvestCheck;
+    @BindView(R.id.reInvestCheckBox)
+    CheckBox reInvestCheckBox;
 
     // identification_layout info views
     @BindView(R.id.idSpinner)
@@ -248,12 +251,23 @@ public class AcctSetUpActivity extends AppCompatActivity {
     EditText nextofkin_email;
 
 
+//    @BindView(R.id.dividendLayout)
+ //   LinearLayout dividendLayout;
+
+
+
+
+
+
     // required_layout info views
     @BindView(R.id.passportEditText)
     EditText passportEditText;
 
     @BindView(R.id.passport_upload)
     LinearLayout passport_upload;
+
+
+
 
     @BindView(R.id.proofAddressEditText)
     EditText proofAddressEditText;
@@ -300,7 +314,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
     String genderVal,user_titleVal,surnameVal,fnameVal,other_nameVal,DOB,acct_nameVal,acct_numberVal,nextofkin_emailVal,
             bankNameVal,bvnVal,idVal,identifNumberVal,dateOfExpiryVal,relationshipVal,fullnameVal,nextofkin_phonenumberVal;
-     String passPortPath,proofAddress,idPath;
+     String passPortPath,proofAddress,idPath = null;
 
      String custResidential_address,custCountry,csutLga,custCity,custPhno,custEmail;
 
@@ -308,9 +322,9 @@ public class AcctSetUpActivity extends AppCompatActivity {
              sponspor_cityVal,  sponspor_lgaVal, sponspor_nationalityVal,sponspor_phoneVal,sponspor_emailVal;
 
      boolean isMinor=false;
-    private String sponsorPath;
-    private String birthCertPath;
-    private String signaturePath;
+    private String sponsorPath = null;
+    private String birthCertPath = null;
+    private String signaturePath= null;
 
     int ageDifference;
     boolean reInvest=false;
@@ -364,6 +378,26 @@ public class AcctSetUpActivity extends AppCompatActivity {
         if(custid_.contains("@")){
             email.setText(custid_);
         }
+
+/*
+        reinvestCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+                boolean hh= reinvestCheck.isChecked();
+
+                if(hh){
+
+                    reinvestCheck.setChecked(true);
+
+                }else {
+                    reinvestCheck.setChecked(false);
+
+                }
+
+            }
+        });
+*/
 
     }
 
@@ -501,10 +535,14 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
     }
 
+
+
+
+
     private void personalInfoAction() {
         custPhno=phone_no.getText().toString().trim();
         genderVal = gender.getSelectedItem().toString();
-        user_titleVal = user_title.getText().toString().trim();
+        user_titleVal = user_title.getSelectedItem().toString().trim();
         surnameVal = surname.getText().toString().trim();
         fnameVal = fname.getText().toString().trim();
         other_nameVal = other_name.getText().toString().trim();
@@ -523,7 +561,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
 
         if (TextUtils.isEmpty(genderVal) || TextUtils.isEmpty(user_titleVal) || TextUtils.isEmpty(surnameVal)
-                || TextUtils.isEmpty(fnameVal) || TextUtils.isEmpty(other_nameVal) || TextUtils.isEmpty(DOB)
+                || TextUtils.isEmpty(fnameVal) || TextUtils.isEmpty(DOB)
                 || TextUtils.isEmpty(custResidential_address) || TextUtils.isEmpty(custCountry) || TextUtils.isEmpty(custCity)
                 || TextUtils.isEmpty(csutLga)|| TextUtils.isEmpty(custEmail)||TextUtils.isEmpty(idVal) || TextUtils.isEmpty(identifNumberVal) || TextUtils.isEmpty(dateOfExpiryVal)
                 || TextUtils.isEmpty(custPhno))
@@ -646,7 +684,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
             return;
         }
 
-        if(reinvestCheck.isChecked()){
+        if(reInvestCheckBox.isChecked()){
             reInvest=true;
         }else {
             reInvest=false;
@@ -784,44 +822,44 @@ public class AcctSetUpActivity extends AppCompatActivity {
     }
 
     public void selectPassport(){
-        Intent intent=new Intent();
-        intent.setType("*/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent= getFileChooserIntent();
+      //  intent.setType("*/*");
+       // intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Passport"),SELECT_PASSPORT);
     }
 
     public void selectProofAddres(){
-        Intent intent=new Intent();
-        intent.setType("*/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent= getFileChooserIntent();
+      //  intent.setType("*/*");
+      //  intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Proof of Address"),PROOF_ADDRESS);
     }
 
     public void selectValidID(){
-        Intent intent=new Intent();
-        intent.setType("*/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent= getFileChooserIntent();
+      //  intent.setType("*/*");
+       // intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Valid ID"),VALID_ID);
     }
 
     public void selectSignature(){
-        Intent intent=new Intent();
-        intent.setType("*/*");
+        Intent intent= new Intent();
+       intent.setType("*/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Signature image"),SIGNATURE);
     }
 
     public void selectBirthCertificate(){
-        Intent intent=new Intent();
-        intent.setType("*/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent= getFileChooserIntent();
+       // intent.setType("*/*");
+      //  intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Birth Certificate image"),BIRTH_CERT);
     }
 
     public void selectSponsorId(){
-        Intent intent=new Intent();
-        intent.setType("*/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent= getFileChooserIntent();
+      //  intent.setType("*/*");
+      //  intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Sponsor ID"),SPONSOR);
     }
 
@@ -835,8 +873,26 @@ public class AcctSetUpActivity extends AppCompatActivity {
              passPortUri = data.getData();
             try {
                 String path = FileUtilx.getPath(context,passPortUri);
+
+                if(!TextUtils.isEmpty(path)){
+
+                    passPortPath=path;
+
+                File file = new File(path);
+                long lenght = file.length() / 1024; // size in Kb
+
+                if(lenght>2000){
+                    passPortPath=null;
+                    Utility.alertOnly(context, "Passport image size cannot exceed 2MB", "");
+                    return;
+
+                }
+
+                }
+
+
                 String dir[]=path.split("/");
-                passPortPath=path;
+
                 passportEditText.setText(dir[dir.length-1]);
                 //   Toast.makeText(context,"Brochure captured",Toast.LENGTH_SHORT).show();
                 // brochurePath=path;
@@ -844,12 +900,31 @@ public class AcctSetUpActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
         else if (requestCode == PROOF_ADDRESS && resultCode == RESULT_OK && data != null && data.getData() != null) {
              proofAddressUri = data.getData();
             try {
                 String path = FileUtilx.getPath(context,proofAddressUri);
+
+
+                if(!TextUtils.isEmpty(path)){
+
+                    proofAddress=path;
+                    File file = new File(path);
+                    long lenght = file.length() / 1024; // size in Kb
+
+                    if(lenght>2000){
+                        proofAddress=null;
+                        Utility.alertOnly(context, "Proof of Address image size cannot exceed 2MB", "");
+                        return;
+
+                    }
+
+                }
+
+
                 String dir[]=path.split("/");
-                proofAddress=path;
+
                 proofAddressEditText.setText(dir[dir.length-1]);
              //   Toast.makeText(context,"Brochure captured",Toast.LENGTH_SHORT).show();
                 // brochurePath=path;
@@ -862,8 +937,25 @@ public class AcctSetUpActivity extends AppCompatActivity {
              validIDuri = data.getData();
             try {
                 String path = FileUtilx.getPath(context,validIDuri);
+
+
+                if(!TextUtils.isEmpty(path)){
+
+                    idPath=path;
+                    File file = new File(path);
+                    long lenght = file.length() / 1024; // size in Kb
+
+                    if(lenght>2000){
+                        idPath=null;
+                        Utility.alertOnly(context, "ID image size cannot exceed 2MB", "");
+                        return;
+
+                    }
+
+                }
+
                 String dir[]=path.split("/");
-                idPath=path;
+
                 id_EditText.setText(dir[dir.length-1]);
                 //   Toast.makeText(context,"Brochure captured",Toast.LENGTH_SHORT).show();
                 // brochurePath=path;
@@ -876,8 +968,26 @@ public class AcctSetUpActivity extends AppCompatActivity {
              signatureUri = data.getData();
             try {
                 String path = FileUtilx.getPath(context,signatureUri);
+
+
+                if(!TextUtils.isEmpty(path)){
+
+                    signaturePath=path;
+                    File file = new File(path);
+                    long lenght = file.length() / 1024; // size in Kb
+
+                    if(lenght>2000){
+                        signaturePath=null;
+                        Utility.alertOnly(context, "Signature image size cannot exceed 2MB", "");
+                        return;
+
+                    }
+
+                }
+
+
                 String dir[]=path.split("/");
-                signaturePath=path;
+
                 signatureEditText.setText(dir[dir.length-1]);
                 //   Toast.makeText(context,"Brochure captured",Toast.LENGTH_SHORT).show();
                 // brochurePath=path;
@@ -890,8 +1000,26 @@ public class AcctSetUpActivity extends AppCompatActivity {
              birthuri = data.getData();
             try {
                 String path = FileUtilx.getPath(context,birthuri);
+
+
+                if(!TextUtils.isEmpty(path)){
+
+                    birthCertPath=path;
+                    File file = new File(path);
+                    long lenght = file.length() / 1024; // size in Kb
+
+                    if(lenght>2000){
+                        birthCertPath=null;
+                        Utility.alertOnly(context, "Birth certificate image size cannot exceed 2MB", "");
+                        return;
+
+                    }
+
+                }
+
+
                 String dir[]=path.split("/");
-                birthCertPath=path;
+
                 birth_EditText.setText(dir[dir.length-1]);
                 //   Toast.makeText(context,"Brochure captured",Toast.LENGTH_SHORT).show();
                 // brochurePath=path;
@@ -907,6 +1035,22 @@ public class AcctSetUpActivity extends AppCompatActivity {
             sponsorUri = data.getData();
             try {
                 String path = FileUtilx.getPath(context,sponsorUri);
+
+
+                if(!TextUtils.isEmpty(path)){
+
+                    File file = new File(path);
+                    long lenght = file.length() / 1024; // size in Kb
+
+                    if(lenght>2000){
+                        Utility.alertOnly(context, "Sponsor image size cannot exceed 2MB", "");
+                        return;
+
+                    }
+
+                }
+
+
                 String dir[]=path.split("/");
                 sponsorPath=path;
                 sponsoridEditText.setText(dir[dir.length-1]);
@@ -960,6 +1104,23 @@ public class AcctSetUpActivity extends AppCompatActivity {
     public void onBackPressed() {
        // super.onBackPressed();
         logout();
+    }
+
+
+    @OnClick(R.id.dividendLayout)
+    public void dividendLayoutAction(){
+
+
+        if(reInvestCheckBox.isChecked()){
+
+            reInvestCheckBox.setChecked(true);
+
+        }else {
+
+            reInvestCheckBox.setChecked(false);
+        }
+
+
     }
 
     @OnClick(R.id.backarrow)
@@ -1022,6 +1183,32 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
         }
 
+    }
+
+
+
+    private Intent getFileChooserIntent() {
+        String[] mimeTypes = {"image/*", "application/pdf"};
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
+            if (mimeTypes.length > 0) {
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+            }
+        } else {
+            String mimeTypesStr = "";
+
+            for (String mimeType : mimeTypes) {
+                mimeTypesStr += mimeType + "|";
+            }
+
+            intent.setType(mimeTypesStr.substring(0, mimeTypesStr.length() - 1));
+        }
+
+        return intent;
     }
 
 
@@ -1252,6 +1439,10 @@ public class AcctSetUpActivity extends AppCompatActivity {
             req.setSponsorCountry(sponspor_countryVal);
 
         }
+
+
+
+
        sendCompleteAccountCreation(req);
        // getToken2();
     }
@@ -1275,41 +1466,7 @@ public class AcctSetUpActivity extends AppCompatActivity {
 
     }
 
-    /*
-    private void getToken1(String kycID){
 
-        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
-            @Override
-            public void onSuccess(String data) {
-
-                SharedPref.setApp_token(context,data);
-                uploadKYCDoc(kycID);
-            }
-
-            @Override
-            public void onFailed(String message) {
-                Utility.alertOnly(context,"Failed, please try again","");
-            }
-        });
-    }
-
-    private void getToken2(){
-
-        new GlobalRepository(context).getToken(new OnApiResponse<String>() {
-            @Override
-            public void onSuccess(String data) {
-
-                SharedPref.setApp_token(context,data);
-                sendCompleteAccountCreation();
-            }
-
-            @Override
-            public void onFailed(String message) {
-                Utility.alertOnly(context,"Failed, please try again","");
-            }
-        });
-    }
-    */
 
     private void uploadKYCDoc(String kycID){
         List<MultipartBody.Part> files=new ArrayList<>();

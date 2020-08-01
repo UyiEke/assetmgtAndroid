@@ -182,7 +182,21 @@ public class MainDashboardViewFragment extends Fragment {
         if(portFolio!=null){
             showBalance(portFolio);
             portfolio_progressBar.setVisibility(View.GONE);
-            portfolioAdapter= new MainDashboardPortfolioAdapter(portFolio,context);
+
+
+
+            List<PortFolioModel> list =new ArrayList<>();
+
+            for(int count = 0; count<portFolio.size(); count++){
+
+                if(!portFolio.get(count).getFundType().equals("Unused Cash")){
+                    list.add(portFolio.get(count));
+                }
+
+            }
+
+
+            portfolioAdapter= new MainDashboardPortfolioAdapter(list,context);
             profile_recycler.setAdapter(portfolioAdapter);
         }else {
             if(!SharedPref.getUSERID(context).contains("@")) {
@@ -293,7 +307,19 @@ public class MainDashboardViewFragment extends Fragment {
                 showBalance(portFolio);
                 portfolio_progressBar.setVisibility(View.GONE);
                 portfolio_status.setVisibility(View.GONE);
-                portfolioAdapter= new MainDashboardPortfolioAdapter(data,context);
+
+
+                List<PortFolioModel> list =new ArrayList<>();
+
+                for(int count = 0; count<data.size(); count++){
+
+                    if(!data.get(count).getFundType().equals("Unused Cash")){
+                        list.add(data.get(count));
+                    }
+
+                }
+
+                portfolioAdapter= new MainDashboardPortfolioAdapter(list,context);
                 profile_recycler.setAdapter(portfolioAdapter);
 
             }

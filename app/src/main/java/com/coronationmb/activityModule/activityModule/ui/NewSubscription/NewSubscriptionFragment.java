@@ -199,12 +199,15 @@ public class NewSubscriptionFragment extends Fragment {
     public void sendRequest(View view){
         progress.show();
         String productName=product_symbol.getSelectedItem().toString().trim();
+
+        String productCode=product_name.getText().toString().trim();
+
         String amt=amount.getText().toString().trim();
         String quantityVal=quantity.getText().toString().trim();
         String miniAmt=minimum_investment.getText().toString().trim();
 
         if(TextUtils.isEmpty(productName)||TextUtils.isEmpty(amt)||TextUtils.isEmpty(quantityVal)
-                ||TextUtils.isEmpty(miniAmt)){
+                ||TextUtils.isEmpty(miniAmt)||TextUtils.isEmpty(productCode)){
             progress.dismiss();
             Utility.alertOnly(context,"Empty Fields","");
             return;
@@ -223,13 +226,13 @@ public class NewSubscriptionFragment extends Fragment {
 
         Utility.hideKeyboardFrom(context,view);
 
-        paymentPreview(amt,productName);
+        paymentPreview(amt,productName,productCode);
 
     }
 
 
     public void validateToken(String amount, String ref,String productName,boolean isCMBaccount,
-                              String acctNum, String token){
+                              String acctNum, String token,String productCode){
 
         progress.show();
 
@@ -239,7 +242,7 @@ public class NewSubscriptionFragment extends Fragment {
 
                 if(data.getStatus().equals("true")){
 
-                    sendSubscriptionRequest(amount,ref,productName,isCMBaccount,acctNum,token);
+                    sendSubscriptionRequest(amount,ref,productName,isCMBaccount,acctNum,token,productCode);
 
                 }
                 else {
@@ -262,7 +265,7 @@ public class NewSubscriptionFragment extends Fragment {
 
 
     private void sendSubscriptionRequest(String amount, String ref,String productName,boolean isCMBaccount,
-                                         String acctNum, String token){
+                                         String acctNum, String token,String productCode){
 
         progress.show();
         SubscribeModel req=new SubscribeModel();
@@ -271,6 +274,7 @@ public class NewSubscriptionFragment extends Fragment {
         req.setEmail(SharedPref.getEMAIL(context));
         req.setCustid(SharedPref.getUSERID(context));
         req.setReference(ref);
+        req.setProductcode(productCode);
 
         if(isCMBaccount){
             req.setBankcode(Constant.cmbBankCode);
@@ -279,6 +283,7 @@ public class NewSubscriptionFragment extends Fragment {
             req.setBankcode("other");
         }
 
+        /*
         if (portFolioData == null){
 
             progress.dismiss();
@@ -292,6 +297,7 @@ public class NewSubscriptionFragment extends Fragment {
                 req.setProductcode(portFolioData.get(count).getFundCode());
             }
         }
+        */
 
         req.setProfile(Constant.profile);
         req.setNarration(SharedPref.getFULLNAME(context)+ " subscription");
@@ -432,9 +438,12 @@ public class NewSubscriptionFragment extends Fragment {
     }
 
 
-    private void paymentPreview(String amt,String prodName){
+    private void paymentPreview(String amt,String prodName,String productCode){
         progress.dismiss();
         final Dialog dialog = new Dialog(context);
+
+
+
         dialog.setContentView(R.layout.payment_preview_layout);
        // dialog.setTitle("Title...");
         TextView transRef = (TextView) dialog.findViewById(R.id.transRef);
@@ -447,6 +456,7 @@ public class NewSubscriptionFragment extends Fragment {
         product_name.setText(prodName);
 
         TextView amountTextview = (TextView) dialog.findViewById(R.id.amount);
+
         amountTextview.setText(amt);
 
         Spinner pay_Spinner = (Spinner) dialog.findViewById(R.id.pay_Spinner);
@@ -492,13 +502,13 @@ public class NewSubscriptionFragment extends Fragment {
 
                     dialog.dismiss();
                     //   sendSubscriptionRequest(amt,refs,prodName,isCMBaccount,acctNum,tokenVal);
-                    validateToken(amt,refs,prodName,isCMBaccount,acctNum,tokenVal);
+                    validateToken(amt,refs,prodName,isCMBaccount,acctNum,tokenVal,productCode);
 
 
                 }else {
 
                     dialog.dismiss();
-                      sendSubscriptionRequest(amt,refs,prodName,isCMBaccount,acctNum,tokenVal);
+                      sendSubscriptionRequest(getCap(amt),refs,prodName,isCMBaccount,acctNum,tokenVal,productCode);
                     // validateToken(amt, refs, prodName, isCMBaccount, acctNum, tokenVal);
 
                 }
@@ -517,15 +527,17 @@ public class NewSubscriptionFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String val= pay_Spinner.getSelectedItem().toString().trim();
+
                 if(val.equals("Pay with CMB")){
+
                     pay_layout.setVisibility(View.VISIBLE);
                     payInfo.setVisibility(View.GONE);
                     amountTextview.setText(Utility.formatStringToNaira(Utility.round(Double.parseDouble(amt))));
+
                 }else {
                     pay_layout.setVisibility(View.GONE);
                     payInfo.setVisibility(View.VISIBLE);
-                    amountTextview.setText(Utility.formatStringToNaira(Utility.round(Double.parseDouble(getCap(amt)))));
-                 //   amountTextview.setText(getCap(amt));
+                  amountTextview.setText(Utility.formatStringToNaira(Utility.round(Double.parseDouble(getCap(amt)))));
                 }
             }
 
@@ -536,6 +548,45 @@ public class NewSubscriptionFragment extends Fragment {
         });
 
 
+
+        acct_number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+                int length = acct_number.length();
+                // String convert = String.valueOf(length);
+                //  textView.setText(convert);
+
+                if(length == 10){
+
+                    String acct =acct_number.getText().toString().trim();
+
+                    if(acct.length()==10) {
+
+                        preview_progressBar.setVisibility(View.VISIBLE);
+                        cmbAccount(acct, actt_name, preview_progressBar, token);
+                    }
+
+                }
+
+
+            }
+        });
+
+
+
+
+      /*
         token.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -547,6 +598,7 @@ public class NewSubscriptionFragment extends Fragment {
                 cmbAccount(acct,actt_name,preview_progressBar,token);
             }
         });
+        */
 
         dialog.setCancelable(false);
         dialog.show();
@@ -575,6 +627,10 @@ public class NewSubscriptionFragment extends Fragment {
 
 
     private String getCap(String amt){
+
+        if(TextUtils.isEmpty(amt)){
+            return "0";
+        }
 
         double val= (Double.parseDouble(amt)) * 0.014;
 

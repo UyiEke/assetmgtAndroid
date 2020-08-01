@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ import com.coronationmb.service.FileUtils;
 import com.coronationmb.service.FileUtilx;
 import com.coronationmb.service.GlobalRepository;
 import com.coronationmb.service.SharedPref;
+import com.coronationmb.service.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -171,7 +173,18 @@ public class ProfileFragment extends Fragment {
             email.setText(SharedPref.getEMAIL(context)==null?"NA":SharedPref.getEMAIL(context));
             phone_no.setText(SharedPref.getPHONE(context)==null?"NA":SharedPref.getPHONE(context));
 
-            adapter=new ProfileAdapter(profileData,context,listOfProduct);
+
+            List<PortFolioModel> list =new ArrayList<>();
+
+            for(int count = 0; count<profileData.size(); count++){
+
+                if(!profileData.get(count).getFundType().equals("Unused Cash")){
+                    list.add(profileData.get(count));
+                }
+
+            }
+
+            adapter=new ProfileAdapter(list,context,listOfProduct);
             recycler.setAdapter(adapter);
 
         }else {
@@ -206,7 +219,21 @@ public class ProfileFragment extends Fragment {
             email.setText(SharedPref.getEMAIL(context) == null ? "NA" : SharedPref.getEMAIL(context));
             phone_no.setText(SharedPref.getPHONE(context) == null ? "NA" : SharedPref.getPHONE(context));
 
-            adapter = new ProfileAdapter(data, context, listOfProduct);
+
+
+            List<PortFolioModel> list =new ArrayList<>();
+
+            for(int count = 0; count<data.size(); count++){
+
+                if(!data.get(count).getFundType().equals("Unused Cash")){
+                    list.add(data.get(count));
+                }
+
+            }
+
+
+
+            adapter = new ProfileAdapter(list, context, listOfProduct);
             recycler.setAdapter(adapter);
         }else {
             progressBar.setVisibility(View.GONE);
@@ -346,6 +373,23 @@ public class ProfileFragment extends Fragment {
             passPortUri = data.getData();
             try {
                 String path = FileUtilx.getPath(context,passPortUri);
+
+
+                if(!TextUtils.isEmpty(path)){
+
+                    File file = new File(path);
+                    long lenght = file.length() / 1024; // size in Kb
+
+                    if(lenght>2000){
+                        Utility.alertOnly(context, "Image size cannot exceed 2MB", "");
+                        return;
+
+                    }
+
+                }
+
+
+
                 String dir[]=path.split("/");
                 passPortPath=path;
             //    passportEditText.setText(dir[dir.length-1]);
