@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true"
+        />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
+        android:layout_below="@id/view"
+        app:tabBackground="@drawable/tab_selector"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        app:tabGravity="center"
+        app:tabPaddingStart="10dp"
+        app:tabPaddingEnd="10dp"
+        app:tabIndicatorHeight="0dp"/>
+
+    <LinearLayout
+        android:layout_below="@id/view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/h1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="35dp"
+            android:textAlignment="center"
+            android:text="The smartest way to grow"
+            android:textColor="@color/text_color"/>
+
+
+        <TextView
+            android:id="@+id/h2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="5dp"
+            android:text="your finance"
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="35dp"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:paddingTop="15dp"
+
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="35dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur "
+            android:textAlignment="center"
+            />
+
+        <LinearLayout
+            android:id="@+id/login_lay"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="25dp"
+            android:gravity="center"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/circular_edge_brown">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/create_acct_lay"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="25dp"
+            android:gravity="center"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/curved_edge_blue"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Account"
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
